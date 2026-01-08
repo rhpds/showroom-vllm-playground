@@ -1,0 +1,95 @@
+= vLLM Playground workshop overview
+:toc:
+:toc-placement: preamble
+:icons: font
+
+== Your role and mission
+
+You're a senior AI engineer at ACME Corporation, and you've been assigned to evaluate and implement an AI-powered customer support system that can serve multiple Large Language Models (LLMs) efficiently.
+
+ACME needs to modernize their customer support infrastructure to handle increasing demand while maintaining response quality. Your manager has explained: "We need a flexible AI inference platform that can serve multiple models, integrate with external tools, and scale to meet our enterprise requirements."
+
+**Your assignment**: Evaluate vLLM Playground as the foundation for ACME's AI customer support system, demonstrating its capabilities for model serving, tool calling, and agentic workflows.
+
+**The objective**: Prove that vLLM Playground can deliver high-performance LLM inference with advanced features like structured outputs, tool calling, and MCP integration.
+
+== Success criteria for your mission
+
+By the end of this workshop, you'll have practical AI inference skills to address ACME's customer support challenges:
+
+* Deploy and manage vLLM servers using Podman containers → *establish reliable model serving infrastructure*
+* Interact with LLMs through a modern chat interface → *demonstrate real-time customer interaction capabilities*
+* Configure structured outputs for consistent AI responses → *ensure predictable, parseable data for downstream systems*
+* Implement tool calling for dynamic functionality → *enable AI to execute actions and retrieve information*
+* Set up MCP servers for agentic capabilities → *extend AI with external tool access and human-in-the-loop approval*
+* Run performance benchmarks to validate throughput → *prove the system can handle production workloads*
+
+**Technical outcome**: You'll have hands-on experience with vLLM Playground that directly applies to ACME's AI infrastructure requirements.
+
+**Business benefit**: A proven AI inference platform that enables intelligent customer support with enterprise-grade reliability.
+
+== Target audience
+
+This workshop is designed for:
+
+* AI Engineers building inference infrastructure
+* Developers integrating LLMs into applications
+* Platform Engineers evaluating AI serving solutions
+* Architects designing enterprise AI systems
+
+== What you need to succeed
+
+You should have:
+
+* Basic Red Hat Enterprise Linux (RHEL) experience - you've used a Linux terminal before
+* Understanding of containers and Podman - you know how to run containers
+* Basic AI/ML concepts - you understand what LLMs and inference mean
+* Access to the provided lab environment with GPU support
+
+== ACME Corporation's AI challenges
+
+**The situation**: ACME Corporation needs to build an AI-powered customer support system that can handle diverse customer inquiries efficiently.
+
+**Project timeline**: Evaluate vLLM Playground and demonstrate its capabilities for ACME's enterprise AI requirements.
+
+**Current challenges** (operational pain points):
+
+* **Inconsistent AI responses**: Different models produce varying output formats → complicates integration with existing systems
+* **Limited tool integration**: Current AI solutions can't execute actions or access external data → reduces automation potential
+* **Manual model management**: Deploying and updating models requires significant effort → slows down iteration cycles
+* **Scalability concerns**: Uncertain if current approach can handle production traffic → risk to customer experience
+
+**The opportunity**: vLLM Playground provides a unified platform for model serving with advanced features that can address these challenges, and you've been selected to evaluate its feasibility for ACME's use case.
+
+**Technical perspective**: "vLLM is the industry-leading high-performance inference engine, and vLLM Playground provides the management interface we need. I need to evaluate how it handles our specific requirements."
+
+== Your vision of success
+
+If vLLM Playground proves effective for ACME's use case, here are the potential improvements:
+
+**Immediate improvements** (short-term):
+
+* **Faster model deployment**: Deploy new models in minutes via containers → accelerate experimentation and iteration
+* **Consistent AI outputs**: Structured outputs ensure predictable response formats → simplify integration with downstream systems
+
+**Strategic benefits** (longer-term):
+
+* **Agentic capabilities**: MCP integration enables AI to use external tools → expand automation possibilities
+* **Human-in-the-loop approval**: Safe tool execution with manual approval → maintain control over AI actions
+* **Performance visibility**: Built-in benchmarking validates throughput → confident capacity planning
+
+**Success metric**: A demonstrable AI inference platform that can serve multiple models with tool calling, structured outputs, and agentic capabilities suitable for ACME's customer support requirements.
+
+== Common questions
+
+**"Can we use different models for different use cases?"**
+→ Yes. vLLM Playground supports various models including Llama, Mistral, and Qwen with model-specific optimizations
+
+**"How does tool calling work with customer support scenarios?"**
+→ Module 3 demonstrates defining custom tools that AI can invoke to retrieve customer data or execute support actions
+
+**"What about controlling AI outputs for our systems?"**
+→ Module 2 covers structured outputs using JSON Schema, Regex, and Grammar to constrain responses
+
+**"Can we extend AI with access to our internal systems?"**
+→ Module 4 shows MCP integration for connecting AI to external tools with human-in-the-loop approval

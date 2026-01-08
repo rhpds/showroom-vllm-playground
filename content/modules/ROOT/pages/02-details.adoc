@@ -1,0 +1,141 @@
+= Workshop details
+:toc:
+:toc-placement: preamble
+:icons: font
+
+== Timing and schedule
+
+=== Full workshop (90 minutes)
+
+* **Module 1**: Getting Started with vLLM Playground (18 minutes)
+* **Module 2**: Advanced Inferencing: Structured Outputs (18 minutes)
+* **Module 3**: Advanced Inferencing: Tool Calling (18 minutes)
+* **Module 4**: Advanced Inferencing: MCP Integration (18 minutes)
+* **Module 5**: Performance Testing (18 minutes)
+
+=== Quick start workshop (45 minutes)
+
+* **Module 1**: Getting Started with vLLM Playground (15 minutes)
+* **Module 2**: Advanced Inferencing: Structured Outputs (15 minutes)
+* **Module 3**: Advanced Inferencing: Tool Calling (15 minutes)
+
+== Technical requirements
+
+=== Software versions
+
+* vLLM Playground v0.1.1
+* Podman 4.0 or later
+* Python 3.10 or later (required for MCP)
+* NVIDIA GPU with CUDA support
+* Web browser (Chrome, Firefox, Safari, Edge)
+
+=== Environment access
+
+Participants have access to:
+
+* GPU-enabled lab host: {targethost}
+* SSH access: `{ssh_command}`
+* vLLM Playground web UI: http://{hostname}:7860
+* Pre-installed vLLM Playground CLI
+
+=== Network requirements
+
+* Internet connectivity for downloading container images from registry
+* Access to HuggingFace for model downloads (if using gated models)
+* Lab host network access (specific URLs provided in lab interface)
+
+== Environment setup
+
+=== Pre-configured for you
+
+Your lab environment comes with:
+
+[cols="1,2"]
+|===
+|Component |Status
+
+|vLLM Playground v0.1.1
+|✓ Pre-installed via pip
+
+|Podman
+|✓ Pre-installed and configured
+
+|NVIDIA GPU drivers
+|✓ Pre-configured with CUDA
+
+|Python 3.10+
+|✓ Available for MCP support
+
+|Container images
+|✓ Will be pulled during exercises
+|===
+
+=== Setup validation
+
+Run these commands to verify your environment:
+
+[source,bash]
+----
+# Verify vLLM Playground installation
+vllm-playground --help
+
+# Verify Podman
+podman version
+
+# Verify GPU availability
+nvidia-smi
+
+# Check Python version (for MCP)
+python3 --version
+----
+
+== Troubleshooting guide
+
+=== Common setup issues
+
+**Problem**: "vllm-playground: command not found"
+→ **Solution**: Verify the installation path is in your PATH, or run with full path
+
+**Problem**: "Permission denied" when running Podman commands
+→ **Solution**: Ensure you're using rootless Podman or have appropriate permissions
+
+**Problem**: "NVIDIA driver not found" or GPU not detected
+→ **Solution**: Verify NVIDIA drivers are installed with `nvidia-smi`
+
+**Problem**: "Container image pull fails"
+→ **Solution**: Check network connectivity and ensure you have access to container registries
+
+**Problem**: "Port 7860 already in use"
+→ **Solution**: Run `vllm-playground stop` to stop any existing instance, or use `--port` to specify a different port
+
+=== During workshop support
+
+* Check the vLLM Playground logs: `podman logs vllm-service`
+* Verify server status: `vllm-playground status`
+* Restart if needed: `vllm-playground stop && vllm-playground`
+
+== Follow-up resources
+
+=== Next steps after the workshop
+
+* link:https://github.com/micytao/vllm-playground[vLLM Playground GitHub Repository^] - Source code and documentation
+* link:https://github.com/vllm-project/vllm[vLLM Project^] - The underlying high-performance inference engine
+* link:https://docs.guidellm.ai[GuideLLM Documentation^] - Performance benchmarking tool
+* link:https://modelcontextprotocol.io[Model Context Protocol^] - MCP specification and servers
+
+=== Additional learning paths
+
+* **Intermediate**: Explore different model architectures and their tool calling capabilities
+* **Advanced**: Deploy vLLM Playground on OpenShift/Kubernetes for enterprise scale
+* **Production**: Implement custom MCP servers for your specific use cases
+
+== Authors and contributors
+
+**Primary Author**: Red Hat Technical Team
+**Last Updated**: January 2026
+**Workshop Version**: 1.0
+
+**Feedback and Questions**:
+
+* Workshop issues: Submit via the lab feedback mechanism
+* vLLM Playground issues: link:https://github.com/micytao/vllm-playground/issues[GitHub Issues^]

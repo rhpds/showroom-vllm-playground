@@ -1,7 +1,10 @@
-* xref:module-01.adoc[1. RPM Native Container]
-** xref:module-01.adoc#repositories[Repositories]
-** xref:module-01.adoc#software[Software]
+* xref:index.adoc[Home]
 
-* xref:module-02.adoc[2. GitHub Sourced Container]
-** xref:module-02.adoc#prerequisites[Install Prerequisites]
-** xref:module-02.adoc#container[Enable Container]
+* xref:01-overview.adoc[Workshop Overview]
+
+* xref:02-details.adoc[Workshop Details]
+
+* xref:03-module-01-getting-started.adoc[Module 1: Getting Started]
+** xref:03-module-01-getting-started.adoc#exercise-1[Exercise 1: Verify Environment]
+** xref:03-module-01-getting-started.adoc#exercise-2[Exercise 2: Deploy vLLM Server]
+** xref:03-module-01-getting-started.adoc#exercise-3[Exercise 3: Chat with LLM]
