@@ -290,7 +290,7 @@ Follow the dynamic variables rule from .cursor/rules/showroom-standards/.
 
 === Documentation
 
-* *Quick Guide*: This file (CLAUDE-SKILLS-CURSOR.adoc)
+* *Quick Guide*: This file (CURSOR-SKILLS-README.adoc)
 * *User Guide*: `CLAUDE-SKILLS-GUIDE.adoc` (in repository root)
 * *Developer Guide*: `.claude/INTERNAL-DEVELOPER-GUIDE.adoc` (detailed technical docs)
 * *Shared Rules*: `.claude/docs/SKILL-COMMON-RULES.md` (common contracts)
