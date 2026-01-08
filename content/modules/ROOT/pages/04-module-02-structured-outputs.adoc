@@ -1,0 +1,518 @@
+= Module 2: Advanced Inferencing: Structured Outputs
+:source-highlighter: rouge
+:toc: macro
+:toclevels: 1
+
+In Module 1, you deployed a vLLM server and experienced the chat interface. Now ACME Corporation faces a new challenge: their customer support system needs to integrate AI responses with existing backend systems. Free-form text responses are difficult to parse and process programmatically.
+
+ACME's engineering team requires predictable, structured outputs that downstream systems can reliably consume. vLLM Playground's structured output capabilities—JSON Schema, Regex, and Grammar—provide exactly this control.
+
+In this module, you'll learn to constrain LLM outputs to specific formats, ensuring ACME's AI responses are system-ready and consistently parseable.
+
+== Learning objectives
+
+By the end of this module, you'll be able to:
+
+* Analyze customer feedback using sentiment classification with constrained outputs
+* Define JSON Schema constraints for structured API-ready responses
+* Apply Regex patterns to enforce specific output formats
+* Create custom Grammar rules for complex output structures
+* Choose the appropriate structured output method for different use cases
+
+[[exercise-1]]
+== Exercise 1: Sentiment analysis with constrained outputs
+
+ACME's customer support team receives thousands of feedback messages daily. Before routing to the appropriate team, they need to automatically classify the sentiment of each message. The classification must be consistent and machine-readable.
+
+You'll configure vLLM to output only valid sentiment labels, ensuring reliable automated processing.
+
+=== Prerequisites
+
+* Module 1 completed (vLLM server running)
+* Access to vLLM Playground web UI
+
+=== Steps
+
+. Open the vLLM Playground web UI at:
++
+[source,text,subs="attributes"]
+----
+http://{hostname}:7860
+----
+
+. Ensure your vLLM server is running. If not, start it from the *Server Configuration* panel.
+
+. Navigate to the *Structured Outputs* section in the toolbar panel.
++
+// TODO: Add screenshot
+image::structured-outputs-panel.png[Structured outputs configuration panel,width=600,title="Structured Outputs Panel"]
+
+. Select *Choice* mode for simple constrained outputs.
+
+. Configure the sentiment choices:
++
+[source,json]
+----
+["positive", "negative", "neutral"]
+----
++
+This constrains the model to output ONLY one of these three values.
+
+. Set a system prompt for sentiment analysis:
++
+----
+You are a sentiment classifier. Analyze the customer feedback and respond with exactly one word: positive, negative, or neutral. No other output.
+----
+
+. Test with sample customer feedback:
++
+----
+Feedback: "I absolutely love your product! It exceeded all my expectations and the customer service was fantastic."
+----
++
+Expected output: `positive`
+
+. Test with negative feedback:
++
+----
+Feedback: "Terrible experience. The product arrived broken and nobody responded to my support ticket for a week."
+----
++
+Expected output: `negative`
+
+. Test with neutral feedback:
++
+----
+Feedback: "The product works as described. Delivery was on time. Nothing special but nothing wrong either."
+----
++
+Expected output: `neutral`
+
+=== Verify
+
+Confirm structured outputs are working:
+
+✓ Model outputs ONLY one of the three allowed values
+
+✓ No additional text, explanations, or formatting
+
+✓ Consistent classification across similar inputs
+
+=== Business value for ACME
+
+With constrained sentiment outputs, ACME can:
+
+* Automatically route negative feedback to priority support queues
+* Aggregate sentiment metrics for reporting dashboards
+* Trigger alerts when negative sentiment spikes
+* Process thousands of messages without manual review
+
+[[exercise-2]]
+== Exercise 2: JSON Schema for structured responses
+
+ACME's backend systems expect customer support responses in a specific JSON format. The AI must generate responses that conform exactly to the required schema, enabling direct API integration without post-processing.
+
+You'll define a JSON Schema that constrains the model to output properly structured customer support tickets.
+
+=== Steps
+
+. In the *Structured Outputs* panel, select *JSON Schema* mode.
++
+// TODO: Add screenshot
+image::json-schema-mode.png[JSON Schema configuration in structured outputs,width=600,title="JSON Schema Mode"]
+
+. Define a schema for customer support ticket extraction:
++
+[source,json]
+----
+{
+  "type": "object",
+  "properties": {
+    "ticket_type": {
+      "type": "string",
+      "enum": ["billing", "technical", "general", "complaint", "feature_request"]
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "urgent"]
+    },
+    "summary": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "customer_sentiment": {
+      "type": "string",
+      "enum": ["positive", "negative", "neutral"]
+    },
+    "requires_escalation": {
+      "type": "boolean"
+    }
+  },
+  "required": ["ticket_type", "priority", "summary", "customer_sentiment", "requires_escalation"]
+}
+----
+
+. Set a system prompt for ticket extraction:
++
+----
+You are a customer support ticket classifier. Extract structured information from customer messages and output a JSON object with ticket_type, priority, summary, customer_sentiment, and requires_escalation fields.
+----
+
+. Test with a sample customer message:
++
+----
+Customer message: "I've been charged twice for my subscription this month! This is unacceptable and I want a refund immediately. I've been a loyal customer for 3 years and this is how you treat me?"
+----
++
+Expected output (formatted):
++
+[source,json]
+----
+{
+  "ticket_type": "billing",
+  "priority": "high",
+  "summary": "Customer charged twice for subscription, requesting immediate refund",
+  "customer_sentiment": "negative",
+  "requires_escalation": true
+}
+----
+
+. Test with a different scenario:
++
+----
+Customer message: "Hey, just wondering if you have any plans to add dark mode to the mobile app? Would be really nice to have. Thanks!"
+----
++
+Expected output:
++
+[source,json]
+----
+{
+  "ticket_type": "feature_request",
+  "priority": "low",
+  "summary": "Request for dark mode in mobile app",
+  "customer_sentiment": "positive",
+  "requires_escalation": false
+}
+----
+
+. Verify the output is valid JSON by checking the response panel shows proper formatting.
+
+=== Verify
+
+Confirm JSON Schema constraints are enforced:
+
+[source,bash]
+----
+# You can validate the JSON output using Python
+python3 -c "import json; print(json.loads('''<paste_output_here>'''))"
+----
+
+✓ Output is valid JSON (no syntax errors)
+
+✓ All required fields are present
+
+✓ Enum values match the defined options
+
+✓ Boolean field is true/false (not string)
+
+=== Troubleshooting
+
+**Issue**: Output contains extra text before/after JSON
+
+**Solution**: 
+
+. Ensure JSON Schema mode is properly selected
+. Check that the schema is valid JSON
+. Restart the server if mode changes don't take effect
+
+**Issue**: Model outputs invalid enum values
+
+**Solution**:
+
+. Verify enum arrays are properly formatted in schema
+. Ensure model supports guided decoding (check server logs)
+
+[[exercise-3]]
+== Exercise 3: Regex patterns for formatted outputs
+
+ACME's ticketing system requires specific ID formats for tracking. The AI must generate ticket IDs that match the exact pattern expected by downstream systems: `ACME-XXXX-YYYY` where X is a letter and Y is a digit.
+
+You'll use Regex constraints to enforce this precise format.
+
+=== Steps
+
+. In the *Structured Outputs* panel, select *Regex* mode.
++
+// TODO: Add screenshot
+image::regex-mode.png[Regex pattern configuration,width=600,title="Regex Mode"]
+
+. Define a pattern for ACME ticket IDs:
++
+[source,text]
+----
+ACME-[A-Z]{4}-[0-9]{4}
+----
++
+This pattern enforces:
+* Literal prefix `ACME-`
+* Exactly 4 uppercase letters
+* A hyphen `-`
+* Exactly 4 digits
+
+. Set a system prompt:
++
+----
+Generate a unique ticket ID for the customer support system. Output only the ticket ID, nothing else.
+----
+
+. Test the Regex constraint:
++
+----
+Generate a ticket ID for a new billing inquiry.
+----
++
+Expected output format: `ACME-BXYZ-1234` (exact letters/numbers will vary)
+
+. Verify the format matches by checking:
+* Starts with `ACME-`
+* Followed by 4 uppercase letters
+* Then a hyphen
+* Ends with 4 digits
+
+. Try a more complex Regex for phone number formatting:
++
+[source,text]
+----
+\(\d{3}\) \d{3}-\d{4}
+----
++
+This enforces US phone format: `(XXX) XXX-XXXX`
+
+. Test with prompt:
++
+----
+Format this phone number: 5551234567
+----
++
+Expected output: `(555) 123-4567`
+
+=== Verify
+
+Confirm Regex patterns are enforced:
+
+[source,bash]
+----
+# Validate ticket ID format with grep
+echo "ACME-WXYZ-1234" | grep -E "^ACME-[A-Z]{4}-[0-9]{4}$"
+----
+
+✓ Output matches the exact pattern
+
+✓ No extra characters or whitespace
+
+✓ Pattern is consistently applied across multiple generations
+
+=== Use cases for ACME
+
+Regex constraints enable:
+
+* **Ticket IDs**: Consistent format for tracking systems
+* **Reference numbers**: Order IDs, invoice numbers, case numbers
+* **Formatted data**: Phone numbers, dates, postal codes
+* **Codes**: Product SKUs, department codes, status codes
+
+[[exercise-4]]
+== Exercise 4: Grammar for complex output structures
+
+ACME's analytics team needs AI-generated reports in a specific markup format that their reporting tool can parse. The format is more complex than what JSON Schema or Regex can easily express.
+
+You'll define a custom Grammar to enforce a report structure with sections, bullet points, and specific delimiters.
+
+=== Steps
+
+. In the *Structured Outputs* panel, select *Grammar* mode.
++
+// TODO: Add screenshot
+image::grammar-mode.png[Grammar configuration panel,width=600,title="Grammar Mode"]
+
+. Grammar uses GBNF (GGML BNF) format. Define a simple report structure:
++
+[source,text]
+----
+root ::= report
+report ::= header sections footer
+header ::= "## REPORT START ##\n"
+sections ::= section+
+section ::= section-title bullet-list "\n"
+section-title ::= "### " [A-Za-z ]+ " ###\n"
+bullet-list ::= bullet+
+bullet ::= "- " [A-Za-z0-9 ,.]+ "\n"
+footer ::= "## REPORT END ##"
+----
++
+This grammar enforces:
+* Report wrapped in START/END markers
+* One or more sections with titles
+* Bullet lists within each section
+
+. Set a system prompt:
++
+----
+Generate a brief customer support summary report. Follow the exact format structure provided.
+----
+
+. Test with a prompt:
++
+----
+Summarize today's customer support metrics: 150 tickets resolved, 23 escalated, average response time 4.2 minutes, customer satisfaction 94%.
+----
++
+Expected output format:
++
+----
+## REPORT START ##
+### Daily Metrics ###
+- Total tickets resolved, 150
+- Escalated tickets, 23
+- Average response time, 4.2 minutes
+### Customer Satisfaction ###
+- Overall satisfaction score, 94 percent
+## REPORT END ##
+----
+
+. Try a simpler grammar for key-value pairs:
++
+[source,text]
+----
+root ::= pairs
+pairs ::= pair+
+pair ::= key ": " value "\n"
+key ::= [A-Za-z_]+
+value ::= [A-Za-z0-9 ]+
+----
+
+. Test key-value extraction:
++
+----
+Extract the following as key-value pairs: The customer name is John Smith, order number is 12345, and status is pending.
+----
++
+Expected output:
++
+----
+customer_name: John Smith
+order_number: 12345
+status: pending
+----
+
+=== Verify
+
+Confirm Grammar constraints work:
+
+✓ Output follows the defined structure exactly
+
+✓ Required delimiters (##, ###, -) are present
+
+✓ No content outside the grammar rules
+
+=== When to use Grammar
+
+| Use Case | Best Method |
+|----------|-------------|
+| Simple choices (yes/no, categories) | Choice mode |
+| Structured data (APIs, databases) | JSON Schema |
+| Specific formats (IDs, codes) | Regex |
+| Complex markup, reports, custom formats | Grammar |
+
+=== Troubleshooting
+
+**Issue**: Grammar syntax errors
+
+**Solution**:
+
+. Verify GBNF syntax is correct
+. Test with simpler grammar first
+. Check for missing quotes or escape characters
+
+**Issue**: Model output doesn't match grammar
+
+**Solution**:
+
+. Ensure Grammar mode is selected (not JSON or Regex)
+. Restart server after changing grammar
+. Simplify grammar rules and test incrementally
+
+== Troubleshooting
+
+**Issue**: Structured outputs not enforced (model ignores constraints)
+
+**Solution**:
+
+. Verify the server was started with structured output support
+. Check server logs for guided decoding errors
+. Some models may not support all constraint types
+
+**Issue**: "Guided decoding not supported" error
+
+**Solution**:
+
+. Ensure you're using a compatible model
+. Check vLLM version supports guided decoding
+. Try a different model that supports constrained generation
+
+**Issue**: Performance slower with structured outputs
+
+**Solution**:
+
+. This is expected - constraint checking adds overhead
+. Use simpler constraints when possible
+. For high throughput, consider JSON Schema over Grammar
+
+== Learning outcomes
+
+By completing this module, you should now understand:
+
+* ✓ How structured outputs enable reliable AI integration with backend systems
+* ✓ The difference between Choice, JSON Schema, Regex, and Grammar modes
+* ✓ When to use each structured output method based on requirements
+* ✓ How to define JSON Schemas for API-ready responses
+* ✓ How Regex patterns enforce specific output formats
+* ✓ How Grammar rules handle complex structured outputs
+
+== Module summary
+
+You've successfully completed the Advanced Inferencing: Structured Outputs module.
+
+**What you accomplished:**
+
+* Implemented sentiment classification with constrained choice outputs
+* Defined JSON Schemas for customer support ticket extraction
+* Applied Regex patterns for ticket ID and phone number formatting
+* Created Grammar rules for structured report generation
+
+**Key takeaways:**
+
+* Structured outputs transform unpredictable AI text into reliable, parseable data
+* JSON Schema is ideal for API integration and database storage
+* Regex excels at enforcing specific ID and code formats
+* Grammar handles complex markup and custom structures
+* Choose the simplest constraint method that meets your requirements
+
+**Business impact for ACME:**
+
+* Customer feedback automatically categorized and routed
+* Support tickets generated in backend-compatible JSON format
+* Consistent ticket IDs for tracking and analytics
+* Structured reports for management dashboards
+
+**Next steps:**
+
+Module 3 will explore *Advanced Inferencing: Tool Calling* - enabling the AI to execute functions, retrieve data, and perform actions on behalf of users.
+
+== References
+
+* link:https://github.com/micytao/vllm-playground[vLLM Playground - Structured Outputs Documentation^]
+* link:https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html#guided-decoding[vLLM Guided Decoding^]
+* link:https://json-schema.org/understanding-json-schema/[Understanding JSON Schema^]
+* link:https://github.com/ggerganov/llama.cpp/blob/master/grammars/README.md[GBNF Grammar Reference^]

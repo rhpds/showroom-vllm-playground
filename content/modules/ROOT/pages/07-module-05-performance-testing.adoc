@@ -1,0 +1,733 @@
+= Module 5: Performance Testing
+:source-highlighter: rouge
+:toc: macro
+:toclevels: 1
+
+Throughout this workshop, you've deployed vLLM servers, configured advanced inferencing features, and built agentic workflows. Now ACME Corporation faces the final question before production deployment: *Can this infrastructure handle real-world load?*
+
+Before launching their AI-powered customer support system, ACME needs to validate that their vLLM deployment can handle expected traffic volumes with acceptable latency. GuideLLM is a performance benchmarking tool designed specifically for LLM inference servers, providing insights into throughput, latency, and resource utilization.
+
+In this final module, you'll benchmark your vLLM server and learn to optimize configuration for production workloads.
+
+== Learning objectives
+
+By the end of this module, you'll be able to:
+
+* Understand LLM inference performance metrics and their business impact
+* Install and configure GuideLLM for vLLM benchmarking
+* Run load tests with different request patterns
+* Analyze throughput, latency, and token generation metrics
+* Optimize vLLM server configuration based on benchmark results
+
+[[exercise-1]]
+== Exercise 1: Introduction to GuideLLM and installation
+
+Before running benchmarks, ACME's engineering team needs to understand what metrics matter for their customer support use case and set up the benchmarking tools.
+
+=== Understanding LLM performance metrics
+
+[cols="1,2,2"]
+|===
+|Metric |Description |Business Impact
+
+|**Throughput**
+|Requests processed per second
+|How many customers can be served simultaneously
+
+|**Latency (TTFT)**
+|Time to First Token - how quickly the response starts
+|User-perceived responsiveness
+
+|**Latency (E2E)**
+|End-to-End - total time for complete response
+|Total customer wait time
+
+|**Tokens/second**
+|Rate of token generation
+|How fast responses stream to users
+
+|**GPU Utilization**
+|Percentage of GPU compute used
+|Infrastructure efficiency and cost
+
+|**Memory Usage**
+|GPU memory consumption
+|Capacity for concurrent requests
+|===
+
+=== What is GuideLLM?
+
+GuideLLM is a benchmarking tool that:
+
+* Generates realistic LLM workloads
+* Measures inference performance metrics
+* Supports sweep testing (varying request rates)
+* Provides detailed analysis and reports
+* Integrates with vLLM's OpenAI-compatible API
+
+=== Prerequisites
+
+* Module 1 completed (vLLM server running)
+* SSH access to lab environment
+* vLLM Playground with running server
+
+=== Steps
+
+. Connect to your lab environment:
++
+[source,bash,subs="attributes"]
+----
+{ssh_command}
+----
+
+. Verify your vLLM server is running:
++
+[source,bash]
+----
+vllm-playground status
+----
++
+If not running, start it:
++
+[source,bash]
+----
+vllm-playground
+----
+
+. Install GuideLLM:
++
+[source,bash]
+----
+pip install guidellm
+----
++
+Alternatively, if you installed vLLM Playground with benchmarking support:
++
+[source,bash]
+----
+pip install vllm-playground[benchmark]
+----
+
+. Verify the installation:
++
+[source,bash]
+----
+guidellm --help
+----
++
+Expected output:
++
+----
+Usage: guidellm [OPTIONS] COMMAND [ARGS]...
+
+  GuideLLM - LLM Inference Benchmarking Tool
+
+Options:
+  --version  Show version
+  --help     Show this message and exit
+
+Commands:
+  benchmark  Run performance benchmark
+  report     Generate benchmark report
+----
+
+. Check your vLLM server endpoint:
++
+[source,bash]
+----
+curl http://localhost:8000/v1/models
+----
++
+This confirms the OpenAI-compatible API is accessible. Note the model name returned—you'll need it for benchmarking.
++
+// TODO: Add screenshot
+image::vllm-models-endpoint.png[vLLM models API response,width=600,title="vLLM Models Endpoint"]
+
+. Understand GuideLLM benchmark options:
++
+[cols="1,2"]
+|===
+|Option |Purpose
+
+|`--target`
+|vLLM server URL (default: http://localhost:8000)
+
+|`--model`
+|Model to benchmark (from /v1/models)
+
+|`--rate`
+|Request rate (requests/sec) or "sweep"
+
+|`--max-seconds`
+|Maximum benchmark duration
+
+|`--max-requests`
+|Maximum number of requests
+
+|`--data`
+|Dataset: "emulated" or path to custom data
+
+|`--output-path`
+|Path to save results
+|===
+
+=== Verify
+
+Confirm GuideLLM is ready:
+
+✓ `guidellm --help` shows available commands
+
+✓ vLLM server is running and accessible
+
+✓ `/v1/models` endpoint returns model information
+
+=== Troubleshooting
+
+**Issue**: "guidellm: command not found"
+
+**Solution**:
+
+. Ensure pip install completed successfully
+. Check if installed in a virtual environment
+. Try: `python -m guidellm --help`
+
+**Issue**: "Connection refused" on /v1/models
+
+**Solution**:
+
+. Verify vLLM server is running: `vllm-playground status`
+. Check the correct port (default: 8000 for API, 7860 for UI)
+. Review server logs: `podman logs vllm-service`
+
+[[exercise-2]]
+== Exercise 2: Run benchmark and analyze performance metrics
+
+Now you'll run your first benchmark and learn to interpret the results. ACME needs to understand their baseline performance before optimizing.
+
+=== Steps
+
+. Run a quick baseline benchmark:
++
+[source,bash]
+----
+guidellm benchmark \
+  --target http://localhost:8000 \
+  --model $(curl -s http://localhost:8000/v1/models | jq -r '.data[0].id') \
+  --rate 1 \
+  --max-requests 10 \
+  --data emulated
+----
++
+This runs 10 requests at 1 request/second using emulated data.
++
+// TODO: Add screenshot
+image::guidellm-running.png[GuideLLM benchmark in progress,width=700,title="Benchmark Running"]
+
+. Wait for the benchmark to complete. You'll see progress indicators and then results.
+
+. Review the benchmark output:
++
+// TODO: Add screenshot
+image::guidellm-results.png[GuideLLM benchmark results,width=700,title="Benchmark Results"]
++
+Key metrics to examine:
++
+[source,text]
+----
+=== Benchmark Results ===
+Total Requests:      10
+Successful:          10
+Failed:              0
+Duration:            12.34s
+
+Throughput:          0.81 req/s
+Tokens/second:       156.3 tok/s
+
+Latency (TTFT):
+  Mean:              234ms
+  P50:               215ms
+  P90:               312ms
+  P99:               398ms
+
+Latency (E2E):
+  Mean:              1.23s
+  P50:               1.15s
+  P90:               1.67s
+  P99:               2.01s
+----
+
+. Understand each metric:
++
+[cols="1,3"]
+|===
+|Metric |Interpretation
+
+|**Throughput (req/s)**
+|At 0.81 req/s, this server can handle ~49 requests per minute
+
+|**Tokens/second**
+|156 tokens/s indicates generation speed for streaming responses
+
+|**TTFT Mean**
+|234ms average time before first token appears (user sees response starting)
+
+|**TTFT P99**
+|99% of requests see first token within 398ms
+
+|**E2E Mean**
+|1.23s average total response time
+
+|**E2E P99**
+|99% of requests complete within 2.01s
+|===
+
+. Run a sweep benchmark to find maximum throughput:
++
+[source,bash]
+----
+guidellm benchmark \
+  --target http://localhost:8000 \
+  --model $(curl -s http://localhost:8000/v1/models | jq -r '.data[0].id') \
+  --rate sweep \
+  --max-seconds 60 \
+  --data emulated \
+  --output-path ~/benchmark-results.json
+----
++
+Sweep mode automatically tests increasing request rates to find the server's capacity limits.
+
+. Monitor GPU utilization during the benchmark:
++
+[source,bash]
+----
+# In a separate terminal
+watch -n 1 nvidia-smi
+----
++
+Observe:
++
+* GPU utilization percentage
+* Memory usage
+* Temperature
+
+. After the sweep completes, examine the results:
++
+[source,bash]
+----
+cat ~/benchmark-results.json | jq '.summary'
+----
+
+. Identify key findings:
++
+* **Maximum throughput**: Highest sustainable requests/second
+* **Saturation point**: Where latency starts increasing significantly
+* **Bottleneck**: GPU compute, memory, or network
+
+=== Analyzing results for ACME's use case
+
+ACME's customer support system requirements:
+
+[cols="1,1,2"]
+|===
+|Requirement |Target |Why
+
+|TTFT
+|< 500ms
+|Users expect quick response start
+
+|E2E (typical)
+|< 3s
+|Reasonable wait for support answers
+
+|Throughput
+|> 10 req/s
+|Handle 100+ concurrent users with queuing
+|===
+
+Compare your benchmark results against these targets.
+
+=== Verify
+
+Confirm benchmarking works:
+
+✓ Baseline benchmark completed successfully
+
+✓ All key metrics (throughput, TTFT, E2E) are captured
+
+✓ Sweep benchmark identifies maximum capacity
+
+✓ Results saved for comparison
+
+=== Troubleshooting
+
+**Issue**: Benchmark requests failing
+
+**Solution**:
+
+. Check server logs: `podman logs vllm-service`
+. Verify model is fully loaded
+. Reduce request rate and retry
+
+**Issue**: Very slow throughput
+
+**Solution**:
+
+. Verify GPU is being utilized: `nvidia-smi`
+. Check model fits in GPU memory
+. Consider a smaller model for testing
+
+**Issue**: Out of memory errors
+
+**Solution**:
+
+. Reduce concurrent requests
+. Lower `--gpu-memory-utilization` setting
+. Use a smaller model
+
+[[exercise-3]]
+== Exercise 3: Optimize server configuration
+
+Based on benchmark results, you'll now optimize the vLLM server configuration to meet ACME's production requirements.
+
+=== Understanding optimization levers
+
+[cols="1,2,2"]
+|===
+|Parameter |Effect |Trade-off
+
+|`--gpu-memory-utilization`
+|Higher = more KV cache = more concurrent requests
+|May cause OOM if too high
+
+|`--max-model-len`
+|Maximum context length
+|Lower = more memory for batching
+
+|`--max-num-seqs`
+|Maximum concurrent sequences
+|Higher = more throughput, more memory
+
+|`--tensor-parallel-size`
+|Multi-GPU distribution
+|Requires multiple GPUs
+
+|`--enforce-eager`
+|Disable CUDA graphs
+|Lower memory, slightly slower
+|===
+
+=== Steps
+
+. Record your baseline metrics from Exercise 2:
++
+[cols="1,1"]
+|===
+|Metric |Baseline Value
+
+|Throughput (req/s)
+|___________
+
+|TTFT P50
+|___________
+
+|E2E P50
+|___________
+
+|GPU Memory Used
+|___________
+|===
+
+. Stop the current vLLM server:
++
+[source,bash]
+----
+vllm-playground stop
+----
+
+. Start with optimized configuration for throughput:
++
+In vLLM Playground UI, update Server Configuration:
++
+// TODO: Add screenshot
+image::optimized-config.png[Optimized server configuration,width=600,title="Optimized Configuration"]
++
+[cols="1,2"]
+|===
+|Setting |Optimized Value
+
+|GPU Memory Utilization
+|0.95 (increase from default 0.9)
+
+|Max Model Length
+|2048 (reduce if your use case allows shorter contexts)
+|===
+
+. Start the server with new configuration and wait for it to load.
+
+. Re-run the baseline benchmark:
++
+[source,bash]
+----
+guidellm benchmark \
+  --target http://localhost:8000 \
+  --model $(curl -s http://localhost:8000/v1/models | jq -r '.data[0].id') \
+  --rate 1 \
+  --max-requests 10 \
+  --data emulated
+----
+
+. Compare results:
++
+[cols="1,1,1"]
+|===
+|Metric |Baseline |Optimized
+
+|Throughput (req/s)
+|___________
+|___________
+
+|TTFT P50
+|___________
+|___________
+
+|E2E P50
+|___________
+|___________
+|===
+
+. If latency is the priority (ACME's TTFT target), try latency-optimized settings:
++
+[cols="1,2"]
+|===
+|Setting |Latency-Optimized Value
+
+|GPU Memory Utilization
+|0.85 (leave headroom)
+
+|Max Num Seqs
+|Lower value (reduces batching delay)
+|===
+
+. Run comparative benchmark with latency focus:
++
+[source,bash]
+----
+guidellm benchmark \
+  --target http://localhost:8000 \
+  --model $(curl -s http://localhost:8000/v1/models | jq -r '.data[0].id') \
+  --rate sweep \
+  --max-seconds 60 \
+  --data emulated \
+  --output-path ~/benchmark-optimized.json
+----
+
+. Create a simple comparison report:
++
+[source,bash]
+----
+echo "=== Performance Comparison ==="
+echo "Baseline:"
+cat ~/benchmark-results.json | jq '.summary.throughput, .summary.latency_ttft_p50'
+echo "Optimized:"
+cat ~/benchmark-optimized.json | jq '.summary.throughput, .summary.latency_ttft_p50'
+----
+
+=== Optimization strategies by use case
+
+[cols="1,3"]
+|===
+|Use Case |Recommended Settings
+
+|**High throughput** (many users, async)
+|High GPU memory util (0.95), larger max-num-seqs, accept higher latency
+
+|**Low latency** (real-time chat)
+|Moderate memory util (0.85), smaller batches, prioritize TTFT
+
+|**Long contexts** (document analysis)
+|Lower memory util, higher max-model-len, fewer concurrent requests
+
+|**Cost efficiency** (maximize GPU usage)
+|High memory util, continuous batching, monitor for OOM
+|===
+
+=== Production readiness checklist for ACME
+
+Based on your benchmarks, verify ACME's requirements:
+
+[cols="1,1,1,1"]
+|===
+|Requirement |Target |Achieved |Status
+
+|TTFT P50
+|< 500ms
+|___________
+|✓ / ✗
+
+|E2E P50
+|< 3s
+|___________
+|✓ / ✗
+
+|Throughput
+|> 10 req/s
+|___________
+|✓ / ✗
+
+|Error rate
+|< 1%
+|___________
+|✓ / ✗
+|===
+
+=== Verify
+
+Confirm optimization improves performance:
+
+✓ Baseline metrics recorded
+
+✓ At least one optimization applied
+
+✓ Comparative benchmark shows improvement
+
+✓ ACME's requirements can be met (or gap identified)
+
+=== Troubleshooting
+
+**Issue**: OOM after increasing memory utilization
+
+**Solution**:
+
+. Reduce `--gpu-memory-utilization` to 0.85
+. Lower `--max-model-len`
+. Use a smaller model
+
+**Issue**: Optimization doesn't improve metrics
+
+**Solution**:
+
+. Identify the bottleneck (GPU compute vs memory vs network)
+. Focus optimization on the bottleneck
+. Consider hardware upgrade for production
+
+**Issue**: Inconsistent benchmark results
+
+**Solution**:
+
+. Run longer benchmarks (more requests)
+. Ensure no other processes using GPU
+. Wait for GPU to cool between tests
+
+== Troubleshooting
+
+**Issue**: GuideLLM crashes during benchmark
+
+**Solution**:
+
+. Check available system memory
+. Reduce `--max-requests` or `--rate`
+. Update to latest GuideLLM version
+
+**Issue**: Results vary significantly between runs
+
+**Solution**:
+
+. GPU thermal throttling—allow cooling between benchmarks
+. Other processes competing for resources
+. Run longer benchmarks for statistical stability
+
+**Issue**: Can't achieve target performance
+
+**Solution**:
+
+. Current model may be too large for hardware
+. Consider model quantization (INT8, INT4)
+. Evaluate smaller, faster models for your use case
+. Scale horizontally with multiple instances
+
+== Learning outcomes
+
+By completing this module, you should now understand:
+
+* ✓ Key LLM inference metrics and their business implications
+* ✓ How to install and use GuideLLM for benchmarking
+* ✓ How to interpret throughput, latency, and token generation metrics
+* ✓ The trade-offs between throughput and latency optimization
+* ✓ How to tune vLLM configuration for different workload patterns
+* ✓ How to validate production readiness against requirements
+
+== Module summary
+
+You've successfully completed the Performance Testing module and the entire vLLM Playground workshop!
+
+**What you accomplished:**
+
+* Installed and configured GuideLLM benchmarking tool
+* Ran baseline and sweep benchmarks against your vLLM server
+* Analyzed throughput, latency (TTFT, E2E), and token generation metrics
+* Optimized server configuration and measured improvements
+* Validated against ACME's production requirements
+
+**Key takeaways:**
+
+* Performance testing is essential before production deployment
+* TTFT (Time to First Token) is critical for user-perceived responsiveness
+* Throughput vs latency is a fundamental trade-off in LLM serving
+* GPU memory utilization directly impacts concurrent request capacity
+* Regular benchmarking helps catch performance regressions
+
+**Business impact for ACME:**
+
+* Validated AI infrastructure can handle expected customer load
+* Identified optimal configuration for customer support use case
+* Established baseline metrics for ongoing monitoring
+* Confident production deployment with known performance characteristics
+
+== Workshop completion
+
+🎉 **Congratulations!** You've completed the vLLM Playground Workshop!
+
+**Your journey through ACME Corporation's AI initiative:**
+
+[cols="1,3"]
+|===
+|Module |Achievement
+
+|Module 1
+|Deployed vLLM server and experienced the chat interface
+
+|Module 2
+|Mastered structured outputs for reliable, parseable AI responses
+
+|Module 3
+|Configured tool calling for AI-driven function invocation
+
+|Module 4
+|Connected MCP servers for agentic AI with human-in-the-loop safety
+
+|Module 5
+|Validated production readiness through performance benchmarking
+|===
+
+**ACME Corporation now has:**
+
+* ✓ High-performance LLM inference infrastructure
+* ✓ Structured outputs for backend integration
+* ✓ Tool calling for intelligent automation
+* ✓ Agentic capabilities with safety controls
+* ✓ Validated performance for production deployment
+
+**Next steps for your own projects:**
+
+* Deploy vLLM Playground in your environment
+* Experiment with different models for your use cases
+* Build custom MCP servers for your specific tools
+* Establish performance baselines and monitoring
+* Scale horizontally for higher throughput
+
+== References
+
+* link:https://github.com/micytao/vllm-playground[vLLM Playground - Benchmarking Documentation^]
+* link:https://docs.guidellm.ai[GuideLLM Official Documentation^]
+* link:https://docs.vllm.ai/en/latest/serving/performance.html[vLLM Performance Tuning Guide^]
+* link:https://github.com/neuralmagic/guidellm[GuideLLM GitHub Repository^]

@@ -8,3 +8,25 @@
 ** xref:03-module-01-getting-started.adoc#exercise-1[Exercise 1: Verify Environment]
 ** xref:03-module-01-getting-started.adoc#exercise-2[Exercise 2: Deploy vLLM Server]
 ** xref:03-module-01-getting-started.adoc#exercise-3[Exercise 3: Chat with LLM]
+
+* xref:04-module-02-structured-outputs.adoc[Module 2: Structured Outputs]
+** xref:04-module-02-structured-outputs.adoc#exercise-1[Exercise 1: Sentiment Analysis]
+** xref:04-module-02-structured-outputs.adoc#exercise-2[Exercise 2: JSON Schema]
+** xref:04-module-02-structured-outputs.adoc#exercise-3[Exercise 3: Regex Patterns]
+** xref:04-module-02-structured-outputs.adoc#exercise-4[Exercise 4: Grammar]
+
+* xref:05-module-03-tool-calling.adoc[Module 3: Tool Calling]
+** xref:05-module-03-tool-calling.adoc#exercise-1[Exercise 1: Enable Tool Calling]
+** xref:05-module-03-tool-calling.adoc#exercise-2[Exercise 2: Define Custom Tools]
+** xref:05-module-03-tool-calling.adoc#exercise-3[Exercise 3: Test Tool Calling Workflow]
+
+* xref:06-module-04-mcp-integration.adoc[Module 4: MCP Integration]
+** xref:06-module-04-mcp-integration.adoc#exercise-1[Exercise 1: Understand & Install MCP]
+** xref:06-module-04-mcp-integration.adoc#exercise-2[Exercise 2: Connect Time Server]
+** xref:06-module-04-mcp-integration.adoc#exercise-3[Exercise 3: File System Access]
+** xref:06-module-04-mcp-integration.adoc#exercise-4[Exercise 4: Agentic Workflow]
+
+* xref:07-module-05-performance-testing.adoc[Module 5: Performance Testing]
+** xref:07-module-05-performance-testing.adoc#exercise-1[Exercise 1: Intro & Install GuideLLM]
+** xref:07-module-05-performance-testing.adoc#exercise-2[Exercise 2: Run Benchmark & Analyze]
+** xref:07-module-05-performance-testing.adoc#exercise-3[Exercise 3: Optimize Configuration]
