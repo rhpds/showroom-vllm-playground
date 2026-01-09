@@ -978,7 +978,6 @@ Your choice? [1/2/3]
    - Extracting all learning outcomes from previous modules
    - Listing 3-5 key takeaways from the workshop
    - Providing next steps (related workshops, docs, practice projects)
-   - Adding certification recommendations if applicable
 4. Update nav.adoc with conclusion entry at the end
 5. Provide brief confirmation
 
@@ -1033,13 +1032,6 @@ Put your new skills to work:
 . **{{ project_idea_1 }}**: {{ project_description_1 }}
 . **{{ project_idea_2 }}**: {{ project_description_2 }}
 . **{{ project_idea_3 }}**: {{ project_description_3 }}
-
-=== Get Certified
-
-Validate your expertise with Red Hat certifications:
-
-* link:https://www.redhat.com/en/services/certification[Red Hat Certification Program^]
-* link:{{ relevant_cert_url }}[{{ relevant_cert_name }}^] - Validates skills covered in this workshop
 
 == Share Your Feedback
 
