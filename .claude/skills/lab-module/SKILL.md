@@ -949,6 +949,56 @@ I'll automatically update `content/modules/ROOT/nav.adoc` - this is REQUIRED for
 - ✅ Give clear next steps
 - ✅ Keep output concise (under 5000 tokens)
 
+### Step 12: Offer to Generate Conclusion Module (Optional)
+
+**After delivering all modules, ask if user wants a conclusion module:**
+
+```
+Q: Would you like me to generate a conclusion module to wrap up the workshop?
+
+This adds a final module that:
+- Summarizes what learners accomplished
+- Lists key takeaways
+- Provides next steps and resources
+- Suggests related workshops and certification paths
+
+Options:
+1. Yes, generate conclusion module
+2. No, I'll create it later
+3. No, workshop is complete without it
+
+Your choice? [1/2/3]
+```
+
+**If user chooses option 1 (Yes)**:
+
+1. Read conclusion template: `content/modules/ROOT/pages/workshop/templates/99-conclusion.adoc`
+2. Detect highest module number (e.g., if last module is 07-module-05, conclusion will be 08-conclusion.adoc)
+3. Generate conclusion module:
+   - File: `0X-conclusion.adoc` (where X = next sequential number)
+   - Summarize all learning outcomes from previous modules
+   - List key takeaways from the workshop
+   - Provide next steps (related workshops, docs, practice projects)
+   - Add certification recommendations if applicable
+4. Update nav.adoc with conclusion entry at the end
+5. Provide brief confirmation
+
+**Conclusion Module Naming**:
+- File: `0X-conclusion.adoc` (sequential number, e.g., 08-conclusion.adoc)
+- Title: `= Conclusion and Next Steps`
+- Nav entry: `* xref:0X-conclusion.adoc[Conclusion and Next Steps]`
+
+**Content to Include**:
+- ✅ "What You've Learned" - Extract from all module learning outcomes
+- ✅ "Key Takeaways" - 3-5 most important concepts
+- ✅ "Next Steps" - Related workshops, documentation, practice projects
+- ✅ "Get Certified" - Relevant Red Hat certifications
+- ✅ "Thank You" - Closing message
+
+**If user chooses option 2 or 3**:
+- Skip conclusion generation
+- Note in summary that user can add conclusion later using the template
+
 ## Example Usage
 
 ### Example 1: Create First Module with Overall Story Planning
