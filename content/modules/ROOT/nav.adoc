@@ -30,3 +30,5 @@
 ** xref:07-module-05-performance-testing.adoc#exercise-1[Exercise 1: Intro & Install GuideLLM]
 ** xref:07-module-05-performance-testing.adoc#exercise-2[Exercise 2: Run Benchmark & Analyze]
 ** xref:07-module-05-performance-testing.adoc#exercise-3[Exercise 3: Optimize Configuration]
+
+* xref:08-conclusion.adoc[Conclusion and Next Steps]
