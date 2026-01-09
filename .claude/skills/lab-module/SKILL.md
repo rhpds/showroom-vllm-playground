@@ -972,16 +972,97 @@ Your choice? [1/2/3]
 
 **If user chooses option 1 (Yes)**:
 
-1. Read conclusion template: `content/modules/ROOT/pages/workshop/templates/99-conclusion.adoc`
-2. Detect highest module number (e.g., if last module is 07-module-05, conclusion will be 08-conclusion.adoc)
-3. Generate conclusion module:
-   - File: `0X-conclusion.adoc` (where X = next sequential number)
-   - Summarize all learning outcomes from previous modules
-   - List key takeaways from the workshop
-   - Provide next steps (related workshops, docs, practice projects)
-   - Add certification recommendations if applicable
+1. Detect highest module number (e.g., if last module is 07-module-05, conclusion will be 08-conclusion.adoc)
+2. Generate conclusion module using the embedded template below
+3. Customize the template by:
+   - Extracting all learning outcomes from previous modules
+   - Listing 3-5 key takeaways from the workshop
+   - Providing next steps (related workshops, docs, practice projects)
+   - Adding certification recommendations if applicable
 4. Update nav.adoc with conclusion entry at the end
 5. Provide brief confirmation
+
+**Embedded Conclusion Template**:
+```asciidoc
+= Conclusion and Next Steps
+
+Congratulations! You've completed the {{ workshop_name }} workshop.
+
+== What You've Learned
+
+Throughout this workshop, you've gained hands-on experience with:
+
+* ✅ {{ learning_outcome_1 }}
+* ✅ {{ learning_outcome_2 }}
+* ✅ {{ learning_outcome_3 }}
+* ✅ {{ learning_outcome_4 }}
+
+You now have the skills to {{ primary_capability }}.
+
+== Key Takeaways
+
+The most important concepts to remember:
+
+. **{{ key_concept_1 }}**: {{ brief_explanation_1 }}
+. **{{ key_concept_2 }}**: {{ brief_explanation_2 }}
+. **{{ key_concept_3 }}**: {{ brief_explanation_3 }}
+
+== Next Steps
+
+Ready to continue your journey? Here are some recommended next steps:
+
+=== Recommended Workshops
+
+Explore related workshops to expand your skills:
+
+* link:{{ related_workshop_1_url }}[{{ related_workshop_1_name }}^] - {{ related_workshop_1_description }}
+* link:{{ related_workshop_2_url }}[{{ related_workshop_2_name }}^] - {{ related_workshop_2_description }}
+
+=== Documentation and Resources
+
+Deepen your knowledge with these resources:
+
+* link:{{ docs_url_1 }}[{{ product_name }} Official Documentation^]
+* link:{{ docs_url_2 }}[{{ feature_name }} Guide^]
+* link:{{ community_url }}[{{ product_name }} Community^]
+
+=== Practice Projects
+
+Put your new skills to work:
+
+. **{{ project_idea_1 }}**: {{ project_description_1 }}
+. **{{ project_idea_2 }}**: {{ project_description_2 }}
+. **{{ project_idea_3 }}**: {{ project_description_3 }}
+
+=== Get Certified
+
+Validate your expertise with Red Hat certifications:
+
+* link:https://www.redhat.com/en/services/certification[Red Hat Certification Program^]
+* link:{{ relevant_cert_url }}[{{ relevant_cert_name }}^] - Validates skills covered in this workshop
+
+== Share Your Feedback
+
+Help us improve this workshop:
+
+* What did you find most valuable?
+* What could be improved?
+* What topics would you like to see covered in future workshops?
+
+Contact us: {{ feedback_contact }}
+
+== Thank You!
+
+Thank you for participating in this workshop. We hope you found it valuable and informative.
+
+Keep building, keep learning! 🚀
+
+---
+
+**Workshop**: {{ workshop_name }} +
+**Completed**: {localdate} +
+**Platform**: Red Hat Showroom
+```
 
 **Conclusion Module Naming**:
 - File: `0X-conclusion.adoc` (sequential number, e.g., 08-conclusion.adoc)
