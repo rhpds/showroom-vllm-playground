@@ -5,7 +5,7 @@
 
 In Module 1, you deployed a vLLM server and experienced the chat interface. Now ACME Corporation faces a new challenge: their customer support system needs to integrate AI responses with existing backend systems. Free-form text responses are difficult to parse and process programmatically.
 
-ACME's engineering team requires predictable, structured outputs that downstream systems can reliably consume. vLLM Playground's structured output capabilities—JSON Schema, Regex, and Grammar—provide exactly this control.
+ACME's engineering team requires predictable, structured outputs that downstream systems can reliably consume. vLLM Playground's structured output capabilities — JSON Schema, Regex, and Grammar — provide exactly this control.
 
 In this module, you'll learn to constrain LLM outputs to specific formats, ensuring ACME's AI responses are system-ready and consistently parseable.
 
@@ -28,7 +28,7 @@ You'll configure vLLM to output only valid sentiment labels, ensuring reliable a
 
 === Prerequisites
 
-* Module 1 completed (vLLM server running)
+* Module 1 completed
 * Access to vLLM Playground web UI
 
 === Steps
@@ -40,12 +40,21 @@ You'll configure vLLM to output only valid sentiment labels, ensuring reliable a
 http://{hostname}:7860
 ----
 
-. Ensure your vLLM server is running. If not, start it from the *Server Configuration* panel.
+. For structured outputs to work reliably, we need a more capable model than TinyLlama used in Module 1. Stop the current server if running, then configure a new server with `Qwen/Qwen2.5-3B-Instruct`:
++
+.. Click *Stop Server* if a server is currently running
+.. In the *Model* section, select or enter: `Qwen/Qwen2.5-3B-Instruct`
+.. Ensure *Container* mode and *GPU* mode are selected
+.. Click *Start Server*
++
+NOTE: Qwen2.5-3B-Instruct is a 3 billion parameter model that provides better instruction-following capabilities for structured output tasks while still being fast on GPU.
+
+. Wait for the server to be ready (green "Server is ready to chat!" notification).
 
 . Navigate to the *Structured Outputs* section in the toolbar panel.
+. Click "Enable Structured Outputs".
 +
-// TODO: Add screenshot
-image::structured-outputs-panel.png[Structured outputs configuration panel,width=600,title="Structured Outputs Panel"]
+image::module-02-figure-01.png[Structured outputs configuration panel showing Enable checkbox and Output Type options,width=600,title="Structured Outputs Panel"]
 
 . Select *Choice* mode for simple constrained outputs.
 
@@ -71,6 +80,8 @@ Feedback: "I absolutely love your product! It exceeded all my expectations and t
 ----
 +
 Expected output: `positive`
++
+image::module-02-figure-02.png[Chat interface showing sentiment analysis with Choice mode outputting positive,width=600,title="Sentiment Analysis with Choice Mode"]
 
 . Test with negative feedback:
 +
@@ -87,6 +98,8 @@ Feedback: "The product works as described. Delivery was on time. Nothing special
 ----
 +
 Expected output: `neutral`
++
+image::module-02-figure-03.png[Sentiment analysis showing neutral classification result,width=600,title="Neutral Sentiment Classification"]
 
 === Verify
 
