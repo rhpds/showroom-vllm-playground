@@ -13,17 +13,17 @@
 * **Module 4**: Advanced Inferencing: MCP Integration (18 minutes)
 * **Module 5**: Performance Testing (18 minutes)
 
-=== Quick start workshop (45 minutes)
+=== Quick start workshop (36 minutes)
 
 * **Module 1**: Getting Started with vLLM Playground (15 minutes)
-* **Module 2**: Advanced Inferencing: Structured Outputs (15 minutes)
-* **Module 3**: Advanced Inferencing: Tool Calling (15 minutes)
+* **Module 5**: Performance Testing (18 minutes)
 
 == Technical requirements
 
 === Software versions
 
 * vLLM Playground v0.1.1
+* vLLM v0.10.0
 * Podman 4.0 or later
 * Python 3.10 or later (required for MCP)
 * NVIDIA GPU with CUDA support
@@ -67,8 +67,27 @@ Your lab environment comes with:
 |✓ Available for MCP support
 
 |Container images
-|✓ Will be pulled during exercises
+|✓ Pre-pulled and configured
 |===
+
+=== Optional packages
+
+The following packages can be installed for additional functionality:
+
+[cols="1,2,2"]
+|===
+|Package |Install Command |Purpose
+
+|MCP Client
+|`pip install mcp` or `pip install vllm-playground[mcp]`
+|Required for Module 4: MCP Integration
+
+|GuideLLM
+|`pip install guidellm` or `pip install vllm-playground[benchmark]`
+|Required for Module 5: Performance Testing
+|===
+
+NOTE: These packages may already be pre-installed in your lab environment. The modules will guide you through verification and installation if needed.
 
 === Setup validation
 
@@ -87,6 +106,12 @@ nvidia-smi
 
 # Check Python version (for MCP)
 python3 --version
+
+# Verify MCP installation (optional - for Module 4)
+python3 -c "import mcp; print('MCP installed successfully')"
+
+# Verify GuideLLM installation (optional - for Module 5)
+guidellm --help
 ----
 
 == Troubleshooting guide
@@ -131,8 +156,8 @@ python3 --version
 
 == Authors and contributors
 
-**Primary Author**: Red Hat Technical Team
-**Last Updated**: January 2026
+**Primary Author**: Michael Yang, Prakhar Srivastava 
+**Last Updated**: January 2026 
 **Workshop Version**: 1.0
 
 **Feedback and Questions**:
