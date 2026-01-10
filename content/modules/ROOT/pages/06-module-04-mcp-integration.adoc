@@ -3,9 +3,9 @@
 :toc: macro
 :toclevels: 1
 
-In Module 3, you configured tool calling and saw how the AI generates function calls. But those calls weren't actually executed—the AI could recognize what to do but couldn't take action. Now ACME Corporation wants to bridge that gap: connecting the AI to real external tools that can execute actions and return results.
+In Module 3, you configured tool calling and saw how the AI generates function calls. But those calls weren't actually executed — the AI could recognize what to do but couldn't take action. Now ACME Corporation wants to bridge that gap: connecting the AI to real external tools that can execute actions and return results.
 
-Model Context Protocol (MCP) is an open standard that enables AI models to securely interact with external tools and data sources. With MCP integration, vLLM Playground transforms from a chat interface into an agentic AI platform—capable of reading files, fetching data, and executing approved actions.
+Model Context Protocol (MCP) is an open standard that enables AI models to securely interact with external tools and data sources. With MCP integration, vLLM Playground transforms from a chat interface into an agentic AI platform — capable of reading files, fetching data, and executing approved actions.
 
 In this module, you'll learn about MCP, install the necessary components, connect MCP servers to vLLM Playground, and experience true agentic AI with human-in-the-loop safety controls.
 
@@ -38,17 +38,17 @@ Model Context Protocol (MCP) is an open standard developed to enable AI models t
 [source,text]
 ----
 ┌─────────────────────────────────────────────────────────────┐
-│                    MCP Architecture                          │
+│                    MCP Architecture                         │
 │                                                             │
-│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐  │
-│  │   vLLM       │    │     MCP      │    │   External   │  │
-│  │  Playground  │◄──►│   Server     │◄──►│   Resource   │  │
-│  │  (AI Chat)   │    │  (Bridge)    │    │  (Files,API) │  │
-│  └──────────────┘    └──────────────┘    └──────────────┘  │
-│         │                   │                              │
-│         └───────────────────┘                              │
-│              Human-in-the-Loop                             │
-│              Approval Layer                                │
+│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐   │
+│  │   vLLM       │    │     MCP      │    │   External   │   │
+│  │  Playground  │◄──►│   Server     │◄──►│   Resource   │   │
+│  │  (AI Chat)   │    │  (Bridge)    │    │  (Files,API) │   │
+│  └──────────────┘    └──────────────┘    └──────────────┘   │
+│         │                   │                               │
+│         └───────────────────┘                               │
+│              Human-in-the-Loop                              │
+│              Approval Layer                                 │
 └─────────────────────────────────────────────────────────────┘
 ----
 
@@ -62,10 +62,10 @@ Model Context Protocol (MCP) is an open standard developed to enable AI models t
 |A bridge that exposes tools and resources to AI models
 
 |**Tools**
-|Functions the AI can call (e.g., read_file, get_time)
+|Functions the MCP client can call (e.g., read_file, get_time)
 
 |**Resources**
-|Data sources the AI can access (e.g., files, databases)
+|Data sources the MCP client can access (e.g., files, databases)
 
 |**Human-in-the-Loop**
 |Approval mechanism for sensitive operations
@@ -77,11 +77,13 @@ Model Context Protocol (MCP) is an open standard developed to enable AI models t
 === Why MCP matters for ACME
 
 Without MCP:
+
 * AI can only generate text responses
 * No access to real-time data
 * Cannot execute actions
 
 With MCP:
+
 * AI accesses real customer documents
 * Retrieves current time for scheduling
 * Executes approved support actions
@@ -120,21 +122,23 @@ IMPORTANT: MCP requires Python 3.10+. If your version is older, MCP features wil
 vllm-playground status
 ----
 +
-If not running, start it:
+Or checking daemon service 
 +
 [source,bash]
 ----
-vllm-playground
+sudo systemctl status vllm-playground
 ----
 
 . Install MCP client dependencies (if not already installed):
 +
 [source,bash]
 ----
-pip install mcp
+sudo pip install mcp
 ----
 +
 This installs the MCP Python client library.
++
+NOTE: The `sudo` prefix is required because the vLLM Playground service runs as a systemd daemon with root privileges. Installing MCP system-wide ensures the service can detect and use the MCP library.
 
 . Verify MCP installation:
 +
@@ -142,6 +146,44 @@ This installs the MCP Python client library.
 ----
 python3 -c "import mcp; print('MCP installed successfully')"
 ----
+
+. Install MCP server transport dependencies:
++
+Different MCP servers require different transport executables. Install the following:
++
+[source,bash]
+----
+# Install uvx (required for Time, Git, Fetch servers)
+# uvx is part of the uv package manager
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Reload shell to pick up uv/uvx
+source ~/.bashrc
+
+# Verify uvx installation
+uvx --version
+----
++
+[source,bash]
+----
+# Install npx (required for Filesystem server)
+# npx is part of Node.js
+sudo dnf install -y nodejs npm
+
+# Verify npx installation
+npx --version
+----
++
+NOTE: `uvx` is used for Python-based MCP servers (Time, Git, Fetch), while `npx` is used for Node.js-based MCP servers (Filesystem).
+
+. Restart the vLLM Playground service so that MCP can be detected:
++
+[source,bash]
+----
+sudo systemctl restart vllm-playground
+----
++
+NOTE: The vLLM Playground service needs to be restarted after installing MCP to detect the new library and enable MCP features in the UI.
 
 . Open the vLLM Playground web UI:
 +
@@ -152,8 +194,7 @@ http://{hostname}:7860
 
 . Navigate to the *MCP Servers* section in the sidebar to verify MCP support is available.
 +
-// TODO: Add screenshot
-image::mcp-servers-panel.png[MCP Servers panel in sidebar,width=300,title="MCP Servers Panel"]
+image::module-04-figure-01.png[MCP Server Configuration panel showing MCP Available status,width=700,title="MCP Server Configuration"]
 
 . You should see preset MCP server options:
 +
@@ -200,9 +241,9 @@ Confirm MCP is ready:
 
 **Solution**:
 
-. Install MCP: `pip install mcp`
+. Install MCP: `sudo pip install mcp`
 . If using virtual environment, ensure it's activated
-. Try: `pip3 install mcp`
+. Try: `sudo pip3 install mcp`
 
 **Issue**: MCP Servers panel not visible
 
@@ -223,12 +264,17 @@ ACME's support team needs current time information to help customers with schedu
 
 . In the vLLM Playground web UI, navigate to the *MCP Servers* panel.
 
-. Click *Add Server* and select the *Time* preset.
+. In the *Quick Start with Presets* section, click the *Time* preset.
 +
-// TODO: Add screenshot
-image::mcp-add-time-server.png[Adding Time MCP server,width=500,title="Add Time Server"]
+The Time server configuration dialog appears. No additional settings are needed—the defaults work out of the box.
++
+image::module-04-figure-02.png[Time server configuration dialog,width=500,title="Time Server Configuration"]
 
-. The Time server configuration is simple—no additional settings needed. Click *Connect*.
+. Click *Save Server* to save the MCP server configuration.
++
+NOTE: Different MCP servers require different transport dependencies. The Time server uses `uvx` (from the `uv` package manager), which is required for Git, Fetch, and Time servers. The Filesystem server requires `npx` (from Node.js). Ensure these dependencies are installed before connecting.
+
+. Click *Connect* to establish the connection.
 
 . Wait for the connection to establish. You should see:
 +
