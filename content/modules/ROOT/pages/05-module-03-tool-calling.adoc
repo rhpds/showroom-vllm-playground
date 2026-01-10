@@ -503,6 +503,16 @@ In this module, we completed steps 1-3. Module 4 (MCP Integration) covers steps 
 . Try "Auto-detect" parser setting
 . Some models may need specific prompt formatting
 
+== Clean up
+
+Before proceeding to Module 4, stop the current vLLM server to prepare for MCP integration:
+
+. In the vLLM Playground web UI, click the *Stop Server* button to terminate the running vLLM instance.
+
+. Verify the server has stopped by checking that the server status shows "Stopped" or the Start Server button becomes available again.
+
+NOTE: Module 4 requires restarting the vLLM Playground daemon service after installing MCP dependencies. Stopping the server now ensures a clean transition.
+
 == Troubleshooting
 
 **Issue**: Tool calls not appearing in response

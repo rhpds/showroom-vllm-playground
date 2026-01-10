@@ -173,7 +173,7 @@ sudo dnf install -y nodejs npm
 npx --version
 ----
 +
-NOTE: `uvx` is used for Python-based MCP servers (Time, Git, Fetch), while `npx` is used for Node.js-based MCP servers (Filesystem).
+NOTE: `npx` is used for Node.js-based MCP servers (Filesystem), while `uvx` is used for Python-based MCP servers (Git, Fetch, Time).
 
 . Restart the vLLM Playground service so that MCP can be detected:
 +
@@ -201,17 +201,17 @@ image::module-04-figure-01.png[MCP Server Configuration panel showing MCP Availa
 |===
 |Server |Purpose
 
-|Time
-|Get current time and timezone information
-
 |Filesystem
 |Read, write, and navigate files
+
+|Git
+|Interact with Git repositories
 
 |Fetch
 |Retrieve content from URLs
 
-|Git
-|Interact with Git repositories
+|Time
+|Get current time and timezone information
 |===
 
 === Verify
@@ -261,7 +261,35 @@ ACME's support team needs current time information to help customers with schedu
 
 === Steps
 
-. In the vLLM Playground web UI, navigate to the *MCP Servers* panel.
+. First, start a vLLM server with tool calling enabled. In the vLLM Playground web UI, configure the following settings:
++
+[cols="1,2"]
+|===
+|Setting |Value
+
+|Model
+|`Qwen/Qwen2.5-3B-Instruct`
+
+|Run Mode
+|Container
+
+|Compute Mode
+|GPU
+
+|Enable Tool Calling
+|Checked ✓
+
+|Tool Call Parser
+|`hermes`
+|===
++
+NOTE: MCP requires tool calling to be enabled on the vLLM server. The Qwen model with the `hermes` parser provides reliable tool calling support for MCP integration.
+
+. Click *Start Server* and wait for the server to be ready.
++
+Monitor the *Server Logs* panel until you see the server is ready to accept connections.
+
+. Navigate to the *MCP Servers* panel in the sidebar.
 
 . In the *Quick Start with Presets* section, click the *Time* preset.
 +
@@ -271,17 +299,16 @@ image::module-04-figure-02.png[Time server configuration dialog,width=500,title=
 
 . Click *Save Server* to save the MCP server configuration.
 +
-NOTE: Different MCP servers require different transport dependencies. The Time server uses `uvx` (from the `uv` package manager), which is required for Git, Fetch, and Time servers. The Filesystem server requires `npx` (from Node.js). Ensure these dependencies are installed before connecting.
+NOTE: Different MCP servers require different transport dependencies. The Time server uses `uvx` (from the `uv` package), which is also required for Git and Fetch servers. The Filesystem server requires `npx` (from Node.js). Ensure these dependencies are installed before connecting.
 
-. Click *Connect* to establish the connection.
+. Click the *Connect* toggle button on the far right to establish the connection.
 
 . Wait for the connection to establish. You should see:
 +
 * Status indicator turns green
 * Available tools from the server are listed
 +
-// TODO: Add screenshot
-image::mcp-time-connected.png[Time server connected showing available tools,width=500,title="Time Server Connected"]
+image::module-04-figure-03.png[Time server connected showing available tools,width=500,title="Time Server Connected"]
 
 . Review the tools provided by the Time server:
 +
