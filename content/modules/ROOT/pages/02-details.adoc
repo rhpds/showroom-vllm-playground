@@ -145,7 +145,7 @@ guidellm --help
 
 * link:https://github.com/micytao/vllm-playground[vLLM Playground GitHub Repository^] - Source code and documentation
 * link:https://github.com/vllm-project/vllm[vLLM Project^] - The underlying high-performance inference engine
-* link:https://docs.guidellm.ai[GuideLLM Documentation^] - Performance benchmarking tool
+* link:https://github.com/vllm-project/guidellm[GuideLLM Documentation^] - Performance benchmarking tool
 * link:https://modelcontextprotocol.io[Model Context Protocol^] - MCP specification and servers
 
 === Additional learning paths
