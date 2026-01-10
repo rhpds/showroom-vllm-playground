@@ -153,29 +153,15 @@ Different MCP servers require different transport executables. Install the follo
 +
 [source,bash]
 ----
-# Install uvx (required for Time, Git, Fetch servers)
-# uvx is part of the uv package manager
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Reload shell to pick up uv/uvx
-source ~/.bashrc
+# Install uv (which includes uvx) system-wide
+# Using sudo pip puts binaries in /usr/local/bin/, accessible by systemd services
+sudo pip install uv
 
 # Verify uvx installation
 uvx --version
-
-# Create symlinks so the systemd service can find uvx
-# The vLLM Playground service runs as root and needs uvx in the system PATH
-sudo ln -sf /home/lab-user/.local/bin/uv /usr/local/bin/uv
-sudo ln -sf /home/lab-user/.local/bin/uvx /usr/local/bin/uvx
-
-# Verify the symlinks were created
-ls -la /usr/local/bin/uvx
-
-# Test with full path (sudo uses restricted PATH)
-sudo /usr/local/bin/uvx --version
 ----
 +
-NOTE: The symlinks use the full path `/home/lab-user/.local/bin/` because `~` would expand to `/root` when using `sudo`. The vLLM Playground systemd service runs as root, so it needs uvx accessible via `/usr/local/bin`.
+NOTE: Using `sudo pip install uv` installs the binaries to `/usr/local/bin/`, which is accessible system-wide. This is simpler than the curl installation method, which requires additional symlinks for systemd services.
 +
 [source,bash]
 ----
