@@ -465,7 +465,7 @@ Confirm tool calling workflow works:
 │  3. Tool Call Generated                                     │
 │     {"name": "get_order_status", "arguments": {...}}        │
 │              ↓                                              │
-│  4. [Module 4] Tool Execution                               │
+│  4. [Module 4] Tool Execution    (MCP Server)               │
 │     Actual function runs, returns data                      │
 │              ↓                                              │
 │  5. [Module 4] AI Response                                  │
