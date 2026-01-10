@@ -3,7 +3,7 @@
 :toc: macro
 :toclevels: 1
 
-ACME Corporation is kicking off their AI customer support initiative, and you've been tasked with evaluating vLLM as the foundation for their inference infrastructure. vLLM is the industry-leading high-performance inference engine, and vLLM Playground provides a modern web interface for managing and interacting with vLLM servers.
+ACME Corporation is kicking off their AI customer support initiative, and you've been tasked with evaluating vLLM as the foundation for their inference infrastructure. vLLM is the industry-leading high-throughtput and memory-efficient inference engine, and vLLM Playground provides a modern web interface for managing and interacting with vLLM servers.
 
 In this module, you'll verify your environment, deploy your first vLLM server using Podman, and experience the chat interface firsthand.
 
@@ -65,7 +65,7 @@ optional arguments:
 podman version
 ----
 +
-You should see Podman version 4.0 or later.
+You should see Podman version 5.0 or later.
 
 . Verify GPU availability:
 +
@@ -84,6 +84,33 @@ vllm-playground status
 ----
 +
 This shows whether any vLLM instance is currently running.
+
+. In this lab environment, vLLM Playground is configured as a system daemon. You can also check its status using systemctl:
++
+[source,bash]
+----
+sudo systemctl status vllm-playground
+----
++
+Expected output:
++
+----
+● vllm-playground.service - vLLM Playground Service
+     Loaded: loaded (/etc/systemd/system/vllm-playground.service; enabled; preset: disabled)
+     Active: active (running) since Sat 2026-01-10 03:00:18 UTC; 36min ago
+ Invocation: 6185d5f065a34e3bbff96f54410c1943
+   Main PID: 3975 (vllm-playground)
+      Tasks: 4 (limit: 95955)
+     Memory: 51.2M (peak: 68.5M)
+        CPU: 11.483s
+     CGroup: /system.slice/vllm-playground.service
+             └─3975 /usr/bin/python3.12 /usr/local/bin/vllm-playground
+----
++
+The key indicators are:
++
+* `Active: active (running)` - Service is running
+* `enabled` - Service starts automatically on boot
 
 === Verify
 
