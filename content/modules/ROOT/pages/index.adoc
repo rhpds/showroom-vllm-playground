@@ -8,9 +8,9 @@ In this workshop, you will:
 
 * Deploy vLLM servers via container management using Podman
 * Use the modern chat UI with streaming responses to interact with LLMs
-* Configure and use tool calling with various models (Llama, Mistral, Qwen)
-* Set up MCP (Model Context Protocol) servers for agentic capabilities
 * Implement structured outputs using JSON Schema, Regex, and Grammar
+* Configure and use tool calling with various Open Source Large Language models (Qwen, Llama, Mistral, etc)
+* Set up MCP (Model Context Protocol) servers for agentic capabilities
 * Run performance benchmarks with GuideLLM
 
 == Who this is for
@@ -24,6 +24,7 @@ This workshop is designed for Developers, AI Engineers, Platform Engineers, and 
 Before starting this workshop, you should have:
 
 * Basic knowledge of Red Hat Enterprise Linux (RHEL)
+* Basic knowledge of vLLM (https://github.com/vllm-project/vllm), a high-throughput and memory-efficient inference and serving engine for LLMs.
 * Familiarity with containers and container runtimes
 * Basic understanding of AI inferencing concepts
 
