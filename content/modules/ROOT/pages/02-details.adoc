@@ -66,8 +66,8 @@ Your lab environment comes with:
 |Python 3.10+
 |✓ Available for MCP support
 
-|Container images
-|✓ Pre-pulled and configured
+|vLLM Container images
+|✓ Pre-pulled and verified
 |===
 
 === Optional packages
@@ -156,7 +156,7 @@ guidellm --help
 
 == Authors and contributors
 
-**Primary Author**: Michael Yang, Prakhar Srivastava 
+**Primary Author**: Michael Yang, Nate Stephany, Prakhar Srivastava 
 **Last Updated**: January 2026 
 **Workshop Version**: 1.0
 
