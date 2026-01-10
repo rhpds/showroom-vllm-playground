@@ -170,7 +170,7 @@ image::module-01-figure-01.png[vLLM Playground home page showing the main interf
 +
 For this exercise, select `TinyLlama 1.1B Chat` from the dropdown - it's fast and doesn't require authentication.
 +
-image::module-01-figure-02.png[Model selection showing dropdown and custom model options,width=200,title="Model Selection Options"]
+image::module-01-figure-02.png[Model selection showing dropdown and custom model options,width=300,title="Model Selection Options"]
 
 .. In the *Run Mode* section, select how vLLM will run:
 +
@@ -179,7 +179,7 @@ image::module-01-figure-02.png[Model selection showing dropdown and custom model
 +
 For this exercise, select *Container* mode - it provides better isolation and matches production deployments.
 +
-image::module-01-figure-03.png[Run Mode selection showing Subprocess and Container options,width=200,title="Run Mode Selection"]
+image::module-01-figure-03.png[Run Mode selection showing Subprocess and Container options,width=300,title="Run Mode Selection"]
 
 .. In the *Compute Mode* section, select your hardware:
 +
@@ -188,7 +188,7 @@ image::module-01-figure-03.png[Run Mode selection showing Subprocess and Contain
 +
 Select *GPU* mode since your lab environment has GPU available.
 +
-image::module-01-figure-04.png[Compute Mode selection showing CPU and GPU options,width=200,title="Compute Mode Selection"]
+image::module-01-figure-04.png[Compute Mode selection showing CPU and GPU options,width=300,title="Compute Mode Selection"]
 
 .. Review the remaining default settings:
 +
@@ -202,7 +202,7 @@ NOTE: These parameters are powered by vLLM's extensive configuration options, ma
 +
 As you adjust these settings, the *Command Preview* at the bottom dynamically generates the corresponding vLLM command that will run inside the container. This helps you understand exactly what parameters are being passed to vLLM.
 +
-image::module-01-figure-05.png[Command Preview showing the generated vLLM command based on selected parameters,width=200,title="Command Preview"]
+image::module-01-figure-05.png[Command Preview showing the generated vLLM command based on selected parameters,width=300,title="Command Preview"]
 
 .. Click *Start Server*
 
@@ -210,30 +210,22 @@ image::module-01-figure-05.png[Command Preview showing the generated vLLM comman
 +
 [source,bash]
 ----
-podman logs -f vllm-service
+sudo podman logs -f vllm-service
 ----
 +
-Look for a message indicating the server is ready to accept requests.
+TIP: The `sudo` prefix is required because the vLLM container uses GPU resources. Access to GPU devices requires elevated privileges, so the container runs with root permissions.
 
 === Verify
 
-Run the following to confirm the vLLM server is running:
+Look for these indicators that the server is ready:
 
-[source,bash]
-----
-vllm-playground status
-----
+* The *Server Logs* panel shows `Application startup complete.`
+* A green *"Server is ready to chat!"* toast notification appears
+* The *Send* button in the chat interface turns green
 
-Expected output shows server running:
+image::module-01-figure-06.png[Server Logs showing Application startup complete and Server is ready to chat notification,width=700,title="Server Ready Indicators"]
 
-----
-vLLM Playground Status:
-  Web UI: Running on port 7860
-  vLLM Server: Running (TinyLlama/TinyLlama-1.1B-Chat-v1.0)
-  Container: vllm-service (healthy)
-----
-
-Also verify via Podman:
+You can also verify the container is running via Podman:
 
 [source,bash]
 ----
