@@ -337,7 +337,7 @@ The AI should:
 +
 image::module-04-figure-05.png[Human-in-the-loop approval dialog,width=500,title="Tool Approval Dialog"]
 
-. When prompted for approval, review the tool call and click *Approve*.
+. When prompted for approval, review the tool call and click *Execute*.
 +
 image::module-04-figure-06.png[AI response after human-in-the-loop approval,width=600,title="AI Response After Approval"]
 
@@ -384,9 +384,9 @@ User: "What time is it in New York?"
               ▼
 ┌─────────────────────────────┐
 │ ⚠️ Human Approval Required  │
-│ [Approve] [Deny]            │
+│ [Execute] [Skip]            │
 └─────────────────────────────┘
-              │ (Approve)
+              │ (Execute)
               ▼
 ┌─────────────────────────────┐
 │ MCP Server executes tool    │
@@ -450,29 +450,7 @@ You'll connect the Filesystem server and enable AI-powered document analysis.
 
 === Steps
 
-. In the *MCP Servers* panel, click *Add Server* and select *Filesystem*.
-
-. Configure the Filesystem server:
-+
-// TODO: Add screenshot
-image::mcp-filesystem-config.png[Filesystem server configuration,width=500,title="Filesystem Configuration"]
-+
-[cols="1,2"]
-|===
-|Setting |Value
-
-|Allowed Directories
-|`/home/{ssh_username}/documents` (or your preferred path)
-
-|Read Only
-|✓ Enabled (recommended for safety)
-|===
-+
-IMPORTANT: Only grant access to directories the AI should read. Start with read-only mode.
-
-. Click *Connect* and verify the server connects successfully.
-
-. Create some test files for the AI to analyze:
+. First, create the documents directory that the Filesystem server will access:
 +
 [source,bash,subs="attributes"]
 ----
@@ -480,10 +458,37 @@ IMPORTANT: Only grant access to directories the AI should read. Start with read-
 {ssh_command}
 
 # Create a documents directory
-mkdir -p ~/documents
+mkdir -p /home/{ssh_username}/documents
+----
 
+. In the *MCP Servers* panel, click the *Filesystem* preset in the *Quick Start with Presets* section.
+
+. Configure the Filesystem server:
++
+image::module-04-figure-08.png[Filesystem server configuration,width=500,title="Filesystem Configuration"]
++
+[cols="1,2"]
+|===
+|Setting |Value
+
+|Allowed Directories
+|Replace `${DIRECTORY}` with your allowed directory path, e.g., `/home/{ssh_username}/documents`
+|===
++
+IMPORTANT: Only grant access to directories the AI should read. Be careful when allowing write access to sensitive directories.
+
+. Click *Save Server* to save the Filesystem MCP Server configuration.
+
+. Click *Connect* and verify the server connects successfully.
++
+image::module-04-figure-09.png[Filesystem server connected,width=500,title="Filesystem Server Connected"]
+
+. Create some test files for the AI to analyze:
++
+[source,bash,subs="attributes"]
+----
 # Create a sample customer FAQ
-cat > ~/documents/customer-faq.txt << 'EOF'
+cat > ~/documents/customer_faq.txt << 'EOF'
 ACME Corporation - Customer FAQ
 
 Q: What are your support hours?
@@ -515,51 +520,49 @@ Home:
 EOF
 ----
 
-. In the Chat panel, ensure Filesystem tools are enabled.
+. In the Chat panel, Start a new conversation, ensure Filesystem tools are enabled.
 
 . Test file reading:
 +
 ----
-Can you read the customer FAQ file and summarize the key points?
+Can you read the customer FAQ file in directory /home/lab-user/documents and summarize the key points?
 ----
 +
 The AI should:
 +
-.. Generate a tool call to read `/home/{username}/documents/customer-faq.txt`
+.. Generate a tool call to read `/home/{username}/documents/customer_faq.txt`
 .. Wait for your approval
 .. After approval, read and summarize the file contents
 
-. Approve the file read operation when prompted.
+. Click *Execute* to approve the file read operation when prompted.
 +
 Review what the AI is requesting:
 +
 * Which file it wants to access
 * What operation (read/write/list)
-* Approve only if appropriate
+* Click *Execute* only if appropriate
++
+image::module-04-figure-10.png[AI response after file read approval,width=600,title="AI Response After File Read"]
 
 . Test directory listing:
 +
 ----
-What files are available in the documents folder?
+What files are available in the /home/lab-user/documents folder?
 ----
 +
 The AI should list the available files after approval.
++
+image::module-04-figure-11.png[Directory listing response,width=600,title="Directory Listing Response"]
 
 . Test document analysis:
 +
 ----
-Based on the products file, what's the most expensive item and what's the cheapest?
+Based on the file /home/lab-user/documents/products.txt, what's the most expensive item and what's the cheapest?
 ----
 +
 Observe the AI reading the file and analyzing the content.
-
-. Try a multi-step query:
 +
-----
-A customer is asking about return policies and wants to know the price of the SmartWatch. Can you help them using the available documents?
-----
-+
-The AI may need to read multiple files to answer completely.
+image::module-04-figure-12.png[Document analysis response,width=600,title="Document Analysis Response"]
 
 === Verify
 
@@ -574,6 +577,8 @@ Confirm Filesystem MCP works:
 ✓ AI correctly analyzes and summarizes documents
 
 ✓ All operations require explicit approval
+
+NOTE: Different models may have varying quality when calling the right tools from MCP servers. Some models are better at understanding tool descriptions and selecting appropriate tools, while others may require more explicit prompts. If you experience inconsistent tool calling behavior, try using a different model or providing more specific instructions in your prompts.
 
 === Security considerations
 
@@ -673,22 +678,9 @@ Watch the AI:
 * *FAQ read*: Get support hours and return policy
 * *Products read*: Get earbuds information
 +
-// TODO: Add screenshot
-image::mcp-multi-tool-workflow.png[Multiple tool calls in an agentic workflow,width=700,title="Agentic Workflow with Multiple Tools"]
-
-. Approve each appropriate request and observe the final response.
-
-. Test autonomous planning:
+image::module-04-figure-13.png[Multiple tool calls in an agentic workflow,width=700,title="Agentic Workflow with Multiple Tools"]
 +
-----
-I need to prepare a brief for a customer who wants to know everything about their options for electronics under $100 and how they can return items if unsatisfied.
-----
-+
-The AI should autonomously:
-+
-.. Read the products file for electronics pricing
-.. Read the FAQ for return policy
-.. Combine into a coherent brief
+NOTE: The directories and files referenced in these examples may not exist in your environment. This is for demonstration purposes only.
 
 . Test the safety controls by attempting an inappropriate request:
 +
@@ -700,12 +692,14 @@ Expected behavior:
 +
 * If directory is not in allowed list: Tool call should fail or not be attempted
 * AI should explain it can only access authorized directories
++
+image::module-04-figure-14.png[Safety controls preventing unauthorized file access,width=600,title="Safety Controls in Action"]
 
 . Experiment with denying a request:
 +
-When an approval dialog appears, click *Deny* instead of *Approve*.
+When an approval dialog appears, click *Skip* instead of *Execute*.
 +
-Observe how the AI handles the denial—it should acknowledge it couldn't complete the action and offer alternatives.
+Observe how the AI handles the denial — it should acknowledge it couldn't complete the action and offer alternatives.
 
 === Verify
 
@@ -721,7 +715,7 @@ Confirm agentic workflow works:
 
 ✓ Unauthorized access attempts are blocked
 
-=== The complete agentic flow
+=== The complete agentic flow (example)
 
 [source,text]
 ----
