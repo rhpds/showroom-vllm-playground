@@ -170,16 +170,41 @@ image::module-01-figure-01.png[vLLM Playground home page showing the main interf
 +
 For this exercise, select `TinyLlama 1.1B Chat` from the dropdown - it's fast and doesn't require authentication.
 +
-image::module-02-figure-02.png[Model selection showing dropdown and custom model options,width=500,title="Model Selection Options"]
-.. Navigate to *Run Mode" section
-.. Verify the "Container" mode is selected (default).
-.. Navigate to "Compute Mode" section
-.. Select "GPU" (NOTE: Both CPU and GPU modes available, but GPU mode will have better performance)
-.. Review the default settings (GPU memory utilization, max model length)
-.. Click *Start Server*
+image::module-01-figure-02.png[Model selection showing dropdown and custom model options,width=200,title="Model Selection Options"]
+
+.. In the *Run Mode* section, select how vLLM will run:
 +
-// TODO: Add screenshot
-image::server-configuration.png[Server configuration panel with model settings,width=600,title="Configuring vLLM Server"]
+* *Subprocess*: Runs vLLM directly as a Python subprocess (good for development, requires vLLM preinstalled via pip install vllm)
+* *Container*: Runs vLLM in an isolated Podman container (recommended for production)
++
+For this exercise, select *Container* mode - it provides better isolation and matches production deployments.
++
+image::module-01-figure-03.png[Run Mode selection showing Subprocess and Container options,width=200,title="Run Mode Selection"]
+
+.. In the *Compute Mode* section, select your hardware:
++
+* *CPU*: For systems without GPU (slower inference)
+* *GPU*: For NVIDIA GPU acceleration (recommended for performance)
++
+Select *GPU* mode since your lab environment has GPU available.
++
+image::module-01-figure-04.png[Compute Mode selection showing CPU and GPU options,width=200,title="Compute Mode Selection"]
+
+.. Review the remaining default settings:
++
+* *Port*: API endpoint port (default: 8000)
+* *Tensor Parallel Size*: Number of GPUs for model parallelism
+* *GPU Memory Utilization*: Fraction of GPU memory to use (default: 0.9)
+* *Data Type*: Model precision (auto, float16, bfloat16)
+* *Max Model Length*: Maximum sequence length
++
+NOTE: These parameters are powered by vLLM's extensive configuration options, making it highly customizable for different hardware configurations and use cases. For this exercise, the defaults work well.
++
+As you adjust these settings, the *Command Preview* at the bottom dynamically generates the corresponding vLLM command that will run inside the container. This helps you understand exactly what parameters are being passed to vLLM.
++
+image::module-01-figure-05.png[Command Preview showing the generated vLLM command based on selected parameters,width=200,title="Command Preview"]
+
+.. Click *Start Server*
 
 . Wait for the model to load. You can monitor progress in the interface or check container logs:
 +
