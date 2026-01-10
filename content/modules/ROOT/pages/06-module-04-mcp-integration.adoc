@@ -162,10 +162,7 @@ source ~/.bashrc
 
 # Verify uvx installation
 uvx --version
-----
-+
-[source,bash]
-----
+
 # Create symlinks so the systemd service can find uvx
 # The vLLM Playground service runs as root and needs uvx in the system PATH
 sudo ln -sf /home/lab-user/.local/bin/uv /usr/local/bin/uv
