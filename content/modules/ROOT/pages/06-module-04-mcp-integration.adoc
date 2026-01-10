@@ -319,6 +319,8 @@ image::module-04-figure-03.png[Time server connected showing available tools,wid
 +
 * Look for the MCP tools toggle or checkbox
 * Ensure Time server tools are enabled for the conversation
++
+image::module-04-figure-04.png[Enable MCP tools in Chat panel,width=500,title="Enable MCP Tools"]
 
 . Test the Time server with a prompt:
 +
@@ -332,11 +334,16 @@ The AI should:
 .. Generate a tool call to `get_current_time`
 .. *Wait for your approval* (human-in-the-loop)
 .. Return the actual current time after approval
++
+image::module-04-figure-05.png[Human-in-the-loop approval dialog,width=500,title="Tool Approval Dialog"]
 
 . When prompted for approval, review the tool call and click *Approve*.
 +
-// TODO: Add screenshot
-image::mcp-tool-approval.png[Human-in-the-loop approval dialog,width=500,title="Tool Approval Dialog"]
+image::module-04-figure-06.png[AI response after human-in-the-loop approval,width=600,title="AI Response After Approval"]
+
+. Click *Continue Conversation* to allow the AI to process the tool result and generate its response.
++
+image::module-04-figure-07.png[AI response with time information,width=600,title="AI Response with Time Information"]
 
 . Observe the complete flow:
 +
