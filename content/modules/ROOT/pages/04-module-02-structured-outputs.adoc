@@ -129,7 +129,9 @@ You'll define a JSON Schema that constrains the model to output properly structu
 
 === Steps
 
-. In the *Structured Outputs* panel, select *JSON Schema* mode.
+. Click the *Clear* button in the Chat Interface to start a new conversation.
+
+. In the *Structured Outputs* panel, select *JSON* mode.
 +
 image::module-02-figure-04.png[JSON Schema configuration in structured outputs panel,width=600,title="JSON Schema Mode"]
 
@@ -263,11 +265,10 @@ You'll use Regex constraints to enforce this precise format.
 
 === Steps
 
+. Click the *Clear* button in the Chat Interface to start a new conversation.
+
 . In the *Structured Outputs* panel, select *Regex* mode.
 +
-// TODO: Add screenshot
-image::regex-mode.png[Regex pattern configuration,width=600,title="Regex Mode"]
-
 . Define a pattern for ACME ticket IDs:
 +
 [source,text]
@@ -280,7 +281,8 @@ This pattern enforces:
 * Exactly 4 uppercase letters
 * A hyphen `-`
 * Exactly 4 digits
-
+image::module-02-figure-07.png[Regex pattern configuration in structured outputs panel,width=600,title="Regex Mode"]
++
 . Set a system prompt:
 +
 ----
@@ -294,6 +296,8 @@ Generate a ticket ID for a new billing inquiry.
 ----
 +
 Expected output format: `ACME-BXYZ-1234` (exact letters/numbers will vary)
++
+image::module-02-figure-08.png[Regex output showing ACME ticket ID format,width=600,title="Regex Constrained Output"]
 
 . Verify the format matches by checking:
 * Starts with `ACME-`
@@ -317,6 +321,8 @@ Format this phone number: 5551234567
 ----
 +
 Expected output: `(555) 123-4567`
++
+image::module-02-figure-09.png[Regex output showing formatted phone number,width=600,title="Phone Number Formatting with Regex"]
 
 === Verify
 
@@ -352,10 +358,9 @@ You'll define a custom Grammar to enforce a report structure with sections, bull
 
 === Steps
 
+. Click the *Clear* button in the Chat Interface to start a new conversation.
+
 . In the *Structured Outputs* panel, select *Grammar* mode.
-+
-// TODO: Add screenshot
-image::grammar-mode.png[Grammar configuration panel,width=600,title="Grammar Mode"]
 
 . Grammar uses GBNF (GGML BNF) format. Define a simple report structure:
 +
@@ -401,31 +406,9 @@ Expected output format:
 - Overall satisfaction score, 94 percent
 ## REPORT END ##
 ----
++
+image::module-02-figure-10.png[Grammar output showing structured report format with GBNF,width=600,title="Grammar Structured Output"]
 
-. Try a simpler grammar for key-value pairs:
-+
-[source,text]
-----
-root ::= pairs
-pairs ::= pair+
-pair ::= key ": " value "\n"
-key ::= [A-Za-z_]+
-value ::= [A-Za-z0-9 ]+
-----
-
-. Test key-value extraction:
-+
-----
-Extract the following as key-value pairs: The customer name is John Smith, order number is 12345, and status is pending.
-----
-+
-Expected output:
-+
-----
-customer_name: John Smith
-order_number: 12345
-status: pending
-----
 
 === Verify
 
@@ -439,14 +422,33 @@ Confirm Grammar constraints work:
 
 === When to use Grammar
 
-| Use Case | Best Method |
-|----------|-------------|
-| Simple choices (yes/no, categories) | Choice mode |
-| Structured data (APIs, databases) | JSON Schema |
-| Specific formats (IDs, codes) | Regex |
-| Complex markup, reports, custom formats | Grammar |
+[cols="1,1", options="header"]
+|===
+|Use Case |Best Method
 
-=== Troubleshooting
+|Simple choices (yes/no, categories)
+|Choice mode
+
+|Structured data (APIs, databases)
+|JSON Schema
+
+|Specific formats (IDs, codes)
+|Regex
+
+|Complex markup, reports, custom formats
+|Grammar
+|===
+
+=== Reset Structured Outputs
+
+Before moving on, disable Structured Outputs to reset the configuration:
+
+. In the *Structured Outputs* panel, uncheck *Enable Structured Outputs*.
+. Click the *Clear* button to start fresh.
+
+NOTE: In this module, we explored each structured output mode individually for learning purposes. In practice, these features can complement each other - for example, you might use JSON Schema for API responses in one conversation and Regex for ID generation in another. The key is choosing the right constraint method for each specific use case.
+
+== Troubleshooting
 
 **Issue**: Grammar syntax errors
 
