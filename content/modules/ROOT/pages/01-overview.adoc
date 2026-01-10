@@ -5,13 +5,13 @@
 
 == Your role and mission
 
-You're a senior AI engineer at ACME Corporation, and you've been assigned to evaluate and implement an AI-powered customer support system that can serve multiple Large Language Models (LLMs) efficiently.
+You're a senior AI engineer at ACME Corporation, and you've been assigned to evaluate and implement an AI Inferencing system that can serve multiple Large Language Models (LLMs) efficiently.
 
 ACME needs to modernize their customer support infrastructure to handle increasing demand while maintaining response quality. Your manager has explained: "We need a flexible AI inference platform that can serve multiple models, integrate with external tools, and scale to meet our enterprise requirements."
 
-**Your assignment**: Evaluate vLLM Playground as the foundation for ACME's AI customer support system, demonstrating its capabilities for model serving, tool calling, and agentic workflows.
+**Your assignment**: Evaluate vLLM / Red Hat AI Inference Server (RHAIIS) as the foundation for ACME's AI Inferencing service, demonstrating its capabilities for model serving, tool calling, and agentic workflows.
 
-**The objective**: Prove that vLLM Playground can deliver high-performance LLM inference with advanced features like structured outputs, tool calling, and MCP integration.
+**The objective**: Prove that vLLM / RHAAIS can deliver high-performance LLM inference with advanced features like structured outputs, tool calling, and MCP integration.
 
 == Success criteria for your mission
 
@@ -24,7 +24,7 @@ By the end of this workshop, you'll have practical AI inference skills to addres
 * Set up MCP servers for agentic capabilities → *extend AI with external tool access and human-in-the-loop approval*
 * Run performance benchmarks to validate throughput → *prove the system can handle production workloads*
 
-**Technical outcome**: You'll have hands-on experience with vLLM Playground that directly applies to ACME's AI infrastructure requirements.
+**Technical outcome**: You'll have hands-on experience with vLLM / RHAIIS that directly applies to ACME's AI infrastructure requirements.
 
 **Business benefit**: A proven AI inference platform that enables intelligent customer support with enterprise-grade reliability.
 
@@ -50,7 +50,7 @@ You should have:
 
 **The situation**: ACME Corporation needs to build an AI-powered customer support system that can handle diverse customer inquiries efficiently.
 
-**Project timeline**: Evaluate vLLM Playground and demonstrate its capabilities for ACME's enterprise AI requirements.
+**Project timeline**: Evaluate vLLM / RHAIIS and demonstrate its capabilities for ACME's enterprise AI requirements.
 
 **Current challenges** (operational pain points):
 
@@ -85,11 +85,14 @@ If vLLM Playground proves effective for ACME's use case, here are the potential 
 **"Can we use different models for different use cases?"**
 → Yes. vLLM Playground supports various models including Llama, Mistral, and Qwen with model-specific optimizations
 
-**"How does tool calling work with customer support scenarios?"**
-→ Module 3 demonstrates defining custom tools that AI can invoke to retrieve customer data or execute support actions
-
 **"What about controlling AI outputs for our systems?"**
 → Module 2 covers structured outputs using JSON Schema, Regex, and Grammar to constrain responses
 
+**"How does tool calling work with customer support scenarios?"**
+→ Module 3 demonstrates defining custom tools that AI can invoke to retrieve customer data or execute support actions
+
 **"Can we extend AI with access to our internal systems?"**
 → Module 4 shows MCP integration for connecting AI to external tools with human-in-the-loop approval
+
+**"How do we validate the system can handle production workloads?"**
+→ Module 5 covers performance benchmarking with GuideLLM to measure throughput, latency, and optimize server configuration
