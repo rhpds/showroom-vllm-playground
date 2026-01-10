@@ -131,8 +131,7 @@ You'll define a JSON Schema that constrains the model to output properly structu
 
 . In the *Structured Outputs* panel, select *JSON Schema* mode.
 +
-// TODO: Add screenshot
-image::json-schema-mode.png[JSON Schema configuration in structured outputs,width=600,title="JSON Schema Mode"]
+image::module-02-figure-04.png[JSON Schema configuration in structured outputs panel,width=600,title="JSON Schema Mode"]
 
 . Define a schema for customer support ticket extraction:
 +
@@ -189,6 +188,8 @@ Expected output (formatted):
   "requires_escalation": true
 }
 ----
++
+image::module-02-figure-05.png[JSON Schema output showing structured ticket extraction,width=600,title="JSON Schema Structured Output"]
 
 . Test with a different scenario:
 +
@@ -196,7 +197,7 @@ Expected output (formatted):
 Customer message: "Hey, just wondering if you have any plans to add dark mode to the mobile app? Would be really nice to have. Thanks!"
 ----
 +
-Expected output:
+Expected output (formatted):
 +
 [source,json]
 ----
@@ -217,9 +218,16 @@ Confirm JSON Schema constraints are enforced:
 
 [source,bash]
 ----
-# You can validate the JSON output using Python
-python3 -c "import json; print(json.loads('''<paste_output_here>'''))"
+# You can validate the JSON output by saving it to a file and using Python
+cat << 'EOF' > /tmp/output.json
+<paste_your_json_output_here>
+EOF
+python3 -c "import json; print(json.load(open('/tmp/output.json')))"
 ----
+
+image::module-02-figure-06.png[Verified JSON output displayed in the response panel,width=600,title="Verified JSON Format"]
+
+TIP: The vLLM Playground response panel already validates JSON formatting - if the output displays properly formatted, it's valid JSON.
 
 ✓ Output is valid JSON (no syntax errors)
 
