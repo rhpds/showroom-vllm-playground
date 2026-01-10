@@ -166,6 +166,19 @@ uvx --version
 +
 [source,bash]
 ----
+# Create symlinks so the systemd service can find uvx
+# The vLLM Playground service runs as root and needs uvx in the system PATH
+sudo ln -sf ~/.local/bin/uv /usr/local/bin/uv
+sudo ln -sf ~/.local/bin/uvx /usr/local/bin/uvx
+
+# Verify the symlinks work with sudo
+sudo uvx --version
+----
++
+NOTE: The symlinks are required because the vLLM Playground systemd service runs as root, and `/usr/local/bin` is in the system PATH. Without these symlinks, the service cannot find `uvx` to start MCP servers.
++
+[source,bash]
+----
 # Install npx (required for Filesystem server)
 # npx is part of Node.js
 sudo dnf install -y nodejs npm
@@ -266,7 +279,7 @@ ACME's support team needs current time information to help customers with schedu
 
 . In the *Quick Start with Presets* section, click the *Time* preset.
 +
-The Time server configuration dialog appears. No additional settings are needed—the defaults work out of the box.
+The Time server configuration dialog appears. No additional settings are needed — the defaults work out of the box.
 +
 image::module-04-figure-02.png[Time server configuration dialog,width=500,title="Time Server Configuration"]
 
