@@ -156,9 +156,9 @@ guidellm --help
 
 == Authors and contributors
 
-.**Primary Author**: Michael Yang 
-.**Last Updated**: January 2026 
-.**Workshop Version**: 1.0
+**Primary Author**: Michael Yang 
+**Last Updated**: January 2026 
+**Workshop Version**: 1.0
 
 **Feedback and Questions**:
 
