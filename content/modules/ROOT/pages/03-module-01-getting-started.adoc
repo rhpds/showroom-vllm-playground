@@ -156,13 +156,25 @@ TIP: In this lab environment, the container image has been pre-pulled during set
 http://{hostname}:7860
 ----
 +
-// TODO: Add screenshot
-image::vllm-playground-home.png[vLLM Playground home page showing the main interface,width=700,title="vLLM Playground Home Page"]
+image::module-01-figure-01.png[vLLM Playground home page showing the main interface,width=700,title="vLLM Playground Home Page"]
 
 . In the vLLM Playground web interface, configure your first model:
 +
 .. Navigate to *Server Configuration* section
-.. In the *Model* field, enter a model ID (e.g., `TinyLlama/TinyLlama-1.1B-Chat-v1.0` for quick testing)
+.. In the *Model* section, you have several options:
++
+* *Dropdown list*: Select from pre-configured models like `TinyLlama 1.1B Chat (Fast, No token)` - ideal for quick testing
+* *Custom model name*: Enter any HuggingFace model ID in the text field
+* *Browse Community Recipes*: Explore community-contributed model configurations
+* *HuggingFace Token*: Required only for gated models (Llama 3.1, Llama 3.2, etc.)
++
+For this exercise, select `TinyLlama 1.1B Chat` from the dropdown - it's fast and doesn't require authentication.
++
+image::module-02-figure-02.png[Model selection showing dropdown and custom model options,width=500,title="Model Selection Options"]
+.. Navigate to *Run Mode" section
+.. Verify the "Container" mode is selected (default).
+.. Navigate to "Compute Mode" section
+.. Select "GPU" (NOTE: Both CPU and GPU modes available, but GPU mode will have better performance)
 .. Review the default settings (GPU memory utilization, max model length)
 .. Click *Start Server*
 +
