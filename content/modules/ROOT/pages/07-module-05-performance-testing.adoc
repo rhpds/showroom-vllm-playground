@@ -367,48 +367,6 @@ Shows latency distribution across different percentiles:
 |99% of requests complete within 3.6 seconds (tail latency)
 |===
 
-. Run a sweep benchmark to find maximum throughput:
-+
-[source,bash]
-----
-guidellm benchmark \
-  --target http://localhost:8000 \
-  --model $(curl -s http://localhost:8000/v1/models | jq -r '.data[0].id') \
-  --rate sweep \
-  --max-seconds 60 \
-  --data emulated \
-  --output-path ~/benchmark-results.json
-----
-+
-Sweep mode automatically tests increasing request rates to find the server's capacity limits.
-
-. Monitor GPU utilization during the benchmark:
-+
-[source,bash]
-----
-# In a separate terminal
-watch -n 1 nvidia-smi
-----
-+
-Observe:
-+
-* GPU utilization percentage
-* Memory usage
-* Temperature
-
-. After the sweep completes, examine the results:
-+
-[source,bash]
-----
-cat ~/benchmark-results.json | jq '.summary'
-----
-
-. Identify key findings:
-+
-* **Maximum throughput**: Highest sustainable requests/second
-* **Saturation point**: Where latency starts increasing significantly
-* **Bottleneck**: GPU compute, memory, or network
-
 === Analyzing results for ACME's use case
 
 ACME's customer support system requirements:
@@ -471,238 +429,84 @@ Confirm benchmarking works:
 . Use a smaller model
 
 [[exercise-3]]
-== Exercise 3: Optimize server configuration
+== Exercise 3: Optimize server configuration (Try it yourself)
 
-Based on benchmark results, you'll now optimize the vLLM server configuration to meet ACME's production requirements.
+Now that you understand how to run benchmarks, try optimizing the vLLM server configuration on your own to improve performance.
 
-=== Understanding optimization levers
+=== Key optimization parameters
 
-[cols="1,2,2"]
+The vLLM Playground UI provides several configuration options that affect performance:
+
+[cols="1,1,2,2"]
 |===
-|Parameter |Effect |Trade-off
+|UI Parameter |vLLM Flag |Effect |Trade-off
 
+|*GPU Memory Utilization*
 |`--gpu-memory-utilization`
-|Higher = more KV cache = more concurrent requests
-|May cause OOM if too high
+|Higher values (0.9-0.95) allow more concurrent requests
+|Too high may cause out-of-memory errors
 
+|*Max Model Length*
 |`--max-model-len`
-|Maximum context length
-|Lower = more memory for batching
+|Maximum context length for requests
+|Lower values free memory for more batching
 
-|`--max-num-seqs`
-|Maximum concurrent sequences
-|Higher = more throughput, more memory
-
+|*Tensor Parallel Size*
 |`--tensor-parallel-size`
-|Multi-GPU distribution
-|Requires multiple GPUs
-
-|`--enforce-eager`
-|Disable CUDA graphs
-|Lower memory, slightly slower
+|Distribute model across multiple GPUs
+|Requires multiple GPUs available
 |===
 
-=== Steps
+=== Walkthrough: How to optimize
 
-. Record your baseline metrics from Exercise 2:
-+
-[cols="1,1"]
-|===
-|Metric |Baseline Value
+. *Record your baseline* - Note the key metrics from Exercise 2 (Requests/Second, Output Tokens/Second, Latency percentiles)
 
-|Throughput (req/s)
-|___________
+. *Stop the current server* - Click *Stop Server* in the vLLM Playground UI
 
-|TTFT P50
-|___________
+. *Adjust configuration* - Try changing one parameter at a time:
+** Increase *GPU Memory Utilization* from 0.9 to 0.95
+** Or decrease *Max Model Length* if your use case allows shorter contexts
 
-|E2E P50
-|___________
+. *Restart the server* - Click *Start Server* with the new configuration
 
-|GPU Memory Used
-|___________
-|===
+. *Re-run the benchmark* - Use the same GuideLLM settings as Exercise 2
 
-. Stop the current vLLM server:
-+
-[source,bash]
-----
-vllm-playground stop
-----
-
-. Start with optimized configuration for throughput:
-+
-In vLLM Playground UI, update Server Configuration:
-+
-// TODO: Add screenshot
-image::optimized-config.png[Optimized server configuration,width=600,title="Optimized Configuration"]
-+
-[cols="1,2"]
-|===
-|Setting |Optimized Value
-
-|GPU Memory Utilization
-|0.95 (increase from default 0.9)
-
-|Max Model Length
-|2048 (reduce if your use case allows shorter contexts)
-|===
-
-. Start the server with new configuration and wait for it to load.
-
-. Re-run the baseline benchmark:
-+
-[source,bash]
-----
-guidellm benchmark \
-  --target http://localhost:8000 \
-  --model $(curl -s http://localhost:8000/v1/models | jq -r '.data[0].id') \
-  --rate 1 \
-  --max-requests 10 \
-  --data emulated
-----
-
-. Compare results:
-+
-[cols="1,1,1"]
-|===
-|Metric |Baseline |Optimized
-
-|Throughput (req/s)
-|___________
-|___________
-
-|TTFT P50
-|___________
-|___________
-
-|E2E P50
-|___________
-|___________
-|===
-
-. If latency is the priority (ACME's TTFT target), try latency-optimized settings:
-+
-[cols="1,2"]
-|===
-|Setting |Latency-Optimized Value
-
-|GPU Memory Utilization
-|0.85 (leave headroom)
-
-|Max Num Seqs
-|Lower value (reduces batching delay)
-|===
-
-. Run comparative benchmark with latency focus:
-+
-[source,bash]
-----
-guidellm benchmark \
-  --target http://localhost:8000 \
-  --model $(curl -s http://localhost:8000/v1/models | jq -r '.data[0].id') \
-  --rate sweep \
-  --max-seconds 60 \
-  --data emulated \
-  --output-path ~/benchmark-optimized.json
-----
-
-. Create a simple comparison report:
-+
-[source,bash]
-----
-echo "=== Performance Comparison ==="
-echo "Baseline:"
-cat ~/benchmark-results.json | jq '.summary.throughput, .summary.latency_ttft_p50'
-echo "Optimized:"
-cat ~/benchmark-optimized.json | jq '.summary.throughput, .summary.latency_ttft_p50'
-----
+. *Compare results* - Did throughput improve? Did latency change?
 
 === Optimization strategies by use case
 
-[cols="1,3"]
+[cols="1,2"]
 |===
-|Use Case |Recommended Settings
+|Use Case |Recommended Approach
 
-|**High throughput** (many users, async)
-|High GPU memory util (0.95), larger max-num-seqs, accept higher latency
+|*High throughput* (many concurrent users)
+|Increase GPU memory utilization, accept slightly higher latency
 
-|**Low latency** (real-time chat)
-|Moderate memory util (0.85), smaller batches, prioritize TTFT
+|*Low latency* (real-time chat)
+|Keep moderate memory utilization (0.85), prioritize fast response times
 
-|**Long contexts** (document analysis)
-|Lower memory util, higher max-model-len, fewer concurrent requests
-
-|**Cost efficiency** (maximize GPU usage)
-|High memory util, continuous batching, monitor for OOM
+|*Long contexts* (document analysis)
+|Higher max-model-len, fewer concurrent requests
 |===
 
-=== Production readiness checklist for ACME
+=== Your turn!
 
-Based on your benchmarks, verify ACME's requirements:
+Try the following on your own:
 
-[cols="1,1,1,1"]
-|===
-|Requirement |Target |Achieved |Status
+. Stop the vLLM server
+. Change one configuration parameter (e.g., GPU Memory Utilization to 0.95)
+. Restart the server and run another benchmark
+. Compare the results with your baseline
 
-|TTFT P50
-|< 500ms
-|___________
-|✓ / ✗
-
-|E2E P50
-|< 3s
-|___________
-|✓ / ✗
-
-|Throughput
-|> 10 req/s
-|___________
-|✓ / ✗
-
-|Error rate
-|< 1%
-|___________
-|✓ / ✗
-|===
+TIP: Keep notes on what changes you made and how they affected performance. This will help you understand the trade-offs for your specific use case.
 
 === Verify
 
-Confirm optimization improves performance:
+✓ You understand the key optimization parameters
 
-✓ Baseline metrics recorded
+✓ You know how to modify server configuration in the UI
 
-✓ At least one optimization applied
-
-✓ Comparative benchmark shows improvement
-
-✓ ACME's requirements can be met (or gap identified)
-
-=== Troubleshooting
-
-**Issue**: OOM after increasing memory utilization
-
-**Solution**:
-
-. Reduce `--gpu-memory-utilization` to 0.85
-. Lower `--max-model-len`
-. Use a smaller model
-
-**Issue**: Optimization doesn't improve metrics
-
-**Solution**:
-
-. Identify the bottleneck (GPU compute vs memory vs network)
-. Focus optimization on the bottleneck
-. Consider hardware upgrade for production
-
-**Issue**: Inconsistent benchmark results
-
-**Solution**:
-
-. Run longer benchmarks (more requests)
-. Ensure no other processes using GPU
-. Wait for GPU to cool between tests
+✓ You can run comparative benchmarks to measure improvements
 
 == Troubleshooting
 
