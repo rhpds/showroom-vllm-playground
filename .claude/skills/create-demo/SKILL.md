@@ -1,6 +1,14 @@
 ---
-name: demo-module
+name: create-demo
 description: Guide you through creating a Red Hat Showroom demo module using the Know/Show structure for presenter-led demonstrations.
+---
+
+---
+context: main
+model: sonnet
+hooks:
+  PreToolUse:
+    - .claude/hooks/validate-paths.sh
 ---
 
 # Demo Module Generator
@@ -16,9 +24,9 @@ Guide you through creating a Red Hat Showroom demo module using the Know/Show st
 - Create content for sales engineers or field demonstrations
 
 **Don't use this for**:
-- Hands-on workshop content → use `/lab-module`
+- Hands-on workshop content → use `/create-lab`
 - Converting to blog posts → use `/blog-generate`
-- Reviewing existing content → use workshop-reviewer agent
+- Reviewing existing content → use `/verify-content`
 
 ## Shared Rules
 
@@ -40,6 +48,32 @@ Demos use a different format than workshops:
 - **Show sections**: Step-by-step presenter instructions, what to demonstrate, expected outcomes
 
 This separates what presenters need to **understand** (business value) from what they need to **do** (technical demonstration).
+
+## Arguments (Optional)
+
+This skill supports optional command-line arguments for faster workflows.
+
+**Usage Examples**:
+```bash
+/create-demo                                   # Interactive mode (asks all questions)
+/create-demo <directory>                       # Specify target directory
+/create-demo <directory> --new                 # Create new demo in directory
+/create-demo <directory> --continue <module>   # Continue from specific module
+```
+
+**Parameters**:
+- `<directory>` - Target directory for demo files
+  - Example: `/create-demo content/modules/ROOT/pages/`
+  - If not provided, defaults to `content/modules/ROOT/pages/`
+- `--new` - Flag to create new demo (generates index + overview + details + module-01)
+- `--continue <module-path>` - Continue from specified previous demo module
+  - Example: `/create-demo content/modules/ROOT/pages/ --continue content/modules/ROOT/pages/03-module-01-intro.adoc`
+  - Reads previous module to detect story continuity
+
+**How Arguments Work**:
+- Arguments skip certain questions (faster workflow)
+- You can still use interactive mode by calling `/create-demo` with no arguments
+- Arguments are validated before use
 
 ## Workflow
 
@@ -90,61 +124,198 @@ etc.
 
 ---
 
-### Step 1: Determine Context (First Module vs Continuation)
+### Step 0: Parse Arguments (If Provided)
+
+**Check if user invoked skill with arguments**.
+
+**Pattern 1: `/create-demo <directory> --new`**
+```
+Parsing arguments: "<directory> --new"
+
+✓ Target directory: <directory>
+✓ Mode: Create new demo
+✓ Will generate: index.adoc → 01-overview → 02-details → 03-module-01
+
+Validating directory...
+[Check if directory exists, create if needed]
+
+Skipping: Step 1 (mode already known: NEW demo)
+Proceeding to: Step 2 (Plan Overall Demo Story)
+```
+
+**Pattern 2: `/create-demo <directory> --continue <module-path>`**
+```
+Parsing arguments: "<directory> --continue <module-path>"
+
+✓ Target directory: <directory>
+✓ Mode: Continue existing demo
+✓ Previous module: <module-path>
+
+Validating directory...
+[Check if directory exists]
+
+Reading previous module: <module-path>
+[Extract story, business context, progression]
+
+Skipping: Step 1 (mode already known: CONTINUE)
+Skipping: Step 2 (story detected from previous module)
+Proceeding to: Step 3 (Module-Specific Details)
+```
+
+**Pattern 3: `/create-demo <directory>`**
+```
+Parsing arguments: "<directory>"
+
+✓ Target directory: <directory>
+
+Validating directory...
+[Check if directory exists]
+
+Skipping: Target directory question
+Proceeding to: Step 1 (still need to ask: new vs continue)
+```
+
+**Pattern 4: `/create-demo` (no arguments)**
+```
+No arguments provided.
+
+Using interactive mode.
+Target directory: Will use default (content/modules/ROOT/pages/)
+
+Proceeding to: Step 1 (Determine Context)
+```
+
+**Argument Validation**:
+- If directory doesn't exist, ask user: "Directory not found. Create it? [Yes/No]"
+- If `--continue` but module path invalid, fall back to asking for story recap
+- All arguments are optional - skill always works in interactive mode
+
+---
+
+### Step 1: Determine Context (New Demo vs Continuation)
+
+**SKIP THIS STEP IF**:
+- User provided `--new` flag in arguments (already know: NEW demo)
+- User provided `--continue <module>` in arguments (already know: EXISTING demo)
 
 **CRITICAL: DO NOT read any files or make assumptions before asking this question!**
 
 **First, ask the user**:
 
 ```
-Q: Is this the first module of a new demo, or continuing an existing demo?
+Let's get started! I'll help you create amazing demo content.
 
-Options:
-1. First module of a NEW demo
-2. Continuing an EXISTING demo
-3. Something else (please describe)
+Are you creating a new demo or continuing an existing one?
 
-Your choice? [1/2/3]
+1. 🆕 Creating a NEW demo (I'll help you plan the whole story)
+2. ➡️  Continuing an EXISTING demo (I'll pick up where you left off)
+3. 🤔 Something else (tell me what you need)
+
+What's your situation? [1/2/3]
 ```
 
 **ONLY AFTER user answers, proceed based on their response.**
 
+### Step 1.5: Ask for Target Directory (if not provided as argument)
+
+**SKIP THIS STEP IF**: User provided `<directory>` as argument
+
+**Ask the user**:
+```
+Where should I create the demo files?
+
+Default location: content/modules/ROOT/pages/
+
+Press Enter to use default, or type a different path:
+```
+
+**Validation**:
+- If directory doesn't exist, ask: "Directory not found. Create it? [Yes/No]"
+- If Yes, create the directory
+- If No, ask again for directory
+
 **If continuing existing demo**:
 - Provide path to previous module (I'll read and auto-detect the story)
 
-### Step 2: Plan Overall Demo Story (if first module)
+### Step 2: Plan Overall Demo Story (if new demo)
 
-If this is the first module, I'll gather the big picture:
+Great! Let's plan your demo together. I'll ask you a few questions to understand what you're trying to achieve.
 
-**IMPORTANT**: Ask these as **open-ended questions** where users type their answers. Do NOT provide multiple choice options.
+**IMPORTANT**: Ask these as **conversational, open-ended questions**. Do NOT provide multiple choice options.
 
-1. **Demo overview**:
-   - What's the overall message of this demo?
-   - Example: "Show how OpenShift accelerates application deployment for enterprises"
+**Question 1 - The Big Picture**:
+```
+What's the main message you want to deliver in this demo?
 
-2. **Target audience**:
-   - Who will see this demo?
-   - Example: "C-level, Sales engineers, Technical managers, Partners"
-   - What are their business priorities?
-   - Example: "Cost reduction, faster time-to-market, competitive advantage"
+Think about: What should your audience remember after seeing this?
 
-3. **Business transformation story**:
-   - What's the customer challenge you're solving?
-   - What's the current state pain?
-   - What's the desired future state?
+Example: "Show how OpenShift accelerates application deployment for enterprises"
 
-4. **Customer scenario**:
-   - What company/industry should we use?
-   - Example: "RetailCo", "FinanceCorp", "TechSolutions" or custom
-   - Specific business challenge driving urgency?
+Your answer:
+```
 
-5. **Key metrics to showcase**:
-   - What quantifiable improvements to highlight?
-   - Example: "6 weeks → 5 minutes deployment time"
+**Question 2 - Know Your Audience**:
+```
+Who will be watching this demo?
 
-6. **Estimated demo duration**:
-   - How long should complete demo take?
-   - Example: "15min, 30min, 45min"
+Examples: C-level executives, Sales engineers, Technical managers, Partners
+
+Your audience:
+
+And what matters most to them right now? (their business priorities)
+
+Examples: Cost reduction, faster time-to-market, competitive advantage
+
+Their priorities:
+```
+
+**Question 3 - The Transformation Story**:
+```
+Let's create the before-and-after narrative.
+
+What's the customer challenge you're solving?
+
+What's painful about their current state?
+
+What does the ideal future state look like?
+
+Your story:
+```
+
+**Question 4 - Customer Scenario**:
+```
+What company or industry should we feature in this demo?
+
+Examples: "RetailCo" (retail), "FinanceCorp" (banking), "HealthTech" (healthcare)
+Or create your own!
+
+Company/industry:
+
+What specific business challenge is driving urgency for them?
+
+Their urgent challenge:
+```
+
+**Question 5 - Show the Impact**:
+```
+What quantifiable improvements will you highlight?
+
+Examples:
+- "6 weeks → 5 minutes deployment time"
+- "80% reduction in infrastructure costs"
+- "10x faster developer productivity"
+
+Your key metrics:
+```
+
+**Question 6 - Timing**:
+```
+How long should the complete demo take?
+
+Typical options: 15min, 30min, 45min
+
+Your target duration:
+```
 
 **Then I'll recommend**:
 - Suggested module/section breakdown
@@ -162,20 +333,32 @@ If this is the first module, I'll gather the big picture:
 
 **IMPORTANT**: This is **optional** assistance. First ask if user needs help.
 
+**⚠️ ADVANCED USERS / RHDP DEVELOPERS ONLY**
+
+AgnosticV catalog configuration is for:
+- Red Hat Demo Platform (RHDP) developers
+- Advanced users who need to provision RHDP environments
+- Teams deploying to demo.redhat.com or integration.demo.redhat.com
+
+**Most content creators can skip this** - AgV is only needed if you're provisioning infrastructure for your demo.
+
 **Initial question:**
 ```
-Q: Do you need help with AgnosticV catalog configuration?
+Quick question about infrastructure setup! 🏗️
 
-Options:
-1. No, already set up → Skip to Step 3
-2. No, I'll handle it myself → Skip to Step 3
-3. Yes, help me create new catalog → Continue ↓
-4. What's AgnosticV? → Explain
+Do you need help configuring AgnosticV (the RHDP provisioning system)?
 
-Your choice? [1/2/3/4]
+⚠️  Heads up: This is for RHDP developers/advanced users only.
+   Most content creators should skip this.
+
+1. ⏭️  Skip this (I'll handle it or it's already set up)
+2. 🆘 Yes, help me create a new catalog
+3. ❓ What's AgnosticV? (explain it to me)
+
+What's your situation? [1/2/3]
 ```
 
-**If user chooses option 3 (YES to AgV help):**
+**If user chooses option 2 (YES to AgV help):**
 
 **Step A: Get AgV Directory Path (REQUIRED)**
 
@@ -326,7 +509,7 @@ Your choice? [1/2/3]
 
 **CRITICAL**: Do NOT proceed to Step 3 until AgV workflow is complete or user confirms skip.
 
-**If user chooses option 1 or 2 (NO AgV help):**
+**If user chooses option 1 (NO AgV help):**
 - Use placeholder attributes in demo content
 - Proceed directly to Step 3
 
@@ -498,6 +681,19 @@ If you provided visual assets or scripts:
 - Results: `deployment-success.png`, `metrics-dashboard.png`
 - Comparisons: `before-state.png`, `after-state.png`
 
+**Clickable Images (Links)**:
+If an image should be clickable and link to external content, use `^` caret to open in new tab:
+
+```asciidoc
+// Using image macro with link attribute
+image::customer-success-story.png[Case Study,600,link=https://www.redhat.com/case-study^]
+
+// Using link macro around image
+link:https://www.redhat.com/case-study^[image:customer-success-story.png[Case Study,600]]
+```
+
+**Critical**: Clickable images linking to external URLs MUST use `^` caret to open in new tab, preventing audience from losing demo context.
+
 ### Step 6: Fetch and Analyze References
 
 Based on your references, I'll:
@@ -509,13 +705,19 @@ Based on your references, I'll:
 - Combine with AgnosticV variables (if provided)
 - Integrate provided diagrams and screenshots strategically
 
+**Reference Tracking** (for conclusion generation):
+- Track all references used across all modules
+- Store reference URLs, titles, and which modules used them
+- References will be consolidated in the conclusion module, NOT in individual modules
+- Each module can cite sources inline (e.g., "According to Red Hat's Total Economic Impact study...") but the formal References section will only appear in the conclusion
+
 ### Step 7: Read Templates and Verification Criteria (BEFORE Generating)
 
 **CRITICAL: I MUST read all these files BEFORE generating content to ensure output meets all standards.**
 
 **Templates to read:**
-- `content/modules/ROOT/pages/demo/03-module-01.adoc`
-- `content/modules/ROOT/pages/demo/01-overview.adoc`
+- `.claude/templates/demo/03-module-01.adoc`
+- `.claude/templates/demo/01-overview.adoc`
 
 **Verification criteria to read and apply DURING generation:**
 1. `.claude/prompts/enhanced_verification_demo.txt` - Complete demo quality checklist
@@ -721,7 +923,7 @@ I'll automatically add the module to `content/modules/ROOT/nav.adoc` - this is R
 3. Capture screenshots for technical demonstrations
 4. Practice demo flow and timing
 5. Run: verify-content to check quality
-6. Create next module: demo-module (continuing existing demo)
+6. Create next module: create-demo (continuing existing demo)
 
 **Note**: All files have been written. Use your editor to review them.
 ```
@@ -739,6 +941,344 @@ I'll automatically add the module to `content/modules/ROOT/nav.adoc` - this is R
 - ✅ Give clear next steps for presenters
 - ✅ Keep output concise (under 5000 tokens)
 
+### Step 12: Generate Conclusion Module (MANDATORY)
+
+**After delivering the final module, ask if this is the last module:**
+
+```
+Q: Is this the last module of your demo?
+
+If YES, I will now generate the mandatory conclusion module that includes:
+- Business impact recap and ROI summary
+- Competitive advantages demonstrated
+- ALL REFERENCES used across the entire demo
+- Next steps for evaluation, pilot, and production
+- Call-to-action for technical teams and decision makers
+- Q&A guidance
+
+If NO, you can continue creating more modules, and I'll generate the conclusion when you're done.
+
+Is this your last module? [Yes/No]
+```
+
+**If user answers YES (this is the last module)**:
+
+1. Read ALL previous modules to extract:
+   - All business value points and ROI metrics
+   - All references cited in each module
+   - Key technical capabilities demonstrated
+   - Competitive differentiation points
+
+2. Ask about references:
+
+   **First, extract all references from previous modules:**
+   - Read all module files (index.adoc, 01-overview.adoc, 02-details.adoc, 03-module-01-*.adoc, etc.)
+   - Extract all external links found in the content
+   - Identify reference materials provided during module creation (Step 3 question 2)
+   - Compile a comprehensive list with:
+     - URL
+     - Link text/title
+     - Which module(s) referenced it
+
+   **Then ask the user:**
+   ```
+   Q: How would you like to handle references in the conclusion?
+
+   I found these references used across your demo modules:
+   1. https://www.redhat.com/... [Red Hat OpenShift Platform] - Used in: Modules 1, 3
+   2. https://docs.redhat.com/... [Product Documentation] - Used in: Module 2
+   3. https://customers.redhat.com/... [Customer Success Story] - Used in: Module 1
+   {{ additional_references_if_found }}
+
+   Options:
+   1. Use these references as-is (I'll organize them by category)
+   2. Let me provide additional references to include
+   3. Let me curate the reference list (add/remove specific items)
+
+   Your choice? [1/2/3]
+   ```
+
+   **If option 1**: Use extracted references, organize by category
+
+   **If option 2**: Ask user to provide additional references:
+   ```
+   Q: Please provide additional references to include in the conclusion.
+
+   Format: URL and description, one per line
+   Example:
+   https://www.redhat.com/... - Red Hat solution brief
+   https://customers.redhat.com/... - Customer case study
+
+   Your additional references:
+   ```
+
+   **If option 3**: Ask user which references to keep/remove/add:
+   ```
+   Q: Let's curate the reference list.
+
+   Current references:
+   {{ numbered_list_of_references }}
+
+   Options:
+   - Type numbers to REMOVE (e.g., "3, 5, 7")
+   - Type "add" to add new references
+   - Type "done" when finished
+
+   Your action:
+   ```
+
+3. Detect highest module number (e.g., if last module is 05-module-03, conclusion will be 06-conclusion.adoc)
+
+4. Generate conclusion module using the embedded template below
+
+5. Customize the template with Know/Show structure:
+   - File: `0X-conclusion.adoc` (where X = next sequential number)
+   - **Know**: Business impact recap, ROI summary, competitive advantages
+   - **Show**: Demo capabilities recap, technical highlights
+   - Next steps: Workshops, POC, deep dives
+   - **References**: Consolidated references from all modules (REQUIRED)
+   - Call to action for decision makers and technical teams
+   - Q&A guidance with common questions
+
+6. Update nav.adoc with conclusion entry at the end
+
+7. Provide brief confirmation
+
+**If user answers NO (more modules to come)**:
+- Note that conclusion will be generated after the last module
+- User can invoke /create-demo again to add more modules
+- When adding the final module, this question will be asked again
+
+**Embedded Demo Conclusion Template**:
+```asciidoc
+= Demo Conclusion and Next Steps
+
+*Presenter Note*: Use this concluding section to wrap up the demonstration, reinforce key messages, and provide clear next steps for the audience.
+
+== Summary
+
+=== Know
+
+**Business Impact Recap**
+
+You've just seen how {{ product_name }} addresses the critical business challenges we discussed:
+
+* **{{ business_challenge_1 }}**: Solved with {{ solution_1 }}
+* **{{ business_challenge_2 }}**: Solved with {{ solution_2 }}
+* **{{ business_challenge_3 }}**: Solved with {{ solution_3 }}
+
+**ROI and Value**
+
+The solution demonstrated today delivers:
+
+* {{ roi_metric_1 }} - {{ benefit_1 }}
+* {{ roi_metric_2 }} - {{ benefit_2 }}
+* {{ roi_metric_3 }} - {{ benefit_3 }}
+
+**Competitive Advantages**
+
+What sets this apart:
+
+. {{ differentiator_1 }}
+. {{ differentiator_2 }}
+. {{ differentiator_3 }}
+
+=== Show
+
+**What We Demonstrated**
+
+In this demo, you saw:
+
+. ✅ {{ demo_capability_1 }}
+. ✅ {{ demo_capability_2 }}
+. ✅ {{ demo_capability_3 }}
+. ✅ {{ demo_capability_4 }}
+
+**Key Technical Highlights**
+
+The most impressive technical capabilities:
+
+* **{{ technical_highlight_1 }}**: {{ why_it_matters_1 }}
+* **{{ technical_highlight_2 }}**: {{ why_it_matters_2 }}
+* **{{ technical_highlight_3 }}**: {{ why_it_matters_3 }}
+
+== Next Steps for Your Organization
+
+=== Immediate Actions
+
+Help your audience get started:
+
+. **Try It Yourself**: {{ workshop_url }} - Hands-on workshop based on this demo
+. **Request POC**: {{ poc_contact }} - Proof of concept in your environment
+. **Schedule Deep Dive**: {{ schedule_url }} - Technical architecture session
+
+=== Recommended Path
+
+**Phase 1: Evaluate** (Weeks 1-2)::
+* Attend hands-on workshop
+* Review technical documentation
+* Assess fit for your use cases
+
+**Phase 2: Pilot** (Weeks 3-6)::
+* Deploy proof of concept
+* Test with representative workloads
+* Measure performance and ROI
+
+**Phase 3: Production** (Months 2-3)::
+* Roll out to production environment
+* Train teams
+* Scale across organization
+
+=== Resources
+
+**Documentation**:
+
+* link:{{ product_docs_url }}[{{ product_name }} Documentation^]
+* link:{{ architecture_guide_url }}[Architecture Guide^]
+* link:{{ best_practices_url }}[Best Practices^]
+
+**Workshops and Training**:
+
+* link:{{ workshop_url }}[Hands-on Workshop^] - Based on this demo
+* link:{{ training_url }}[{{ product_name }} Training^]
+
+**Support and Community**:
+
+* link:{{ community_url }}[Community Forums^]
+* link:{{ support_url }}[Enterprise Support^]
+* link:{{ blog_url }}[Technical Blog^]
+
+== Call to Action
+
+*Presenter Guidance*: Tailor this section based on your audience (technical vs executive, evaluation vs purchase stage).
+
+=== For Technical Teams
+
+**Ready to build?**
+
+. Access the hands-on workshop: {{ workshop_url }}
+. Clone the demo repository: {{ demo_repo_url }}
+. Join the community: {{ community_url }}
+
+=== For Decision Makers
+
+**Ready to transform your operations?**
+
+. Schedule a custom demo: {{ custom_demo_url }}
+. Request ROI analysis: {{ roi_analysis_contact }}
+. Speak with an architect: {{ architect_contact }}
+
+== Questions and Discussion
+
+*Presenter Note*: Leave 5-10 minutes for Q&A. Common questions and answers:
+
+**Q: How long does deployment take?**::
+A: {{ deployment_time }} with our guided process. Proof of concept can be running in {{ poc_time }}.
+
+**Q: What's the learning curve?**::
+A: {{ learning_curve }}. Workshop participants are productive within {{ productivity_time }}.
+
+**Q: Integration with existing tools?**::
+A: {{ integration_summary }}. We support {{ integration_list }}.
+
+**Q: Support and SLAs?**::
+A: {{ support_summary }}. Enterprise support includes {{ sla_details }}.
+
+== Presenter Action Items
+
+*For Sales Engineers / Solution Architects*: Follow these steps after the demo:
+
+=== Immediate Follow-up (Within 24 hours)
+
+. **Send Demo Recording**: Email recording link with key timestamps
+. **Share Resources**: Send links to documentation, workshop, and trial access
+. **Schedule Next Meeting**: Book follow-up for deeper technical discussion or POC planning
+. **Internal Notes**: Log demo feedback, questions asked, and objections in CRM
+
+=== Within One Week
+
+. **Proposal or ROI Analysis**: Send customized proposal based on their requirements
+. **Technical Deep Dive**: Offer architecture review session with specialist
+. **POC Proposal**: Outline proof-of-concept scope, timeline, and success criteria
+. **Connect with Product Team**: Loop in product specialists if needed
+
+=== Qualification Checkpoints
+
+Based on this demo, assess:
+
+* **Budget**: Do they have budget allocated or need justification?
+* **Timeline**: When do they need to make a decision?
+* **Authority**: Who else needs to be involved in the decision?
+* **Need**: Is this a critical priority or nice-to-have?
+
+== References
+
+**CRITICAL**: This section consolidates ALL references used across the entire demo.
+
+Read all previous modules and extract every reference cited, then organize them by category:
+
+=== Product Documentation
+
+* link:{{ product_docs_url }}[{{ product_name }} Documentation^] - Used in: Modules {{ modules_list }}
+* link:{{ feature_docs_url }}[{{ feature_name }} Guide^] - Used in: Modules {{ modules_list }}
+
+=== Red Hat Resources
+
+* link:{{ redhat_resource_1 }}[{{ resource_title_1 }}^] - Used in: Module {{ module_number }}
+* link:{{ solution_brief_url }}[{{ solution_brief_title }}^] - Used in: Module {{ module_number }}
+
+=== Customer Success Stories
+
+* link:{{ customer_story_1 }}[{{ customer_name_1 }} Case Study^] - Used in: Module {{ module_number }}
+* link:{{ customer_story_2 }}[{{ customer_name_2 }} Success Story^] - Used in: Module {{ module_number }}
+
+=== Industry Research and Analysis
+
+* link:{{ analyst_report_url }}[{{ analyst_report_title }}^] - Market research
+* link:{{ industry_study_url }}[{{ study_title }}^] - Industry benchmarks
+
+**Guidelines for References section**:
+- Group references by category (Product Docs, Red Hat Resources, Customer Stories, Research)
+- Include which module(s) used each reference
+- ALL external links must use `^` caret to open in new tab
+- Provide brief context for each reference (what it covers)
+- Ensure ALL references from ALL modules are included
+
+== Thank You
+
+Thank you for your time and attention. We're excited to help you {{ primary_value_proposition }}.
+
+**Contact Information**:
+
+* Sales: {{ sales_contact }}
+* Technical: {{ technical_contact }}
+* Support: {{ support_contact }}
+
+---
+
+**Demo**: {{ demo_name }} +
+**Presented**: {localdate} +
+**Platform**: Red Hat Showroom
+```
+
+**Conclusion Module Naming**:
+- File: `0X-conclusion.adoc` (sequential number, e.g., 06-conclusion.adoc)
+- Title: `= Demo Conclusion and Next Steps`
+- Nav entry: `* xref:0X-conclusion.adoc[Conclusion and Next Steps]`
+
+**Content to Include** (ALL REQUIRED):
+- ✅ **Know**: Business impact recap, ROI metrics, competitive advantages
+- ✅ **Show**: Demo capabilities summary, technical highlights
+- ✅ "Next Steps for Your Organization" - Evaluation path, pilot, production
+- ✅ "Resources" - Documentation, workshops, community
+- ✅ "Call to Action" - Tailored for technical teams vs decision makers
+- ✅ "Q&A Guidance" - Common questions with suggested answers
+- ✅ **"References"** - Consolidate ALL references from ALL modules (MANDATORY)
+- ✅ "Presenter Action Items" - Follow-up guidance for sales engineers
+- ✅ "Thank You" - Contact information and closing
+
+**CRITICAL**: The References section MUST include every reference used across all demo modules, organized by category (Product Docs, Red Hat Resources, Customer Stories, Research).
+
 ## Example Usage
 
 ### Example 1: Create First Demo Module with Overall Story Planning
@@ -750,8 +1290,8 @@ Skill: Excellent! Since this is a new demo, let me gather the overall story firs
 
 **Overall Demo Planning:**
 
-Q: Is this the first module or continuing existing demo?
-A: First module of a new demo
+Q: Are you creating a new demo or continuing an existing demo?
+A: Creating a new demo
 
 Q: What's the overall message?
 A: "Show how OpenShift reduces time-to-market and operational costs for enterprises"
@@ -828,8 +1368,8 @@ User: Create demo Module 1 for OpenShift using:
       https://docs.openshift.com/container-platform/4.14/
 
 Skill: I'll create that demo module. Let me ask questions...
-       [asks if first module or continuing]
-       [if first: asks overall story questions]
+       [asks if new demo or continuing]
+       [if new demo: asks overall story questions]
        [asks module-specific questions]
        [generates module with business story]
        [validates with agents]
@@ -1000,8 +1540,8 @@ Every demo module will have:
 ## Integration Notes
 
 **Templates used**:
-- `content/modules/ROOT/pages/demo/03-module-01.adoc`
-- `content/modules/ROOT/pages/demo/01-overview.adoc`
+- `.claude/templates/demo/03-module-01.adoc`
+- `.claude/templates/demo/01-overview.adoc`
 
 **Agents invoked**:
 - `workshop-reviewer` - Validates structure

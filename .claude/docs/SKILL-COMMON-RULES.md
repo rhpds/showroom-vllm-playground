@@ -5,7 +5,7 @@
 
 ## Purpose
 
-This document defines shared contracts and rules used by all Showroom authoring skills (`/lab-module`, `/demo-module`, `/blog-generate`). These rules prevent drift and ensure consistency across skills.
+This document defines shared contracts and rules used by all Showroom authoring skills (`/create-lab`, `/create-demo`, `/blog-generate`). These rules prevent drift and ensure consistency across skills.
 
 ## Shared Contracts
 
@@ -111,34 +111,41 @@ include::partial$_attributes.adoc[]
 
 **AsciiDoc Syntax** (REQUIRED):
 ```asciidoc
-image::pipeline-execution-1.png[Tekton pipeline showing three tasks executing in sequence,width=700,title="Pipeline Execution in Progress"]
+image::pipeline-execution-1.png[Tekton pipeline showing three tasks executing in sequence,link=self,window=blank,width=700,title="Pipeline Execution in Progress"]
 ```
+
+**CRITICAL - Clickable Images** (Based on team feedback from Nate Stephany):
+- **ALWAYS** include `link=self,window=blank` in image syntax
+- This makes images clickable and opens full-size version in new tab
+- Details are often too hard to see in inline version
+- Users can click to see full resolution without losing their place
 
 **Required for every image**:
 1. **Meaningful alt text** (accessibility)
-2. **Width guidance** (500-800px typical)
-3. **Descriptive filename** (no `image1.png`)
+2. **Clickable link** (`link=self,window=blank`)
+3. **Width guidance** (500-800px typical, or width=100% for full-width)
+4. **Descriptive filename** (no `image1.png`)
 
 **Placeholders**:
 If image doesn't exist yet:
 ```asciidoc
 // TODO: Add screenshot
-image::create-task-screenshot.png[OpenShift console showing task creation form,width=600,title="Creating a Tekton Task"]
+image::create-task-screenshot.png[OpenShift console showing task creation form,link=self,window=blank,width=600,title="Creating a Tekton Task"]
 ```
 
 **Assets Needed List**:
 ```asciidoc
 == Assets Needed
 
-. `content/modules/ROOT/assets/images/pipeline-execution-1.png` - Screenshot of pipeline running in OpenShift console
-. `content/modules/ROOT/assets/images/task-definition.png` - YAML editor showing task definition
+. `content/modules/ROOT/assets/images/pipeline-execution-1.png` - Screenshot of pipeline running in OpenShift console (clickable full-size)
+. `content/modules/ROOT/assets/images/task-definition.png` - YAML editor showing task definition (clickable full-size)
 ```
 
 **Why**: Accessibility, organization, maintainability.
 
 ---
 
-### 5. Navigation Update Expectations (REQUIRED for /lab-module and /demo-module)
+### 5. Navigation Update Expectations (REQUIRED for /create-lab and /create-demo)
 
 **Rule**: nav.adoc update is REQUIRED. Modules won't appear in Showroom without it.
 
@@ -222,14 +229,14 @@ image::create-task-screenshot.png[OpenShift console showing task creation form,w
 
 ### What Skills Are NOT Responsible For
 
-**All skills** (`/lab-module`, `/demo-module`, `/blog-generate`):
+**All skills** (`/create-lab`, `/create-demo`, `/blog-generate`):
 - ❌ **Provisioning automation**: Skills generate content, not infrastructure
 - ❌ **Exact UI pixel accuracy**: Screenshots are placeholders with descriptions
 - ❌ **Real-time version checking**: Use provided references, not live docs
 - ❌ **Multi-language translation**: English only
 - ❌ **Video script generation**: Text-based content only
 
-**`/lab-module` and `/demo-module` specifically**:
+**`/create-lab` and `/create-demo` specifically**:
 - ❌ **Roadmap positioning**: Don't make claims about future product direction
 - ❌ **Competitive analysis**: Don't compare to other vendors unless in references
 - ❌ **Performance benchmarking**: Don't invent metrics
@@ -247,7 +254,7 @@ image::create-task-screenshot.png[OpenShift console showing task creation form,w
 
 ## AgnosticV Configuration Assistance (Shared Contract)
 
-**Applies to**: `/lab-module` and `/demo-module` skills
+**Applies to**: `/create-lab` and `/create-demo` skills
 
 Both lab and demo skills provide intelligent AgnosticV (AgV) configuration assistance to help users find existing catalogs or create new ones following agd_v2 best practices.
 
@@ -548,13 +555,13 @@ Search again or proceed to keyword recommendations? [Search again/Keywords]
 
 **Default recommendations:**
 
-**Labs** (`/lab-module`):
+**Labs** (`/create-lab`):
 - **Recommend: Multi-user**
 - Rationale: Hands-on workshops with 5-50 attendees, cost-effective, one cluster with multiple user accounts (user1...userN)
 - Infrastructure: CNV with autoscaling
 - Authentication: htpasswd for multi-user
 
-**Demos** (`/demo-module`):
+**Demos** (`/create-demo`):
 - **Recommend: Dedicated**
 - Rationale: Presenter-led demonstrations, executive/sales demos, consistent experience, single presenter control
 - Infrastructure: CNV or AWS (if GPU)
@@ -1593,7 +1600,7 @@ If user doesn't have deployed environment access:
 
 ## Skill-Specific Rules
 
-### `/lab-module` - Workshop Module Generator
+### `/create-lab` - Workshop Module Generator
 
 **Learning Outcomes Checkpoint** (REQUIRED):
 
@@ -1621,7 +1628,7 @@ By completing this module, you should now understand:
 
 ---
 
-### `/demo-module` - Demo Content Generator
+### `/create-demo` - Demo Content Generator
 
 **Slide or Diagram Cue** (OPTIONAL but RECOMMENDED):
 
@@ -1736,7 +1743,7 @@ All skills reference these files:
 
 **Verification Prompts** (READ BEFORE generating content):
 
-**For Lab Modules (`/lab-module`)**:
+**For Lab Modules (`/create-lab`)**:
 1. `.claude/prompts/enhanced_verification_workshop.txt` - Complete quality checklist
 2. `.claude/prompts/redhat_style_guide_validation.txt` - Red Hat style rules
 3. `.claude/prompts/verify_workshop_structure.txt` - Structure requirements
@@ -1744,7 +1751,7 @@ All skills reference these files:
 5. `.claude/prompts/verify_accessibility_compliance_workshop.txt` - Accessibility requirements
 6. `.claude/prompts/verify_content_quality.txt` - Content quality standards
 
-**For Demo Modules (`/demo-module`)**:
+**For Demo Modules (`/create-demo`)**:
 1. `.claude/prompts/enhanced_verification_demo.txt` - Complete demo quality checklist
 2. `.claude/prompts/redhat_style_guide_validation.txt` - Red Hat style rules
 3. `.claude/prompts/verify_technical_accuracy_demo.txt` - Technical accuracy for demos

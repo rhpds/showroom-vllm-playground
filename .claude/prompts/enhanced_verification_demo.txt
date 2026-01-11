@@ -423,6 +423,57 @@ Reference the comprehensive style guidelines: `prompts/redhat_style_guide_valida
 - ✅ **ROI data**: Use verified Red Hat Total Economic Impact studies or customer case studies
 - ✅ **Product capabilities**: Align with official Red Hat product documentation
 
+**CRITICAL: References Consolidation and Conclusion Module Requirements:**
+- ❌ **INVALID**: Individual demo modules containing "== References" sections
+- ✅ **REQUIRED**: All references MUST be consolidated in the conclusion module only
+- ✅ **REQUIRED**: Every demo MUST have a conclusion module (typically named conclusion.adoc or XX-conclusion.adoc)
+- ✅ **Conclusion content**: Business impact recap, ROI summary, competitive advantages, consolidated references, next steps, call-to-action
+- 📝 **Note**: Individual demo modules may cite sources inline but should NOT have formal References sections
+
+**CRITICAL: External Link Format Requirements:**
+- ✅ **ALL external links MUST use `^` caret** to open in new tab
+- ✅ **Format**: `link:https://example.com[Link Text^]` (note the caret before closing bracket)
+- ✅ **Purpose**: Prevents audience from losing context during presentation
+- ❌ **INVALID**: `link:https://example.com[Link Text]` (missing caret)
+- 📝 **Exception**: Internal xref links (demo navigation) should NOT use `^` - keep flow within demo
+- 📝 **Text Link Examples**:
+  - External: `link:https://www.redhat.com/...[Red Hat Solution Brief^]` ✅
+  - Internal: `xref:03-demo-platform.adoc[Next Section]` ✅ (no caret)
+
+**CRITICAL: Clickable Image Link Format Requirements:**
+- ✅ **ALL clickable images linking externally MUST use `^` caret** to open in new tab
+- ✅ **Format Option 1**: `image::case-study.png[Alt Text,600,link=https://example.com^]` (caret after URL)
+- ✅ **Format Option 2**: `link:https://example.com^[image:case-study.png[Alt Text,600]]` (caret before closing bracket)
+- ❌ **INVALID**: `image::case-study.png[Alt Text,link=https://example.com]` (missing caret)
+- 📝 **Image Link Examples**:
+  - Clickable external: `image::roi.png[ROI Analysis,link=https://www.redhat.com/study^]` ✅
+  - Regular image: `image::dashboard.png[Dashboard]` ✅ (no link, no caret needed)
+
+**VALIDATION CHECKS - You MUST actively scan content and flag these issues:**
+
+1. **Scan for image macros with external links missing caret:**
+   - Search pattern: `image::[^[]+\[.*link=https?://[^\^]+\]`
+   - Flag as ERROR: Missing `^` caret in clickable image
+   - Example to flag: `image::case-study.png[Case Study,link=https://www.redhat.com]`
+   - Correct version: `image::case-study.png[Case Study,link=https://www.redhat.com^]`
+
+2. **Scan for link macros wrapping images, missing caret:**
+   - Search pattern: `link:https?://[^\^]+\[image:`
+   - Flag as ERROR: Missing `^` caret in image link
+   - Example to flag: `link:https://www.redhat.com/case[image:case-study.png[Case]]`
+   - Correct version: `link:https://www.redhat.com/case^[image:case-study.png[Case]]`
+
+3. **Scan for text links to external URLs missing caret:**
+   - Search pattern: `link:https?://[^\^]+\[[^\]]+\]` (without ^ before bracket)
+   - Flag as ERROR: Missing `^` caret in external link
+   - Example to flag: `link:https://www.redhat.com/solutions[Solutions]`
+   - Correct version: `link:https://www.redhat.com/solutions[Solutions^]`
+
+**Troubleshooting Section Guidance for Demos:**
+- ⚠️ **Optional for most demos**: Presenter-led demos typically handle issues live without documented troubleshooting
+- ✅ **Recommended for self-service demos**: Demos meant for prospect self-exploration benefit from troubleshooting guidance
+- 📝 **Evaluation Rule**: Only flag missing troubleshooting for self-service demo content, not presenter-led demos
+
 **Red Hat Voice and Tone Standards:**
 - ✅ Clear, direct, and honest communication
 - ✅ Humble yet confident positioning

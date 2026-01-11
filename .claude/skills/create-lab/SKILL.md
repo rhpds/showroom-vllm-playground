@@ -1,6 +1,14 @@
 ---
-name: lab-module
+name: create-lab
 description: Guide you through creating a single Red Hat Showroom workshop module from reference materials (URLs, files, docs, or text) with business storytelling and proper AsciiDoc formatting.
+---
+
+---
+context: main
+model: sonnet
+hooks:
+  PreToolUse:
+    - .claude/hooks/validate-paths.sh
 ---
 
 # Lab Module Generator
@@ -16,9 +24,9 @@ Guide you through creating a single Red Hat Showroom workshop module from refere
 - Transform technical content into engaging learning experience
 
 **Don't use this for**:
-- Creating demo content → use `/demo-module`
+- Creating demo content → use `/create-demo`
 - Converting to blog posts → use `/blog-generate`
-- Reviewing existing content → use workshop-reviewer agent
+- Reviewing existing content → use `/verify-content`
 
 ## Shared Rules
 
@@ -31,6 +39,32 @@ Guide you through creating a single Red Hat Showroom workshop module from refere
 - Failure-mode behavior (stop if cannot proceed safely)
 
 See SKILL-COMMON-RULES.md for complete details.
+
+## Arguments (Optional)
+
+This skill supports optional command-line arguments for faster workflows.
+
+**Usage Examples**:
+```bash
+/create-lab                                    # Interactive mode (asks all questions)
+/create-lab <directory>                        # Specify target directory
+/create-lab <directory> --new                  # Create new lab in directory
+/create-lab <directory> --continue <module>    # Continue from specific module
+```
+
+**Parameters**:
+- `<directory>` - Target directory for module files
+  - Example: `/create-lab content/modules/ROOT/pages/`
+  - If not provided, defaults to `content/modules/ROOT/pages/`
+- `--new` - Flag to create new lab (generates index + overview + details + module-01)
+- `--continue <module-path>` - Continue from specified previous module
+  - Example: `/create-lab content/modules/ROOT/pages/ --continue content/modules/ROOT/pages/03-module-01-intro.adoc`
+  - Reads previous module to detect story continuity
+
+**How Arguments Work**:
+- Arguments skip certain questions (faster workflow)
+- You can still use interactive mode by calling `/create-lab` with no arguments
+- Arguments are validated before use
 
 ## Workflow
 
@@ -107,24 +141,115 @@ etc.
 
 ---
 
+### Step 0: Parse Arguments (If Provided)
+
+**Check if user invoked skill with arguments**.
+
+**Pattern 1: `/create-lab <directory> --new`**
+```
+Parsing arguments: "<directory> --new"
+
+✓ Target directory: <directory>
+✓ Mode: Create new lab
+✓ Will generate: index.adoc → 01-overview → 02-details → 03-module-01
+
+Validating directory...
+[Check if directory exists, create if needed]
+
+Skipping: Step 1 (mode already known: NEW lab)
+Proceeding to: Step 2 (Plan Overall Lab Story)
+```
+
+**Pattern 2: `/create-lab <directory> --continue <module-path>`**
+```
+Parsing arguments: "<directory> --continue <module-path>"
+
+✓ Target directory: <directory>
+✓ Mode: Continue existing lab
+✓ Previous module: <module-path>
+
+Validating directory...
+[Check if directory exists]
+
+Reading previous module: <module-path>
+[Extract story, company, progression]
+
+Skipping: Step 1 (mode already known: CONTINUE)
+Skipping: Step 2 (story detected from previous module)
+Proceeding to: Step 3 (Module-Specific Details)
+```
+
+**Pattern 3: `/create-lab <directory>`**
+```
+Parsing arguments: "<directory>"
+
+✓ Target directory: <directory>
+
+Validating directory...
+[Check if directory exists]
+
+Skipping: Target directory question
+Proceeding to: Step 1 (still need to ask: new vs continue)
+```
+
+**Pattern 4: `/create-lab` (no arguments)**
+```
+No arguments provided.
+
+Using interactive mode.
+Target directory: Will use default (content/modules/ROOT/pages/)
+
+Proceeding to: Step 1 (Determine Context)
+```
+
+**Argument Validation**:
+- If directory doesn't exist, ask user: "Directory not found. Create it? [Yes/No]"
+- If `--continue` but module path invalid, fall back to asking for story recap
+- All arguments are optional - skill always works in interactive mode
+
+---
+
 ### Step 1: Determine Context (New Lab vs Existing Lab)
+
+**SKIP THIS STEP IF**:
+- User provided `--new` flag in arguments (already know: NEW lab)
+- User provided `--continue <module>` in arguments (already know: EXISTING lab)
 
 **CRITICAL: DO NOT read any files or make assumptions before asking this question!**
 
 **First, ask the user**:
 
 ```
-Q: Are you creating a new lab or adding to an existing lab?
+Welcome! Let's create your workshop together.
 
-Options:
-1. Creating a NEW lab (I'll generate: index.adoc → 01-overview → 02-details → 03-module-01)
-2. Adding to an EXISTING lab (I'll detect next number and generate: 0X-module-YY only)
-3. Something else (please describe)
+Are you starting a brand new lab or adding to an existing one?
 
-Your choice? [1/2/3]
+1. 🆕 NEW lab (I'll create the whole thing: index → overview → details → first module)
+2. ➕ EXISTING lab (I'll add the next module and continue your story)
+3. 🤔 Something else (tell me what you need)
+
+What's your situation? [1/2/3]
 ```
 
 **ONLY AFTER user answers, proceed based on their response.**
+
+### Step 1.5: Ask for Target Directory (if not provided as argument)
+
+**SKIP THIS STEP IF**: User provided `<directory>` as argument
+
+**Ask the user**:
+```
+Where should I create the lab files?
+
+Default location: content/modules/ROOT/pages/
+
+Press Enter to use default, or type a different path:
+```
+
+**Validation**:
+- If directory doesn't exist, ask: "Directory not found. Create it? [Yes/No]"
+- If Yes, create the directory
+- If No, ask again for directory
 
 **If option 1 (NEW lab)**:
 - Generate ALL workshop files: index.adoc, 01-overview.adoc, 02-details.adoc, 03-module-01-*.adoc
@@ -156,46 +281,98 @@ Your choice? [1/2/3]
 
 ### Step 2: Plan Overall Lab Story (if first module)
 
-If this is the first module, I'll gather the big picture:
+Awesome! Let's design your workshop together. I'll ask you some questions to build the perfect learning experience.
 
-**IMPORTANT**: Ask these as **open-ended questions** where users type their answers. Do NOT provide multiple choice options.
+**IMPORTANT**: Ask these as **conversational, open-ended questions**. Do NOT provide multiple choice options.
 
-1. **Lab overview**:
-   - What's the overall goal of this lab?
-   - Example: "Learn to build and deploy AI/ML workloads on OpenShift AI"
+**Question 1 - What Should We Call This?**:
+```
+What's the name of your workshop?
 
-2. **Target audience**:
-   - Who is this lab for?
-   - Example: "Developers, Architects, SREs, Data Scientists"
-   - What's their experience level?
-   - Example: "Beginner, Intermediate, Advanced"
+Example: "Building AI/ML Workloads on OpenShift AI"
 
-3. **Learning journey**:
-   - What should learners know by the end?
-   - What skills will they gain?
+I'll use this to set up your lab title and generate a clean URL-friendly slug.
 
-4. **Story/scenario**:
-   - What company/business scenario should we use?
-   - Example: "ACME Corp" or custom company
-   - What's the business challenge driving this?
+Your lab name:
 
-5. **Estimated duration**:
-   - How long should the complete lab take?
-   - Example: "30min, 1hr, 2hr"
+[After user provides title, I'll suggest a slug like "building-ai-ml-workloads-openshift-ai"]
+```
 
-6. **Version and environment scope** (REQUIRED):
-   - OpenShift version?
-   - Example: "4.18, 4.20" or use placeholder `{ocp_version}`
-   - Product versions?
-   - Example: "OpenShift Pipelines 1.12, OpenShift AI 2.8" or use placeholders
-   - Cluster type?
-   - Example: "SNO or multinode"
-   - Access level?
-   - Example: "admin only, or multi-user with keycloak/htpasswd"
-   - If not provided:
-     - Use attribute placeholders: `{ocp_version}`, `{pipelines_version}`
-     - Avoid version-specific CLI/UI steps
-     - Note in module: "Tested on OpenShift {ocp_version}"
+**Question 2 - The Learning Goal**:
+```
+What's the main goal of this lab?
+
+What should learners be able to do when they finish?
+
+Example: "Learn to build and deploy AI/ML workloads on OpenShift AI"
+
+Your lab goal:
+```
+
+**Question 3 - Who's Learning?**:
+```
+Who is this lab designed for?
+
+Examples: Developers, Architects, SREs, Data Scientists, Platform Engineers
+
+Your target audience:
+
+What's their experience level?
+- Beginner (new to the technology)
+- Intermediate (some hands-on experience)
+- Advanced (production experience)
+
+Their level:
+```
+
+**Question 4 - The Learning Journey**:
+```
+By the end of this lab, what should learners understand and be able to do?
+
+List the key skills they'll gain:
+
+Your learning outcomes:
+```
+
+**Question 5 - Make It Real**:
+```
+What company or business scenario should we use to make this relatable?
+
+Examples: "ACME Corp", "RetailCo", "FinTech Solutions"
+Or create your own!
+
+Company name:
+
+What business challenge are they facing that drives this learning?
+
+Their challenge:
+```
+
+**Question 6 - How Long?**:
+```
+How much time should learners budget for the complete lab?
+
+Typical options: 30min, 1hr, 2hr
+
+Your target duration:
+```
+
+**Question 7 - Technical Environment**:
+```
+Let's nail down the technical details:
+
+OpenShift version? (e.g., "4.18", "4.20", or I can use {ocp_version} placeholder)
+
+Product versions? (e.g., "OpenShift Pipelines 1.12, OpenShift AI 2.8")
+
+Cluster type? (SNO or multinode)
+
+Access level? (admin only, or multi-user with keycloak/htpasswd)
+
+Your environment details:
+
+Note: If you're not sure, I'll use placeholders that work across versions.
+```
 
 **Then I'll recommend**:
 - Suggested module breakdown (how many modules, what each covers)
@@ -208,24 +385,70 @@ If this is the first module, I'll gather the big picture:
 - Adjust module count and topics
 - Change the progression
 
+### Step 2.1: Update Lab Configuration Files (REQUIRED for new labs)
+
+**CRITICAL: Update these files with the lab name BEFORE generating any content files.**
+
+Using the lab title and slug from Step 2, update:
+
+1. **site.yml** (line 3):
+   ```yaml
+   site:
+     title: {{ lab_title }}  # e.g., "Building AI/ML Workloads on OpenShift AI"
+   ```
+
+2. **content/antora.yml** (line 2):
+   ```yaml
+   name: modules
+   title: {{ lab_title }}  # Same as site.yml
+   ```
+
+3. **content/antora.yml** (line 9):
+   ```yaml
+   asciidoc:
+     attributes:
+       lab_name: "{{ lab_slug }}"  # e.g., "building-ai-ml-workloads-openshift-ai"
+   ```
+
+**Example transformation**:
+- User says: "Building AI/ML Workloads on OpenShift AI"
+- Generated slug: `building-ai-ml-workloads-openshift-ai`
+- site.yml title: "Building AI/ML Workloads on OpenShift AI"
+- antora.yml title: "Building AI/ML Workloads on OpenShift AI"
+- antora.yml lab_name: "building-ai-ml-workloads-openshift-ai"
+
+**Note**: These files must be updated BEFORE Step 8 (Generate Files).
+
 ### Step 2.5: AgnosticV Configuration Assistance (OPTIONAL)
 
 **IMPORTANT**: This is **optional** assistance. First ask if user needs help.
 
+**⚠️ ADVANCED USERS / RHDP DEVELOPERS ONLY**
+
+AgnosticV catalog configuration is for:
+- Red Hat Demo Platform (RHDP) developers
+- Advanced users who need to provision RHDP environments
+- Teams deploying to demo.redhat.com or integration.demo.redhat.com
+
+**Most content creators can skip this** - AgV is only needed if you're provisioning infrastructure for your workshop/demo.
+
 **Initial question:**
 ```
-Q: Do you need help with AgnosticV catalog configuration?
+Quick question about infrastructure setup! 🏗️
 
-Options:
-1. No, already set up → Skip to Step 3
-2. No, I'll handle it myself → Skip to Step 3
-3. Yes, help me create new catalog → Continue ↓
-4. What's AgnosticV? → Explain
+Do you need help configuring AgnosticV (the RHDP provisioning system)?
 
-Your choice? [1/2/3/4]
+⚠️  Heads up: This is for RHDP developers/advanced users only.
+   Most content creators should skip this.
+
+1. ⏭️  Skip this (I'll handle it or it's already set up)
+2. 🆘 Yes, help me create a new catalog
+3. ❓ What's AgnosticV? (explain it to me)
+
+What's your situation? [1/2/3]
 ```
 
-**If user chooses option 3 (YES to AgV help):**
+**If user chooses option 2 (YES to AgV help):**
 
 **Step A: Get AgV Directory Path (REQUIRED)**
 
@@ -458,6 +681,29 @@ Now for this specific module:
    - I'll save them to `content/modules/ROOT/assets/images/`
    - And reference them properly in AsciiDoc
 
+9. **Troubleshooting section** (optional):
+   ```
+   Q: Would you like to include a troubleshooting section in this module?
+
+   A troubleshooting section helps learners solve common issues they may encounter.
+
+   Options:
+   1. Yes, include troubleshooting (Recommended for production workshops)
+   2. No, skip it for now (I'll add it later if needed)
+
+   Your choice? [1/2]
+   ```
+
+   **When to recommend "Yes"**:
+   - Production-ready workshops
+   - Complex technical modules with many potential failure points
+   - Modules involving external dependencies (registries, APIs, networks)
+
+   **When "No" is acceptable**:
+   - Simple introductory modules
+   - Proof-of-concept content
+   - Modules with very straightforward steps
+
 ### Step 4: Get UserInfo Variables (if applicable)
 
 If UserInfo variables weren't already provided in Step 2.5 or Step 3, I'll ask for them now.
@@ -582,6 +828,19 @@ At end of module, include:
 - Command outputs: `oc-get-pods-output.png`, `build-logs.png`
 - Step-by-step: `step-1-create-task.png`, `step-2-run-pipeline.png`
 
+**Clickable Images (Links)**:
+If an image should be clickable and link to external content, use `^` caret to open in new tab:
+
+```asciidoc
+// Using image macro with link attribute
+image::architecture-diagram.png[Architecture,600,link=https://docs.redhat.com/architecture^]
+
+// Using link macro around image
+link:https://docs.redhat.com/architecture^[image:architecture-diagram.png[Architecture,600]]
+```
+
+**Critical**: Clickable images linking to external URLs MUST use `^` caret to open in new tab, just like text links.
+
 ### Step 6: Fetch and Analyze References
 
 Based on your references, I'll:
@@ -601,15 +860,11 @@ Based on your references, I'll:
   - Choose based on version relevance
   - Note the decision in module
 
-**References Used Section**:
-- Add at end of each module: "## References"
-- List all references used with purpose:
-  ```asciidoc
-  == References
-
-  * link:https://docs.openshift.com/...[OpenShift Pipelines documentation^] - Pipeline syntax and examples
-  * link:https://tekton.dev/...[Tekton documentation^] - Task definitions
-  ```
+**Reference Tracking** (for conclusion generation):
+- Track all references used across all modules
+- Store reference URLs, titles, and which modules used them
+- References will be consolidated in the conclusion module, NOT in individual modules
+- Each module can cite sources inline (e.g., "According to the Red Hat documentation...") but the formal References section will only appear in the conclusion
 
 **IMPORTANT: External Link Format**:
 - ALL external links MUST use `^` caret to open in new tab
@@ -735,10 +990,11 @@ I'll create a complete module with:
 - Step-by-step instructions with commands
 - **Verification checkpoints** (REQUIRED - see below)
 - Image placeholders
-- **Troubleshooting section** (REQUIRED - see below)
+- **Troubleshooting section** (OPTIONAL - if user requested in Step 3, see below)
 - **Learning outcomes checkpoint** (REQUIRED - see below)
 - Module summary
-- **References section** (REQUIRED)
+
+**Note**: References are NOT included in individual modules. All references will be consolidated in the mandatory conclusion module.
 
 **Mandatory: Verification Checkpoints**:
 Each major step must include:
@@ -762,8 +1018,8 @@ my-app-xxxxx-xxxxx      1/1     Running   0          2m
 ✓ READY shows 1/1
 ```
 
-**Mandatory: Troubleshooting Section**:
-Every module must include:
+**Optional: Troubleshooting Section (If Requested)**:
+If the user requested troubleshooting in Step 3, include this section:
 ```asciidoc
 == Troubleshooting
 
@@ -783,6 +1039,13 @@ Every module must include:
 . Verify OpenShift CLI installed: `oc version`
 . Expected version: {ocp_version}
 ```
+
+**Guidelines for troubleshooting section**:
+- Include 3-5 common issues specific to the module's technology
+- Provide clear, actionable solutions
+- Use real commands and expected outputs
+- Tailor scenarios to the module's exercises
+- If user declined troubleshooting, skip this section entirely
 
 **Mandatory: Learning Outcomes Checkpoint**:
 Every module must include a learning confirmation (not just technical validation):
@@ -838,9 +1101,9 @@ oc delete project my-project
 2. **Completeness**:
    - ✓ All required sections present (see Step 8)
    - ✓ Verification checkpoints after major steps
-   - ✓ Troubleshooting section with 3+ scenarios
+   - ✓ Troubleshooting section with 3+ scenarios (if user requested)
    - ✓ Learning outcomes section
-   - ✓ References section
+   - ✓ No References section in module (references go in conclusion)
 
 3. **Navigation**:
    - ✓ nav.adoc will be updated in Step 10
@@ -919,7 +1182,7 @@ I'll automatically update `content/modules/ROOT/nav.adoc` - this is REQUIRED for
 - Learning objectives: 4 items
 - Exercises: 3
 - Verification checkpoints: 3
-- Troubleshooting scenarios: 5
+- Troubleshooting scenarios: 5 (if included)
 - Learning outcomes: 4 items
 
 **Assets**:
@@ -931,7 +1194,7 @@ I'll automatically update `content/modules/ROOT/nav.adoc` - this is REQUIRED for
 2. Capture screenshots for placeholder images
 3. Test commands in your environment
 4. Run: verify-content to check quality
-5. Create next module: lab-module (continuing existing lab)
+5. Create next module: create-lab (continuing existing lab)
 
 **Note**: All files have been written. Use your editor to review them.
 ```
@@ -949,37 +1212,109 @@ I'll automatically update `content/modules/ROOT/nav.adoc` - this is REQUIRED for
 - ✅ Give clear next steps
 - ✅ Keep output concise (under 5000 tokens)
 
-### Step 12: Offer to Generate Conclusion Module (Optional)
+### Step 12: Generate Conclusion Module (MANDATORY)
 
-**After delivering all modules, ask if user wants a conclusion module:**
+**After delivering the final module, ask if this is the last module:**
 
 ```
-Q: Would you like me to generate a conclusion module to wrap up the workshop?
+Q: Is this the last module of your workshop?
 
-This adds a final module that:
-- Summarizes what learners accomplished
-- Lists key takeaways
-- Provides next steps and resources
-- Suggests related workshops and certification paths
+If YES, I will now generate the mandatory conclusion module that includes:
+- Summary of what learners accomplished
+- Key takeaways from all modules
+- ALL REFERENCES used across the entire workshop
+- Next steps and resources
+- Related workshops and certification paths
 
-Options:
-1. Yes, generate conclusion module
-2. No, I'll create it later
-3. No, workshop is complete without it
+If NO, you can continue creating more modules, and I'll generate the conclusion when you're done.
 
-Your choice? [1/2/3]
+Is this your last module? [Yes/No]
 ```
 
-**If user chooses option 1 (Yes)**:
+**If user answers YES (this is the last module)**:
 
-1. Detect highest module number (e.g., if last module is 07-module-05, conclusion will be 08-conclusion.adoc)
-2. Generate conclusion module using the embedded template below
-3. Customize the template by:
+1. Read ALL previous modules to extract:
+   - All learning outcomes from each module
+   - All references cited in each module
+   - Key concepts and skills taught
+   - Technologies and products covered
+
+2. Ask about references:
+
+   **First, extract all references from previous modules:**
+   - Read all module files (index.adoc, 01-overview.adoc, 02-details.adoc, 03-module-01-*.adoc, etc.)
+   - Extract all external links found in the content
+   - Identify reference materials provided during module creation (Step 3 question 2)
+   - Compile a comprehensive list with:
+     - URL
+     - Link text/title
+     - Which module(s) referenced it
+
+   **Then ask the user:**
+   ```
+   Q: How would you like to handle references in the conclusion?
+
+   I found these references used across your modules:
+   1. https://docs.openshift.com/container-platform/4.18/... [OpenShift Documentation] - Used in: Modules 1, 3
+   2. https://tekton.dev/docs/pipelines/ [Tekton Pipelines] - Used in: Module 2
+   3. https://developers.redhat.com/... [Developer Guide] - Used in: Module 1
+   {{ additional_references_if_found }}
+
+   Options:
+   1. Use these references as-is (I'll organize them by category)
+   2. Let me provide additional references to include
+   3. Let me curate the reference list (add/remove specific items)
+
+   Your choice? [1/2/3]
+   ```
+
+   **If option 1**: Use extracted references, organize by category
+
+   **If option 2**: Ask user to provide additional references:
+   ```
+   Q: Please provide additional references to include in the conclusion.
+
+   Format: URL and description, one per line
+   Example:
+   https://docs.redhat.com/... - OpenShift documentation
+   https://developers.redhat.com/... - Developer guides
+
+   Your additional references:
+   ```
+
+   **If option 3**: Ask user which references to keep/remove/add:
+   ```
+   Q: Let's curate the reference list.
+
+   Current references:
+   {{ numbered_list_of_references }}
+
+   Options:
+   - Type numbers to REMOVE (e.g., "3, 5, 7")
+   - Type "add" to add new references
+   - Type "done" when finished
+
+   Your action:
+   ```
+
+3. Detect highest module number (e.g., if last module is 07-module-05, conclusion will be 08-conclusion.adoc)
+
+4. Generate conclusion module using the embedded template below
+
+5. Customize the template by:
    - Extracting all learning outcomes from previous modules
    - Listing 3-5 key takeaways from the workshop
+   - **Using the curated reference list from step 2** (REQUIRED)
    - Providing next steps (related workshops, docs, practice projects)
-4. Update nav.adoc with conclusion entry at the end
-5. Provide brief confirmation
+
+6. Update nav.adoc with conclusion entry at the end
+
+7. Provide brief confirmation
+
+**If user answers NO (more modules to come)**:
+- Note that conclusion will be generated after the last module
+- User can invoke /create-lab again to add more modules
+- When adding the final module, this question will be asked again
 
 **Embedded Conclusion Template**:
 ```asciidoc
@@ -1033,6 +1368,39 @@ Put your new skills to work:
 . **{{ project_idea_2 }}**: {{ project_description_2 }}
 . **{{ project_idea_3 }}**: {{ project_description_3 }}
 
+== References
+
+**CRITICAL**: This section consolidates ALL references used across the entire workshop.
+
+Read all previous modules and extract every reference cited, then organize them by category:
+
+=== Official Documentation
+
+* link:{{ docs_url_1 }}[{{ product_name }} Documentation^] - Used in: Modules {{ modules_list }}
+* link:{{ docs_url_2 }}[{{ feature_name }} Guide^] - Used in: Modules {{ modules_list }}
+
+=== Red Hat Resources
+
+* link:{{ redhat_resource_1 }}[{{ resource_title_1 }}^] - Used in: Module {{ module_number }}
+* link:{{ redhat_resource_2 }}[{{ resource_title_2 }}^] - Used in: Module {{ module_number }}
+
+=== Community and Open Source
+
+* link:{{ community_url_1 }}[{{ community_resource_1 }}^] - Used in: Module {{ module_number }}
+* link:{{ community_url_2 }}[{{ community_resource_2 }}^] - Used in: Module {{ module_number }}
+
+=== Additional Reading
+
+* link:{{ additional_url_1 }}[{{ additional_title_1 }}^] - Background information
+* link:{{ additional_url_2 }}[{{ additional_title_2 }}^] - Advanced topics
+
+**Guidelines for References section**:
+- Group references by category (Official Docs, Red Hat Resources, Community, etc.)
+- Include which module(s) used each reference
+- ALL external links must use `^` caret to open in new tab
+- Provide brief context for each reference (what it covers)
+- Ensure ALL references from ALL modules are included
+
 == Share Your Feedback
 
 Help us improve this workshop:
@@ -1061,16 +1429,15 @@ Keep building, keep learning! 🚀
 - Title: `= Conclusion and Next Steps`
 - Nav entry: `* xref:0X-conclusion.adoc[Conclusion and Next Steps]`
 
-**Content to Include**:
+**Content to Include** (ALL REQUIRED):
 - ✅ "What You've Learned" - Extract from all module learning outcomes
 - ✅ "Key Takeaways" - 3-5 most important concepts
 - ✅ "Next Steps" - Related workshops, documentation, practice projects
-- ✅ "Get Certified" - Relevant Red Hat certifications
+- ✅ **"References"** - Consolidate ALL references from ALL modules (MANDATORY)
+- ✅ "Share Your Feedback" - Feedback prompts
 - ✅ "Thank You" - Closing message
 
-**If user chooses option 2 or 3**:
-- Skip conclusion generation
-- Note in summary that user can add conclusion later using the template
+**CRITICAL**: The References section MUST include every reference used across all modules, organized by category.
 
 ## Example Usage
 

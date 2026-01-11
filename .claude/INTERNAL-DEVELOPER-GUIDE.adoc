@@ -38,9 +38,9 @@
 │   ├── verify_accessibility_compliance.txt
 │   └── verify_content_quality.txt
 ├── skills/                             # Skill definitions
-│   ├── lab-module/
+│   ├── create-lab/
 │   │   └── SKILL.md                    # Workshop module generator
-│   ├── demo-module/
+│   ├── create-demo/
 │   │   └── SKILL.md                    # Demo module generator
 │   └── verify-content/
 │       └── SKILL.md                    # Content verification
@@ -61,16 +61,16 @@ content/modules/ROOT/pages/
 └── demo/                               # Demo examples
     └── example/
 
-CLAUDE-SKILLS-GUIDE.md                  # User-facing quick guide (root)
+CLAUDE-SKILLS-GUIDE.adoc                # User-facing quick guide (root)
 ```
 
 ---
 
 ## Skill Definitions
 
-### 1. `lab-module` - Workshop Module Generator
+### 1. `create-lab` - Workshop Module Generator
 
-**File**: `.claude/skills/lab-module/SKILL.md`
+**File**: `.claude/skills/create-lab/SKILL.md`
 
 **Purpose**: Generate hands-on workshop modules with step-by-step instructions, verification commands, and progressive learning structure.
 
@@ -84,17 +84,24 @@ CLAUDE-SKILLS-GUIDE.md                  # User-facing quick guide (root)
 - Auto-updates `nav.adoc`
 
 **Workflow Steps**:
-1. Determine context (first vs continuation)
-2. Plan overall story (if first)
-3. Optional: AgV catalog assistance
-4. Gather module details
-5. Get UserInfo variables
-6. Read templates and verification prompts
-7. Generate module content
-8. Update navigation
+1. Determine context (NEW vs EXISTING lab)
+1.5. Ask for target directory (if not provided as argument)
+2. Plan overall story (if NEW lab)
+2.1. Update lab configuration files (site.yml, antora.yml)
+2.5. Optional: AgV catalog assistance
+3. Gather module details
+4. Get UserInfo variables
+5. Handle diagrams, screenshots, code blocks
+6. Fetch and analyze references
+7. Read templates and verification criteria
+8. Generate module content (using verification criteria)
+9. Final quality check
+10. Update navigation
+11. Deliver (with token management)
+12. Offer conclusion module (optional)
 
 **Files Read**:
-- `.claude/skills/lab-module/SKILL.md`
+- `.claude/skills/create-lab/SKILL.md`
 - `.claude/docs/SKILL-COMMON-RULES.md`
 - `.claude/prompts/redhat_style_guide_validation.txt`
 - `content/modules/ROOT/pages/workshop/templates/03-module-01.adoc`
@@ -112,9 +119,9 @@ CLAUDE-SKILLS-GUIDE.md                  # User-facing quick guide (root)
 
 ---
 
-### 2. `demo-module` - Demo Content Generator
+### 2. `create-demo` - Demo Content Generator
 
-**File**: `.claude/skills/demo-module/SKILL.md`
+**File**: `.claude/skills/create-demo/SKILL.md`
 
 **Purpose**: Generate presenter-led demo modules with Know/Show structure and business value messaging.
 
@@ -126,23 +133,29 @@ CLAUDE-SKILLS-GUIDE.md                  # User-facing quick guide (root)
 - Business metrics quantification
 
 **Workflow Steps**:
-1. Determine context (new vs continuation)
-2. Plan demo narrative and business story
-3. Optional: AgV catalog assistance
-4. Gather module details
-5. Get UserInfo variables
-6. Read templates and verification prompts
-7. Generate Know/Show structured content
-8. Update navigation
+1. Determine context (NEW vs EXISTING demo)
+1.5. Ask for target directory (if not provided as argument)
+2. Plan demo narrative and business story (if NEW demo)
+2.5. Optional: AgV catalog assistance
+3. Gather module details
+4. Get UserInfo variables
+5. Handle diagrams, screenshots, demo scripts
+6. Fetch and analyze references
+7. Read templates and verification criteria
+8. Generate Know/Show structured content (using verification criteria)
+9. Validate with agents
+10. Update navigation
+11. Deliver (with token management)
+12. Offer conclusion module (optional)
 
 **Files Read**:
-- `.claude/skills/demo-module/SKILL.md`
+- `.claude/skills/create-demo/SKILL.md`
 - `.claude/docs/SKILL-COMMON-RULES.md`
 - `.claude/prompts/redhat_style_guide_validation.txt`
 - `content/modules/ROOT/pages/demo/example/`
 
 **Files Written**:
-- Demo module files (similar structure to lab-module)
+- Demo module files (similar structure to create-lab)
 - `content/modules/ROOT/nav.adoc` (updated)
 
 ---
@@ -460,12 +473,12 @@ Preserve:
 **Implementation**:
 ```
 Before generation, read:
-  for lab-module:
+  for create-lab:
     - redhat_style_guide_validation.txt
     - verify_workshop_structure.txt (conceptually)
     - All workshop templates and examples
 
-  for demo-module:
+  for create-demo:
     - redhat_style_guide_validation.txt
     - Demo templates and examples
 ```
@@ -476,7 +489,7 @@ Before generation, read:
 
 ### AgV Workflow in Skills
 
-Both `lab-module` and `demo-module` offer **optional** AgV catalog assistance (Step 2.5).
+Both `create-lab` and `create-demo` offer **optional** AgV catalog assistance (Step 2.5).
 
 **Flow**:
 ```
@@ -611,8 +624,21 @@ All content must follow:
 
 ### Version History
 
+**January 9, 2026** - Interactive Questions Update
+- Made all questions conversational and friendly
+- Added Step 1.5: Target directory prompt in interactive mode
+- Simplified AgV question from 4 to 3 options
+- Fixed "first module" redundancy (changed to "NEW demo/lab")
+- Added welcome messages and emojis for better UX
+- Created CLAUDE-SKILLS-GUIDE.adoc (user-facing quick guide)
+- Updated lab name configuration (Step 2.1) to update site.yml and antora.yml
+- Moved templates from content/modules/ROOT/pages/ to .claude/templates/
+- Embedded conclusion templates in skills (removed external file dependency)
+- Added SA action items to demo conclusions
+- Removed certification sections (not applicable for internal RHDP)
+
 **January 2026** - Initial release
-- Created lab-module, demo-module, verify-content skills
+- Created create-lab, create-demo, verify-content, blog-generate skills
 - Implemented 4 critical workflow fixes:
   - UUID generation before file creation
   - Showroom repo auto-detection
@@ -642,8 +668,8 @@ None currently. Report issues to Prakhar Srivastava or RHDP team.
 ## Appendix: File Reference Quick Links
 
 ### Skill Definitions
-- [lab-module SKILL.md](skills/lab-module/SKILL.md)
-- [demo-module SKILL.md](skills/demo-module/SKILL.md)
+- [create-lab SKILL.md](skills/create-lab/SKILL.md)
+- [create-demo SKILL.md](skills/create-demo/SKILL.md)
 - [verify-content SKILL.md](skills/verify-content/SKILL.md)
 
 ### Shared Rules
