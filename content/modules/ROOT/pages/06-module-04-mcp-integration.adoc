@@ -781,31 +781,17 @@ Customer Query: "What time do you close and what's your return policy?"
 . Use clearer system prompts
 . Try more capable models for complex reasoning
 
-== Troubleshooting
+== Clean up
 
-**Issue**: MCP servers don't appear in the panel
+Before proceeding to Module 5, clean up the MCP environment:
 
-**Solution**:
+. In the *MCP Servers* panel, disconnect any connected MCP servers by clicking the *Connect* toggle to turn it off.
 
-. Verify Python 3.10+ is installed
-. Check vLLM Playground version supports MCP
-. Restart vLLM Playground
+. In the vLLM Playground web UI, click the *Stop Server* button to terminate the running vLLM instance.
 
-**Issue**: Connection timeouts
+. Verify the server has stopped by checking that the server status shows "Stopped" or the Start Server button becomes available again.
 
-**Solution**:
-
-. Check network connectivity
-. Verify MCP server process is running
-. Review MCP server logs for errors
-
-**Issue**: Tools not available in chat
-
-**Solution**:
-
-. Ensure MCP server is connected (green status)
-. Enable MCP tools in chat panel settings
-. Restart the conversation after connecting servers
+NOTE: Module 5 focuses on performance testing with GuideLLM, which requires a clean server configuration without MCP overhead for accurate benchmarking results.
 
 == Learning outcomes
 
