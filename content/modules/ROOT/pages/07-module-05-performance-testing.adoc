@@ -80,32 +80,18 @@ GuideLLM is a benchmarking tool that:
 {ssh_command}
 ----
 
-. Verify your vLLM server is running:
-+
-[source,bash]
-----
-vllm-playground status
-----
-+
-If not running, start it:
-+
-[source,bash]
-----
-vllm-playground
-----
-
 . Install GuideLLM:
 +
 [source,bash]
 ----
-pip install guidellm
+sudo pip install guidellm
 ----
 +
 Alternatively, if you installed vLLM Playground with benchmarking support:
 +
 [source,bash]
 ----
-pip install vllm-playground[benchmark]
+sudo pip install vllm-playground[benchmark]
 ----
 
 . Verify the installation:
@@ -130,6 +116,49 @@ Commands:
   benchmark  Run performance benchmark
   report     Generate benchmark report
 ----
+
+. Restart the vLLM Playground daemon service so that GuideLLM can be detected:
++
+[source,bash]
+----
+sudo systemctl restart vllm-playground
+----
++
+NOTE: The vLLM Playground service needs to be restarted after installing GuideLLM to detect the new benchmarking tools.
+
+. Verify your vLLM Playground is running:
++
+[source,bash]
+----
+vllm-playground status
+----
++
+Or, checking the daemon service:
++
+[source,bash]
+----
+sudo systemctl status vllm-playground
+----
+
+. Start a vLLM server with the Qwen model. In the vLLM Playground web UI, configure the following settings:
++
+[cols="1,2"]
+|===
+|Setting |Value
+
+|Model
+|`Qwen/Qwen2.5-3B-Instruct`
+
+|Run Mode
+|Container
+
+|Compute Mode
+|GPU
+|===
++
+Click *Start Server* and wait for the server to be ready. Monitor the *Server Logs* panel until you see the server is ready to accept connections.
++
+NOTE: For performance benchmarking, we use a simple configuration without tool calling or MCP to get accurate baseline metrics.
 
 . Check your vLLM server endpoint:
 +
@@ -187,7 +216,7 @@ Confirm GuideLLM is ready:
 
 **Solution**:
 
-. Ensure pip install completed successfully
+. Ensure `sudo pip install` completed successfully
 . Check if installed in a virtual environment
 . Try: `python -m guidellm --help`
 
