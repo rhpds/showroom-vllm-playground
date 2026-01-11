@@ -573,51 +573,8 @@ You've successfully completed the Performance Testing module and the entire vLLM
 * Established baseline metrics for ongoing monitoring
 * Confident production deployment with known performance characteristics
 
-== Workshop completion
-
-🎉 **Congratulations!** You've completed the vLLM Playground Workshop!
-
-**Your journey through ACME Corporation's AI initiative:**
-
-[cols="1,3"]
-|===
-|Module |Achievement
-
-|Module 1
-|Deployed vLLM server and experienced the chat interface
-
-|Module 2
-|Mastered structured outputs for reliable, parseable AI responses
-
-|Module 3
-|Configured tool calling for AI-driven function invocation
-
-|Module 4
-|Connected MCP servers for agentic AI with human-in-the-loop safety
-
-|Module 5
-|Validated production readiness through performance benchmarking
-|===
-
-**ACME Corporation now has:**
-
-* ✓ High-performance LLM inference infrastructure
-* ✓ Structured outputs for backend integration
-* ✓ Tool calling for intelligent automation
-* ✓ Agentic capabilities with safety controls
-* ✓ Validated performance for production deployment
-
-**Next steps for your own projects:**
-
-* Deploy vLLM Playground in your environment
-* Experiment with different models for your use cases
-* Build custom MCP servers for your specific tools
-* Establish performance baselines and monitoring
-* Scale horizontally for higher throughput
-
 == References
 
 * link:https://github.com/micytao/vllm-playground[vLLM Playground - Benchmarking Documentation^]
-* link:https://docs.guidellm.ai[GuideLLM Official Documentation^]
-* link:https://docs.vllm.ai/en/latest/serving/performance.html[vLLM Performance Tuning Guide^]
+* link:https://developers.redhat.com/articles/2025/06/20/guidellm-evaluate-llm-deployments-real-world-inference#[GuideLLM Developer Blog^]
 * link:https://github.com/neuralmagic/guidellm[GuideLLM GitHub Repository^]
