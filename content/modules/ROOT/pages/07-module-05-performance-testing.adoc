@@ -106,15 +106,17 @@ Expected output:
 ----
 Usage: guidellm [OPTIONS] COMMAND [ARGS]...
 
-  GuideLLM - LLM Inference Benchmarking Tool
+  GuideLLM CLI for benchmarking, preprocessing, and testing language models.
 
 Options:
-  --version  Show version
-  --help     Show this message and exit
+  --version  Show the version and exit.
+  --help     Show this message and exit.
 
 Commands:
-  benchmark  Run performance benchmark
-  report     Generate benchmark report
+  benchmark    Run a benchmark or load a previously saved benchmark report.
+  config       Show configuration settings.
+  mock-server  Start a mock OpenAI/vLLM-compatible server for testing.
+  preprocess   Tools for preprocessing datasets for use in benchmarks.
 ----
 
 . Restart the vLLM Playground daemon service so that GuideLLM can be detected:
@@ -169,8 +171,7 @@ curl http://localhost:8000/v1/models
 +
 This confirms the OpenAI-compatible API is accessible. Note the model name returned—you'll need it for benchmarking.
 +
-// TODO: Add screenshot
-image::vllm-models-endpoint.png[vLLM models API response,width=600,title="vLLM Models Endpoint"]
+image::module-05-figure-01.png[vLLM models API response,width=600,title="vLLM Models Endpoint"]
 
 . Understand GuideLLM benchmark options:
 +
@@ -235,55 +236,114 @@ Now you'll run your first benchmark and learn to interpret the results. ACME nee
 
 === Steps
 
-. Run a quick baseline benchmark:
+. In the vLLM Playground web UI, navigate to the *GuideLLM* panel in the sidebar.
 +
-[source,bash]
-----
-guidellm benchmark \
-  --target http://localhost:8000 \
-  --model $(curl -s http://localhost:8000/v1/models | jq -r '.data[0].id') \
-  --rate 1 \
-  --max-requests 10 \
-  --data emulated
-----
-+
-This runs 10 requests at 1 request/second using emulated data.
-+
-// TODO: Add screenshot
-image::guidellm-running.png[GuideLLM benchmark in progress,width=700,title="Benchmark Running"]
+image::module-05-figure-02.png[GuideLLM panel in vLLM Playground,width=700,title="GuideLLM Panel"]
 
-. Wait for the benchmark to complete. You'll see progress indicators and then results.
-
-. Review the benchmark output:
+. Select the *GuideLLM (Advanced)* radio button for Benchmark method.
 +
-// TODO: Add screenshot
-image::guidellm-results.png[GuideLLM benchmark results,width=700,title="Benchmark Results"]
+NOTE: The *GuideLLM (Advanced)* option is only available after GuideLLM is installed. Without it, you can still use the built-in benchmark for basic performance testing.
+
+. Configure the benchmark settings (defaults):
 +
-Key metrics to examine:
+[cols="1,2"]
+|===
+|Setting |Value
+
+|Total Requests
+|`100`
+
+|Request Rate (req/s)
+|`5` (requests per second)
+
+|Prompt Tokens
+|`100`
+
+|output Tokens
+|`100`
+
+|===
+
+. Click *Run Benchmark* to start the benchmark.
 +
-[source,text]
-----
-=== Benchmark Results ===
-Total Requests:      10
-Successful:          10
-Failed:              0
-Duration:            12.34s
+This runs 100 requests at 5 request/second using 100 prompt tokens and 100 output tokens.
++
+image::module-05-figure-03.png[GuideLLM benchmark in progress,width=700,title="Benchmark Running"]
 
-Throughput:          0.81 req/s
-Tokens/second:       156.3 tok/s
+. Wait for the benchmark to complete. You'll see progress indicators and then results in the UI.
 
-Latency (TTFT):
-  Mean:              234ms
-  P50:               215ms
-  P90:               312ms
-  P99:               398ms
+. Review the benchmark results displayed in the panel. The GuideLLM panel provides three output formats:
++
+[cols="1,2"]
+|===
+|Output Format |Description
 
-Latency (E2E):
-  Mean:              1.23s
-  P50:               1.15s
-  P90:               1.67s
-  P99:               2.01s
-----
+|*Raw Output*
+|The complete console output from GuideLLM, showing real-time progress and detailed logs
+
+|*JSON*
+|Structured JSON output for programmatic analysis and integration with other tools
+
+|*Benchmark Summary Table*
+|A formatted table displaying key performance metrics at a glance
+|===
++
+image::module-05-figure-04.png[GuideLLM benchmark results,width=700,title="Benchmark Results"]
++
+The *Benchmark Summary Table* displays four key sections:
++
+*Performance Metrics*::
+Shows throughput statistics including Mean, Median, Min, and Max requests per second. For example:
++
+[cols="1,1,1,1,1"]
+|===
+|Metric |Mean |Median |Min |Max
+
+|Requests/Second
+|4.33
+|4.84
+|0.00
+|59.20
+|===
+
+*Token Statistics*::
+Displays the token generation rate:
++
+[cols="1,1"]
+|===
+|Metric |Value
+
+|Output Tokens/Second (Mean)
+|448.40
+|===
+
+*Request Latency Percentiles*::
+Shows latency distribution across different percentiles:
++
+[cols="1,1,1"]
+|===
+|Percentile |Latency (s) |Latency (ms)
+
+|P50
+|3.417
+|3416.56
+
+|P75
+|3.498
+|3497.91
+
+|P90
+|3.512
+|3511.61
+
+|P95
+|3.518
+|3517.99
+
+|P99
+|3.559
+|3558.93
+|===
 
 . Understand each metric:
 +
@@ -291,23 +351,20 @@ Latency (E2E):
 |===
 |Metric |Interpretation
 
-|**Throughput (req/s)**
-|At 0.81 req/s, this server can handle ~49 requests per minute
+|**Requests/Second (Mean)**
+|Average throughput - at 4.33 req/s, this server can handle ~260 requests per minute
 
-|**Tokens/second**
-|156 tokens/s indicates generation speed for streaming responses
+|**Output Tokens/Second**
+|448 tokens/s indicates the generation speed for responses
 
-|**TTFT Mean**
-|234ms average time before first token appears (user sees response starting)
+|**P50 Latency**
+|Median latency - 50% of requests complete within 3.4 seconds
 
-|**TTFT P99**
-|99% of requests see first token within 398ms
+|**P90 Latency**
+|90% of requests complete within 3.5 seconds
 
-|**E2E Mean**
-|1.23s average total response time
-
-|**E2E P99**
-|99% of requests complete within 2.01s
+|**P99 Latency**
+|99% of requests complete within 3.6 seconds (tail latency)
 |===
 
 . Run a sweep benchmark to find maximum throughput:
