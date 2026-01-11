@@ -1,54 +1,93 @@
-= Workshop details
+= Demonstration details and presenter guidance
 :toc:
 :toc-placement: preamble
 :icons: font
 
-== Timing and schedule
+== Demo timing and flexible formats
 
-=== Full workshop (90 minutes)
+=== Full demonstration (60 minutes)
 
-* **Module 1**: Getting Started with vLLM Playground (18 minutes)
-* **Module 2**: Advanced Inferencing: Structured Outputs (18 minutes)
-* **Module 3**: Advanced Inferencing: Tool Calling (18 minutes)
-* **Module 4**: Advanced Inferencing: MCP Integration (18 minutes)
-* **Module 5**: Performance Testing (18 minutes)
+* **Module 1**: Getting Started with vLLM Playground (12 minutes)
+* **Module 2**: Structured Outputs for System Integration (12 minutes)
+* **Module 3**: Tool Calling for Dynamic Functionality (12 minutes)
+* **Module 4**: MCP Integration for Agentic Workflows (12 minutes)
+* **Module 5**: Performance Testing and Validation (12 minutes)
 
-=== Quick start workshop (36 minutes)
+=== Standard technical demo (30-45 minutes)
 
-* **Module 1**: Getting Started with vLLM Playground (15 minutes)
-* **Module 5**: Performance Testing (18 minutes)
+**Recommended flow**:
 
-== Technical requirements
+* **Module 1**: Getting Started with vLLM Playground (12 minutes)
+* **Module 2**: Structured Outputs (10 minutes - focus on JSON Schema only)
+* **Module 3**: Tool Calling (10 minutes - show one or two tool examples)
+* **Q&A and discussion** (8-13 minutes)
 
-=== Software versions
+**What to skip**: Module 4 (MCP Integration) and Module 5 (Performance Testing) - mention these capabilities briefly
+
+=== Executive brief (15-20 minutes)
+
+**Recommended flow**:
+
+* **Module 1 Part 1**: Deploy vLLM server and show chat interface (8 minutes)
+* **Quick highlights**: Show structured output example and mention tool calling (4 minutes)
+* **Business value recap**: Connect capabilities to ACME's challenges (3 minutes)
+* **Q&A and next steps** (5 minutes)
+
+**What to skip**: Detailed technical configurations, performance testing, MCP integration
+
+== Technical specifications
+
+=== Software versions used in this demonstration
 
 * vLLM Playground v0.1.1
 * vLLM v0.10.0
 * Podman 4.0 or later
-* Python 3.10 or later (required for MCP)
+* Python 3.10 or later (for MCP demonstrations)
 * NVIDIA GPU with CUDA support
 * Web browser (Chrome, Firefox, Safari, Edge)
 
-=== Environment access
+=== Demo environment specifications
 
-Participants have access to:
+Presenters demonstrate on a pre-configured environment with:
 
-* GPU-enabled lab host: {targethost}
-* SSH access: `{ssh_command}`
+* GPU-enabled demonstration host: {targethost}
+* SSH access available: `{ssh_command}`
 * vLLM Playground web UI: http://{hostname}:7860
 * Pre-installed vLLM Playground CLI
+* Pre-pulled container images for faster demonstrations
 
-=== Network requirements
+=== Network requirements for live demos
 
-* Internet connectivity for downloading container images from registry
-* Access to HuggingFace for model downloads (if using gated models)
-* Lab host network access (specific URLs provided in lab interface)
+* Internet connectivity for accessing web UI (audience view)
+* Access to container registries (if demonstrating image pulls)
+* Lab host network access for presenter SSH connections
 
-== Environment setup
+NOTE: For customer site demonstrations, verify firewall rules allow access to demo host port 7860 (web UI) and SSH port 22.
 
-=== Pre-configured for you
+== Presenter preparation and environment setup
 
-Your lab environment comes with:
+=== Pre-demo environment validation
+
+Before starting your demonstration, verify the environment is ready:
+
+[source,bash]
+----
+# Verify vLLM Playground installation
+vllm-playground --help
+
+# Check Podman availability
+podman version
+
+# Verify GPU (optional - depends on demo depth)
+nvidia-smi
+
+# Check system daemon status (if configured)
+sudo systemctl status vllm-playground
+----
+
+=== Demo environment components
+
+Your demonstration environment includes:
 
 [cols="1,2"]
 |===
@@ -61,106 +100,124 @@ Your lab environment comes with:
 |✓ Pre-installed and configured
 
 |NVIDIA GPU drivers
-|✓ Pre-configured with CUDA
+|✓ Pre-configured with CUDA (L4 or equivalent)
 
 |Python 3.10+
-|✓ Available for MCP support
+|✓ Available for MCP demonstrations
 
 |vLLM Container images
-|✓ Pre-pulled and verified
+|✓ Pre-pulled for faster demo flow
 |===
 
-=== Optional packages
+=== Optional packages for extended demos
 
-The following packages can be installed for additional functionality:
+For advanced demonstration modules, these packages are available:
 
 [cols="1,2,2"]
 |===
-|Package |Install Command |Purpose
+|Package |Purpose |Demo Module
 
 |MCP Client
-|`pip install mcp` or `pip install vllm-playground[mcp]`
-|Required for Module 4: MCP Integration
+|Model Context Protocol integration
+|Module 4: MCP Integration
 
 |GuideLLM
-|`pip install guidellm` or `pip install vllm-playground[benchmark]`
-|Required for Module 5: Performance Testing
+|Performance benchmarking and metrics
+|Module 5: Performance Testing
 |===
 
-NOTE: These packages may already be pre-installed in your lab environment. The modules will guide you through verification and installation if needed.
+== Presenter support and troubleshooting
 
-=== Setup validation
+=== Common demo scenarios and handling
 
-Run these commands to verify your environment:
+**Scenario**: Web UI doesn't load during demonstration
+→ **Recovery**: Use SSH terminal to show CLI commands and explain web UI features. Most audiences understand technical glitches.
+
+**Scenario**: Model inference is slower than expected
+→ **Context**: Explain that cold starts take longer, warm inference is faster. Use it as opportunity to discuss production optimization.
+
+**Scenario**: Audience asks about specific model support
+→ **Reference**: vLLM supports Llama, Mistral, Qwen, Granite, and many others. Check link:https://github.com/vllm-project/vllm[vLLM supported models list^].
+
+**Scenario**: Question about enterprise deployment and support
+→ **Answer**: Red Hat AI Inference Server (RHAIIS) provides enterprise-supported version of vLLM with SLAs, security updates, and OpenShift integration.
+
+=== Live demonstration support commands
+
+Keep these handy for demonstration recovery:
 
 [source,bash]
 ----
-# Verify vLLM Playground installation
-vllm-playground --help
+# Check vLLM Playground status
+vllm-playground status
 
-# Verify Podman
-podman version
+# View server logs
+podman logs vllm-service
 
-# Verify GPU availability
-nvidia-smi
+# Restart if needed (last resort)
+vllm-playground stop && vllm-playground
 
-# Check Python version (for MCP)
-python3 --version
-
-# Verify MCP installation (optional - for Module 4)
-python3 -c "import mcp; print('MCP installed successfully')"
-
-# Verify GuideLLM installation (optional - for Module 5)
-guidellm --help
+# Check running containers
+podman ps
 ----
 
-== Troubleshooting guide
+== Audience engagement and follow-up resources
 
-=== Common setup issues
+=== Recommended post-demo actions for attendees
 
-**Problem**: "vllm-playground: command not found"
-→ **Solution**: Verify the installation path is in your PATH, or run with full path
+After this demonstration, interested attendees should:
 
-**Problem**: "Permission denied" when running Podman commands
-→ **Solution**: Ensure you're using rootless Podman or have appropriate permissions
+. **Try it yourself**: Access link:https://github.com/micytao/vllm-playground[vLLM Playground GitHub Repository^] for installation and setup
+. **Request POC environment**: Contact your Red Hat representative for proof-of-concept environment provisioning
+. **Schedule deep dive**: Book technical architecture session to discuss integration with your specific systems
 
-**Problem**: "NVIDIA driver not found" or GPU not detected
-→ **Solution**: Verify NVIDIA drivers are installed with `nvidia-smi`
+=== Additional learning and technical resources
 
-**Problem**: "Container image pull fails"
-→ **Solution**: Check network connectivity and ensure you have access to container registries
+**vLLM and inference engine resources**:
 
-**Problem**: "Port 7860 already in use"
-→ **Solution**: Run `vllm-playground stop` to stop any existing instance, or use `--port` to specify a different port
+* link:https://github.com/vllm-project/vllm[vLLM Project^] - The high-performance inference engine powering this demonstration
+* link:https://github.com/micytao/vllm-playground[vLLM Playground GitHub Repository^] - Source code, documentation, and community
+* link:https://github.com/vllm-project/guidellm[GuideLLM Documentation^] - Performance benchmarking tool demonstrated in Module 5
 
-=== During workshop support
+**Model Context Protocol and agentic AI**:
 
-* Check the vLLM Playground logs: `podman logs vllm-service`
-* Verify server status: `vllm-playground status`
-* Restart if needed: `vllm-playground stop && vllm-playground`
+* link:https://modelcontextprotocol.io[Model Context Protocol Specification^] - MCP standard and server implementations
+* link:https://github.com/modelcontextprotocol/servers[MCP Servers Repository^] - Pre-built MCP servers for common integrations
 
-== Follow-up resources
+**Red Hat AI and enterprise deployment**:
 
-=== Next steps after the workshop
+* link:https://www.redhat.com/en/technologies/cloud-computing/openshift/openshift-ai[Red Hat OpenShift AI^] - Enterprise AI platform with vLLM support
+* link:https://access.redhat.com/documentation/en-us/red_hat_openshift_ai_self-managed[OpenShift AI Documentation^] - Deployment and configuration guides
+* link:https://developers.redhat.com/products/openshift-ai[Red Hat Developers: OpenShift AI^] - Developer resources and tutorials
 
-* link:https://github.com/micytao/vllm-playground[vLLM Playground GitHub Repository^] - Source code and documentation
-* link:https://github.com/vllm-project/vllm[vLLM Project^] - The underlying high-performance inference engine
-* link:https://github.com/vllm-project/guidellm[GuideLLM Documentation^] - Performance benchmarking tool
-* link:https://modelcontextprotocol.io[Model Context Protocol^] - MCP specification and servers
+=== Sales enablement and next steps
 
-=== Additional learning paths
+**For sales engineers and solution architects**:
 
-* **Intermediate**: Explore different model architectures and their tool calling capabilities
-* **Advanced**: Deploy vLLM Playground on OpenShift/Kubernetes for enterprise scale
-* **Production**: Implement custom MCP servers for your specific use cases
+After delivering this demonstration, follow up with prospects by:
+
+. **Sending demonstration recording**: Email link with timestamps for key moments
+. **Sharing technical resources**: Provide links to documentation and trial access
+. **Scheduling POC planning**: Book session to scope proof-of-concept requirements
+. **Connecting with product specialists**: Loop in AI/ML specialists for deeper technical discussions
+
+**Qualification questions to assess fit**:
+
+* What's your current AI inference infrastructure? (understand baseline)
+* How many models do you need to serve? (assess scale requirements)
+* What systems need AI integration? (identify tool calling opportunities)
+* When do you need production deployment? (timeline and urgency)
+* What's your biggest AI infrastructure challenge? (align solution to pain)
 
 == Authors and contributors
 
-**Primary Author**: Michael Yang 
-**Last Updated**: January 2026 
-**Workshop Version**: 1.0
+**Primary Author**: Michael Yang (vLLM Playground) +
+**Demo Content**: Red Hat Showroom Team +
+**Last Updated**: January 2026 +
+**Demo Version**: 1.0
 
-**Feedback and Questions**:
+**Feedback and questions**:
 
-* Workshop issues: Submit via the lab feedback mechanism
-* vLLM Playground issues: link:https://github.com/micytao/vllm-playground/issues[GitHub Issues^]
+* Demo delivery feedback: Submit via Red Hat Showroom feedback mechanism
+* vLLM Playground technical issues: link:https://github.com/micytao/vllm-playground/issues[GitHub Issues^]
+* Red Hat AI solutions: Contact your Red Hat account team

@@ -1,52 +1,66 @@
-= vLLM Playground Workshop
+= Building Production-Ready AI Infrastructure with vLLM Playground
 
-Welcome to the vLLM Playground workshop!
+Welcome to the vLLM Playground demonstration!
 
-== What you'll learn
+== What you'll see in this demo
 
-In this workshop, you will:
+In this demonstration, we'll show you how ACME Corporation is building production-ready AI infrastructure with vLLM Playground:
 
-* Deploy vLLM servers via container management using Podman
-* Use the modern chat UI with streaming responses to interact with LLMs
-* Implement structured outputs using JSON Schema, Regex, and Grammar
-* Configure and use tool calling with various Open Source Large Language models (Qwen, Llama, Mistral, etc)
-* Set up MCP (Model Context Protocol) servers for agentic capabilities
-* Run performance benchmarks with GuideLLM
+* Deploy vLLM servers via container management using Podman for rapid model serving
+* Use modern chat interfaces with streaming responses to deliver real-time customer experiences
+* Implement structured outputs using JSON Schema, Regex, and Grammar for reliable system integration
+* Configure tool calling with Open Source Large Language Models (Qwen, Llama, Mistral) to extend AI capabilities
+* Set up Model Context Protocol (MCP) servers for agentic workflows with human-in-the-loop approval
+* Run performance benchmarks with GuideLLM to validate production readiness
 
-== Who this is for
+== Who this demo is for
 
-This workshop is designed for Developers, AI Engineers, Platform Engineers, and Architects who want to set up a complete AI inference environment with tool calling and MCP integration.
+This demonstration is designed for:
 
-**Experience level**: All levels - Beginner, Intermediate, and Advanced
+* **AI Engineers and Architects** evaluating AI inference platforms
+* **Platform Engineers** building enterprise AI infrastructure
+* **Technical Decision Makers** assessing AI serving solutions
+* **Developers** integrating LLMs into applications
 
-== Prerequisites
+**Experience level**: Technical audience with basic understanding of containers, Linux, and AI/ML concepts
 
-Before starting this workshop, you should have:
+== Demo formats
 
-* Basic knowledge of Red Hat Enterprise Linux (RHEL)
-* Basic knowledge of vLLM (https://github.com/vllm-project/vllm), a high-throughput and memory-efficient inference and serving engine for LLMs.
-* Familiarity with containers and container runtimes
-* Basic understanding of AI inferencing concepts
+This demonstration is modular and can be tailored to your time constraints:
 
-== Workshop environment
+* **15-20 minutes (Executive Brief)**: Core business value + vLLM deployment demonstration
+* **30-45 minutes (Standard Technical Demo)**: Getting Started, Structured Outputs, and Tool Calling capabilities
+* **60 minutes (Deep Technical Dive)**: Complete demonstration of all 5 advanced features with performance benchmarking
 
-Your lab environment comes pre-configured with vLLM Playground v0.1.1 and all necessary dependencies installed on a GPU-enabled machine.
+Your presenter will adapt the content based on your interests and available time.
 
-You will have access to:
+== ACME Corporation scenario
 
-* Lab host: {targethost}
-* SSH access: `{ssh_command}`
-* Username: {ssh_username}
-* Password: {ssh_password}
+Throughout this demo, we'll follow **ACME Corporation's journey** to modernize their customer support infrastructure:
 
-NOTE: All environment details and credentials are available in the lab interface.
+* **Business Challenge**: Build AI-powered customer support that handles increasing demand while maintaining response quality
+* **Technical Requirements**: Flexible AI inference platform serving multiple models with tool integration and enterprise scalability
+* **Solution**: vLLM Playground / Red Hat AI Inference Server (RHAIIS) providing high-performance LLM inference with advanced features
 
-== Estimated time
+== Demo environment
 
-This workshop will take approximately *90 minutes* to complete.
+For this demonstration, we're using a pre-configured environment with:
 
-You can work at your own pace.
+* GPU-enabled inference host: {targethost}
+* vLLM Playground v0.1.1 pre-installed
+* SSH access available: `{ssh_command}`
+* Web UI accessible at: http://{hostname}:7860
+
+NOTE: All environment details and credentials are available for hands-on exploration after the demo.
+
+== Estimated timing
+
+* **Full demonstration**: 60 minutes (all 5 modules)
+* **Standard demo**: 30-45 minutes (modules 1-3)
+* **Executive brief**: 15-20 minutes (module 1 + highlights)
+
+Your presenter will customize the flow based on your priorities.
 
 == Let's get started!
 
-Click on *Workshop Overview* in the navigation to begin your learning journey.
+Click on **Demo Overview** in the navigation to understand ACME's business challenge and how vLLM Playground addresses their AI infrastructure requirements.

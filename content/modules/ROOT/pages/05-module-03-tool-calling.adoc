@@ -1,162 +1,102 @@
-= Module 3: Advanced Inferencing: Tool Calling
+= Module 3: Tool calling for intelligent automation
 :source-highlighter: rouge
 :toc: macro
 :toclevels: 1
 
-In Module 2, you learned to constrain AI outputs to specific formats. Now ACME Corporation wants to take their AI customer support to the next level: enabling the AI to not just respond, but to take actions—looking up order status, checking inventory, or scheduling callbacks.
+In Module 2, ACME learned to constrain AI outputs to specific formats. Now they want to take customer support to the next level: enabling AI to not just respond, but to take actions - looking up order status, checking inventory, or scheduling callbacks.
 
-Tool calling (also known as function calling) allows the AI to recognize when it needs external data or actions, and generate structured function calls that your systems can execute. In this module, you'll configure tool calling and define custom tools for ACME's customer support scenarios.
+Tool calling (also known as function calling) allows the AI to recognize when it needs external data or actions, and generate structured function calls that your systems can execute. This module demonstrates how ACME configures tool calling and defines custom tools for customer support scenarios.
 
-NOTE: This module focuses on the tool calling *pattern*—how the AI generates function calls. Actual tool execution with human-in-the-loop approval is covered in Module 4 (MCP Integration).
+**Critical understanding**: Tool calling does NOT mean the LLM executes tools. The AI generates JSON-formatted function calls with arguments, but your application (vLLM Playground) is responsible for parsing and executing them. This design ensures security and gives you full control over actions.
 
-== Learning objectives
+**Presenter note**: For 30-45 minute demos, focus on Part 1 showing 2-3 tools. This module is essential for demonstrating how AI goes beyond text generation to become an intelligent assistant.
 
-By the end of this module, you'll be able to:
+== Part 1 — Enabling tool calling for intelligent automation
 
-* Enable tool calling in vLLM Playground server configuration
-* Understand tool calling parsers for different model families
-* Define custom tools with proper function schemas
-* Interpret AI-generated function calls and arguments
-* Choose the appropriate model and parser for tool calling use cases
+=== Know
 
-[[exercise-1]]
-== Exercise 1: Enable tool calling
+_ACME Corporation's AI customer support is limited to providing text responses. Support agents still manually look up order status, check inventory, and schedule callbacks. This creates delays and frustration for customers who expect AI to "just handle it."_
 
-ACME's engineering team needs to configure the vLLM server to support tool calling. This requires enabling the feature and selecting the appropriate parser for the model being used.
+**Business challenge**: AI that can act, not just chat
 
-You'll restart the server with tool calling enabled and understand the different parser options.
+* Current AI only generates text responses - agents manually execute actions
+* Customer inquiries requiring data lookup (order status, account info) force handoffs to agents
+* Simple requests like "schedule a callback" still need human intervention
+* No integration between AI conversation and backend systems (CRM, ERP, order management)
 
-=== Prerequisites
+**Current state limitations**:
 
-* Module 1 completed (familiar with vLLM Playground)
-* Access to vLLM Playground web UI
+* **AI-to-human handoff delays**: 60-80% of inquiries need agent action after AI diagnosis
+* **No real-time data access**: AI cannot check order status, inventory, or account information
+* **Manual task execution**: Agents manually schedule callbacks, create tickets, update records
+* **Disconnected systems**: AI conversation exists separately from operational systems
 
-=== Understanding tool calling
+**Desired state transformation**:
 
-Tool calling enables AI models to recognize when they need external data or capabilities, and generate structured requests (function calls) that your application can interpret and execute.
+* AI generates structured function calls when customers ask about orders or accounts
+* Backend systems execute these calls and return real data to the AI conversation
+* Simple actions (callback scheduling, ticket creation) happen automatically
+* Seamless integration between AI conversation and enterprise systems
 
-NOTE: **Tool calling does NOT mean LLM executes tools.** When tool calling is enabled, the AI model generates a JSON-formatted function call with arguments — but LLM itself does not execute any code or call external APIs. Your application (vLLM-PLayground in this case) is responsible for parsing the tool call, executing the actual function, and returning results to the model. This design ensures security and gives you full control over what actions are taken.
+**Business value proposition**:
 
-=== Understanding tool calling parsers
+Tool calling transforms AI from a chatbot into an intelligent assistant that can interact with backend systems. ACME's AI can now check order status, retrieve account information, and schedule actions - all within the conversation flow.
 
-Different model families use different formats for tool calling. vLLM supports several parsers:
+**Quantified business impact**:
 
-[cols="1,2,2"]
-|===
-|Parser |Models |Format
+* **60-80% reduction in agent handoffs**: AI handles data lookup and simple actions automatically
+* **Faster resolution times**: Order status checks happen in seconds instead of minutes (agent lookup)
+* **Improved customer satisfaction**: Customers get answers without waiting for agent availability
+* **Backend integration**: Single conversation accesses CRM, order management, inventory systems
 
-|`llama3_json`
-|Llama 3.x, Llama 3.1, Llama 3.2
-|JSON-based function calls
+**Stakeholder impact**:
 
-|`mistral`
-|Mistral, Mixtral
-|Mistral's native tool format
+* **Customer Support Leaders**: Reduce agent workload by automating routine data lookups
+* **IT Integration Teams**: Standard function calling pattern works across all backend APIs
+* **Customer Experience**: Seamless AI-to-system integration feels like talking to an expert agent
+* **Operations**: Real-time data access ensures accurate information in every response
 
-|`hermes`
-|Hermes, Qwen (with Hermes prompt)
-|Hermes-style function calling
+=== Show
 
-|`auto` (Auto-detect)
-|Various
-|Attempts to detect model type
-|===
+**Presenter guidance**: Demonstrate how ACME's AI goes from text-only responses to generating function calls that interact with backend systems. Emphasize the business transformation.
 
-=== Steps
+**What to demonstrate**:
 
-. Open the vLLM Playground web UI at:
+. **Access vLLM Playground** (15 seconds):
 +
-[source,text,subs="attributes"]
-----
-http://{hostname}:7860
-----
-
-. If a server is running, stop it first:
+Open browser to: http://{hostname}:7860
 +
-* Click *Stop Server* in the Server Configuration panel
+**Business context**: "We're continuing from Module 2. Now we'll configure the AI to call tools - enabling it to access backend data and take actions."
 
-. In the *Server Configuration* panel, configure tool calling:
+. **Stop current server and enable tool calling** (2 minutes):
 +
-.. Check *Enable Tool Calling*
-.. Select a tool calling parser (or leave as "Auto-detect")
+**If server is running** - click *Stop Server*
++
+**In Server Configuration panel**:
++
+* Check *Enable Tool Calling* checkbox
+* Select tool calling parser: `hermes` or `Auto-detect`
+* Model: `Qwen/Qwen2.5-3B-Instruct` (same as Module 2 if already deployed)
+* Click *Start Server*
+* Wait for green "Server is ready!" notification
++
 image::module-03-figure-01.png[Server configuration with tool calling enabled,width=500,title="Enable Tool Calling"]
 +
-.. Choose a model that supports tool calling
+**Business talking point**: "Enabling tool calling allows the AI to recognize when it needs external data and generate function calls. Different model families use different formats - Qwen uses Hermes-style, Llama uses llama3_json, Mistral has its own format."
 
-. For this exercise, configure:
+. **Navigate to Tools panel** (15 seconds):
 +
-[cols="1,2"]
-|===
-|Setting |Value
-
-|Model
-|`Qwen/Qwen2.5-3B-Instruct` (or similar Qwen model)
-
-|Enable Tool Calling
-|✓ Checked
-
-|Tool Call Parser
-|`hermes` (or Auto-detect)
-|===
+**Click the Tools icon (🔧) in the toolbar**
 +
-NOTE: Qwen models are open and don't require HuggingFace authentication. If using gated models like Llama, ensure you have HuggingFace access configured.
-
-. Click *Start Server* and wait for the model to load.
-
-. Monitor the server logs in the *Server Logs* panel for tool calling confirmation. Look for messages indicating tool calling is enabled and the model has loaded successfully.
-
-=== Verify
-
-Confirm tool calling is enabled:
-
-✓ Server started without errors
-
-✓ "Enable Tool Calling" shows as active in the UI
-
-✓ Server logs confirm tool calling parser loaded
-
-=== Troubleshooting
-
-**Issue**: "Tool calling not supported for this model"
-
-**Solution**:
-
-. Use a model that supports function calling (Llama 3.x, Mistral, Qwen)
-. Check the model's documentation for tool calling support
-. Try a different parser setting
-
-**Issue**: Server fails to start with tool calling enabled
-
-**Solution**:
-
-. Check GPU memory—tool calling may require additional resources
-. Try a smaller model
-. Review server logs for specific errors
-
-[[exercise-2]]
-== Exercise 2: Define custom tools
-
-With tool calling enabled, ACME needs to define the tools (functions) that the AI can invoke. Each tool has a name, description, and parameter schema that tells the AI when and how to use it.
-
-You'll create customer support tools that the AI can call to assist customers.
-
-=== Understanding tool definitions
-
-A tool definition includes:
-
-* **name**: Function identifier (e.g., `get_order_status`)
-* **description**: When to use this tool (helps AI decide)
-* **parameters**: JSON Schema defining expected arguments
-
-=== Steps
-
-. In vLLM Playground, navigate to the *Tools* panel (🔧 icon in the toolbar).
+**Business context**: "This is where ACME defines the tools (functions) their AI can call. Each tool represents a backend API or system capability."
 +
 image::module-03-figure-02.png[Tools definition panel,width=600,title="Tools Panel"]
 
-. Click *Add Tool* to define your first customer support function.
-
-. Create an order status lookup tool:
+. **Define order status lookup tool** (3-4 minutes):
++
+**Click Add Tool**
++
+**Define the function**:
 +
 [source,json]
 ----
@@ -180,8 +120,12 @@ image::module-03-figure-02.png[Tools definition panel,width=600,title="Tools Pan
 ----
 +
 image::module-03-figure-03.png[Order status lookup tool definition,width=600,title="Order Status Lookup Tool"]
++
+**Business talking point**: "This tool definition tells the AI: 'When a customer asks about order status, generate a function call to get_order_status with the order_id parameter.' The description helps the AI decide when to use this tool."
 
-. Add a second tool for customer information:
+. **Define customer information retrieval tool** (2 minutes):
++
+**Add second tool**:
 +
 [source,json]
 ----
@@ -196,10 +140,6 @@ image::module-03-figure-03.png[Order status lookup tool definition,width=600,tit
         "customer_email": {
           "type": "string",
           "description": "Customer's email address"
-        },
-        "customer_id": {
-          "type": "string",
-          "description": "Customer's account ID (optional if email provided)"
         }
       },
       "required": ["customer_email"]
@@ -207,8 +147,12 @@ image::module-03-figure-03.png[Order status lookup tool definition,width=600,tit
   }
 }
 ----
++
+**Business talking point**: "This tool connects to ACME's CRM. When the AI needs account information, it generates a function call with the customer's email."
 
-. Add a third tool for scheduling callbacks:
+. **Define callback scheduling tool** (2 minutes):
++
+**Add third tool**:
 +
 [source,json]
 ----
@@ -238,8 +182,119 @@ image::module-03-figure-03.png[Order status lookup tool definition,width=600,tit
   }
 }
 ----
++
+**Business talking point**: "Callback scheduling was always manual - agents had to enter this data into ticketing systems. Now the AI extracts the information and generates the function call automatically."
 
-. Add a product search tool:
+. **Test tool calling workflow** (4-5 minutes):
++
+**Navigate to Chat interface**
++
+**Send customer inquiry**:
++
+----
+Hi, I'm checking on my order ORD-45892. It's been a week and I haven't received any updates. Can you tell me where it is?
+----
++
+**What they'll see** - AI generates function call:
++
+[source,json]
+----
+{
+  "name": "get_order_status",
+  "arguments": {
+    "order_id": "ORD-45892"
+  }
+}
+----
++
+**Business value callout**: "Notice what happened. The AI understood the customer's question, extracted the order ID, and generated a function call. In production, ACME's system would execute this call against their order management API and return real status data to the conversation."
++
+**Point out the function call display** in the chat interface
++
+**Business talking point**: "The AI didn't just respond with text - it generated a structured function call that ACME's backend can execute. This is the foundation for AI-to-system integration."
+
+. **Test multiple tool scenario** (2-3 minutes):
++
+**Send escalation request**:
++
+----
+This is unacceptable. I need someone to call me back today. My number is 555-0123 and I need to speak with a manager. This order was supposed to arrive for my daughter's birthday.
+----
++
+**What they'll see** - AI generates callback scheduling call:
++
+[source,json]
+----
+{
+  "name": "schedule_callback",
+  "arguments": {
+    "customer_phone": "555-0123",
+    "preferred_time": "today",
+    "issue_summary": "Delayed order ORD-45892, customer upset, needs manager callback"
+  }
+}
+----
++
+**Business talking point**: "The AI recognized this needs escalation, extracted the phone number, understood urgency, and generated a callback request. ACME's ticketing system receives this structured data and creates a high-priority callback task automatically."
+
+. **Demonstrate tool selection intelligence** (2 minutes):
++
+**Send different type of inquiry**:
++
+----
+I forgot my account password and need to verify my account. My email is customer@example.com
+----
++
+**What they'll see**:
++
+[source,json]
+----
+{
+  "name": "get_customer_info",
+  "arguments": {
+    "customer_email": "customer@example.com"
+  }
+}
+----
++
+**Business talking point**: "The AI chose the right tool for this scenario - customer information lookup, not order status. This intelligence comes from the tool descriptions and the model's understanding of context."
+
+**Business value summary**:
+
+"What you've seen is how ACME transforms their AI from a text generator into an intelligent assistant that interacts with backend systems. The AI now handles order lookups, schedules callbacks, and retrieves account information - all within the conversation. This reduces agent workload by 60-80% for routine inquiries."
+
+**Troubleshooting scenarios to be ready for**:
+
+**Q: "How do we secure tool execution? Can the AI call any function?"**
+→ A: Tool definitions are configured by administrators - the AI can only call tools you explicitly define. In production, you'd add authentication and authorization checks before executing function calls.
+
+**Q: "What if the AI generates invalid function arguments?"**
+→ A: Tool definitions include parameter schemas with types and requirements. The AI generates arguments matching this schema. Your backend should still validate before execution.
+
+**Q: "How does this integrate with our existing APIs?"**
+→ A: The AI generates standard JSON function calls. Your middleware maps these to your API endpoints - REST, GraphQL, internal services. The pattern works with any backend.
+
+**Q: "What about execution and results?"**
+→ A: This module shows function call generation. Module 4 (MCP Integration) demonstrates the full execution cycle with human-in-the-loop approval and results returning to the AI.
+
+== Part 2 — Advanced tool patterns (Optional - 60min demo)
+
+=== Know
+
+_For complex customer support scenarios, ACME needs more sophisticated tools: product search with filters, inventory checks, order modifications, and multi-step workflows._
+
+**Advanced tool capabilities**:
+
+* **Complex parameters**: Multiple optional fields, nested objects, array parameters
+* **Tool chaining**: AI generates multiple tool calls in sequence
+* **Conditional logic**: AI chooses different tools based on customer needs
+* **Error handling**: AI responds appropriately when tool calls fail
+
+=== Show
+
+**Presenter guidance** (only for 60min deep dive): Demonstrate advanced tool patterns like product search with filters.
+
+. **Define product search tool with filters** (2-3 minutes):
 +
 [source,json]
 ----
@@ -247,22 +302,22 @@ image::module-03-figure-03.png[Order status lookup tool definition,width=600,tit
   "type": "function",
   "function": {
     "name": "search_products",
-    "description": "Search the product catalog. Use this when a customer asks about products, availability, or pricing.",
+    "description": "Search for products in the catalog. Use this when customers ask about product availability, features, or pricing.",
     "parameters": {
       "type": "object",
       "properties": {
         "query": {
           "type": "string",
-          "description": "Search query (product name, category, or keywords)"
+          "description": "Search keywords"
         },
         "category": {
           "type": "string",
-          "description": "Product category filter (optional)",
-          "enum": ["electronics", "clothing", "home", "sports", "all"]
+          "enum": ["electronics", "clothing", "home", "sports"],
+          "description": "Product category filter"
         },
-        "max_results": {
-          "type": "integer",
-          "description": "Maximum number of results to return"
+        "max_price": {
+          "type": "number",
+          "description": "Maximum price filter"
         }
       },
       "required": ["query"]
@@ -270,138 +325,14 @@ image::module-03-figure-03.png[Order status lookup tool definition,width=600,tit
   }
 }
 ----
-
-. Your tools panel should now show 4 defined tools:
 +
-image::module-03-figure-04.png[Four customer support tools defined,width=600,title="Defined Tools"]
+**Business talking point**: "Product search shows advanced parameters - required query, optional category filter, optional price filter. The AI decides which parameters to use based on the customer's question."
 
-=== Verify
-
-Confirm tools are properly defined:
-
-✓ All 4 tools appear in the Tools panel
-
-✓ Each tool has name, description, and parameters
-
-✓ No JSON syntax errors (panel accepts the definitions)
-
-=== Best practices for tool definitions
-
-[cols="1,2"]
-|===
-|Practice |Why It Matters
-
-|Clear descriptions
-|Helps AI decide when to use the tool
-
-|Specific parameter names
-|Reduces ambiguity in extracted values
-
-|Required vs optional
-|Guides AI on minimum needed information
-
-|Enum constraints
-|Limits values to valid options
-
-|Default values
-|Provides sensible fallbacks
-|===
-
-[[exercise-3]]
-== Exercise 3: Test tool calling workflow
-
-Now you'll see tool calling in action. The AI will analyze customer messages and generate appropriate function calls based on the tools you defined. Remember: in this module, we're observing the *pattern*—the AI generates the calls, but we don't execute them.
-
-=== Steps
-
-. Ensure your tools from Exercise 2 are loaded and the server is running with tool calling enabled.
-
-. In the *Chat* panel, set a system prompt for customer support:
+. **Test advanced search** (2 minutes):
 +
-----
-You are a helpful customer support assistant for ACME Corporation. You have access to tools to help customers with their orders, account information, scheduling callbacks, and product searches. Use the appropriate tool when a customer needs specific information or actions.
-----
-
-. In the *Tools* panel, set *Tool Choice* to *Auto (recommended)*.
+**Send query**: "I'm looking for wireless headphones under $100"
 +
-This setting allows the AI to automatically decide when to use tools based on the conversation context.
-
-. Test order status inquiry:
-+
-----
-Hi, I placed an order last week and haven't received any updates. My order number is ORD-78432. Can you check the status?
-----
-+
-Expected AI behavior—generates a tool call:
-+
-[source,json]
-----
-{
-  "name": "get_order_status",
-  "arguments": {
-    "order_id": "ORD-78432"
-  }
-}
-----
-+
-image::module-03-figure-05.png[AI generating a tool call for order status,width=700,title="Tool Call Generated"]
-+
-NOTE: Streaming is disabled for tool calling due to a bug in vLLM v0.11.0. This issue has been resolved in later versions of vLLM.
-
-. Observe the response format:
-* The AI recognizes the need for external data
-* Instead of making up information, it generates a function call
-* The arguments are extracted from the customer's message
-
-. Test customer lookup:
-+
-----
-I need to update my shipping address. My email is john.smith@email.com
-----
-+
-Expected tool call:
-+
-[source,json]
-----
-{
-  "name": "get_customer_info",
-  "arguments": {
-    "customer_email": "john.smith@email.com"
-  }
-}
-----
-+
-image::module-03-figure-06.png[AI generating a tool call for customer lookup,width=700,title="Customer Lookup Tool Call"]
-
-. Test callback scheduling:
-+
-----
-This is frustrating! I've been trying to resolve this billing issue for days. Can someone call me back? My number is 555-123-4567, preferably in the afternoon.
-----
-+
-Expected tool call:
-+
-[source,json]
-----
-{
-  "name": "schedule_callback",
-  "arguments": {
-    "customer_phone": "555-123-4567",
-    "issue_summary": "Billing issue",
-    "preferred_time": "afternoon"
-  }
-}
-----
-+
-image::module-03-figure-07.png[AI generating a tool call for callback scheduling,width=700,title="Callback Scheduling Tool Call"]
-
-. Test product search:
-+
-----
-Do you have any wireless headphones under $100?
-----
-+
-Expected tool call:
+**Expected function call**:
 +
 [source,json]
 ----
@@ -410,179 +341,50 @@ Expected tool call:
   "arguments": {
     "query": "wireless headphones",
     "category": "electronics",
-    "max_results": 5
+    "max_price": 100
   }
 }
 ----
 +
-image::module-03-figure-08.png[AI generating a tool call for product search,width=700,title="Product Search Tool Call"]
+**Business talking point**: "The AI extracted the product type, inferred the category, and captured the price limit. This structured search query goes directly to ACME's product catalog API."
 
-. Test a message that doesn't need tools:
-+
-----
-Thanks for your help today!
-----
-+
-Expected: Normal text response (no tool call) — the AI should respond conversationally without invoking a tool.
+**Business value summary for advanced tools**:
 
-. Test multiple potential tools:
-+
-----
-I want to check on order ORD-99001 and also see if you have the new laptop model in stock.
-----
-+
-Observe: The AI may generate multiple tool calls or prioritize one. Different models handle this differently.
-+
-image::module-03-figure-09.png[AI handling multiple tool calls in a single request,width=700,title="Multiple Tool Calls"]
+"Advanced tool patterns enable ACME to handle complex customer interactions - multi-parameter searches, conditional workflows, and sophisticated business logic - all through natural conversation."
 
-=== Verify
+== Demonstration outcomes
 
-Confirm tool calling workflow works:
+By seeing this demonstration, audiences should understand:
 
-✓ AI generates tool calls for appropriate requests
-
-✓ Arguments are correctly extracted from customer messages
-
-✓ Tool names match the defined functions
-
-✓ AI responds normally when tools aren't needed
-
-✓ JSON format is valid and parseable
-
-=== Understanding the workflow
-
-[source,text]
-----
-┌─────────────────────────────────────────────────────────────┐
-│                    Tool Calling Workflow                    │
-│                                                             │
-│  1. Customer Message                                        │
-│     "Check order ORD-12345"                                 │
-│              ↓                                              │
-│  2. AI Analysis                                             │
-│     Recognizes need for get_order_status tool               │
-│              ↓                                              │
-│  3. Tool Call Generated                                     │
-│     {"name": "get_order_status", "arguments": {...}}        │
-│              ↓                                              │
-│  4. [Module 4] Tool Execution    (MCP Server)               │
-│     Actual function runs, returns data                      │
-│              ↓                                              │
-│  5. [Module 4] AI Response                                  │
-│     AI incorporates result into customer response           │
-└─────────────────────────────────────────────────────────────┘
-----
-
-In this module, we completed steps 1-3. Module 4 (MCP Integration) covers steps 4-5 with actual tool execution.
-
-=== Troubleshooting
-
-**Issue**: AI responds with text instead of tool calls
-
-**Solution**:
-
-. Verify tool calling is enabled in server config
-. Check that tools are properly loaded
-. Ensure system prompt mentions available tools
-. Try rephrasing the customer message more explicitly
-
-**Issue**: AI generates wrong tool or arguments
-
-**Solution**:
-
-. Improve tool descriptions to be more specific
-. Add examples in the description
-. Check parameter names are clear and unambiguous
-. Try a different bigger model (Llama 4 has improved tool calling)
-
-**Issue**: Invalid JSON in tool call
-
-**Solution**:
-
-. Check tool call parser matches model
-. Try "Auto-detect" parser setting
-. Some models may need specific prompt formatting
-
-== Clean up
-
-Before proceeding to Module 4, stop the current vLLM server to prepare for MCP integration:
-
-. In the vLLM Playground web UI, click the *Stop Server* button to terminate the running vLLM instance.
-
-. Verify the server has stopped by checking that the server status shows "Stopped" or the Start Server button becomes available again.
-
-NOTE: Module 4 requires restarting the vLLM Playground daemon service after installing MCP dependencies. Stopping the server now ensures a clean transition.
-
-== Troubleshooting
-
-**Issue**: Tool calls not appearing in response
-
-**Solution**:
-
-. Verify "Enable Tool Calling" is checked
-. Restart server after enabling
-. Check server logs for tool-related errors
-
-**Issue**: Model ignores defined tools
-
-**Solution**:
-
-. Ensure tools are saved/loaded before chatting
-. Add system prompt explicitly mentioning tools
-. Use models known for good tool calling (Llama 3.1+, Mistral)
-
-**Issue**: Performance degradation with tools
-
-**Solution**:
-
-. Tool calling adds processing overhead
-. Reduce number of tools if possible
-. Use concise tool descriptions
-
-== Learning outcomes
-
-By completing this module, you should now understand:
-
-* ✓ How tool calling enables AI to request external data and actions
-* ✓ The role of tool parsers for different model families
-* ✓ How to define tools with proper schemas and descriptions
-* ✓ The workflow from customer message to generated function call
-* ✓ Best practices for tool definitions that guide AI behavior
-* ✓ The difference between tool call generation and tool execution
+* ✓ How tool calling transforms AI from text generation to intelligent automation
+* ✓ The business impact of reducing agent handoffs by 60-80%
+* ✓ How function definitions enable AI-to-backend system integration
+* ✓ Real-world application to customer support workflows (orders, callbacks, account lookup)
+* ✓ The pattern for integrating AI with existing enterprise APIs
 
 == Module summary
 
-You've successfully completed the Advanced Inferencing: Tool Calling module.
+**What ACME accomplished**:
 
-**What you accomplished:**
+* Enabled tool calling in vLLM server configuration
+* Defined custom tools for order status, customer info, and callback scheduling
+* Demonstrated AI-generated function calls for backend system integration
+* (Optional) Showed advanced tool patterns with filters and complex parameters
 
-* Enabled tool calling in vLLM Playground server configuration
-* Understood tool calling parsers for Llama, Mistral, and Hermes models
-* Defined 4 customer support tools with proper schemas
-* Tested tool calling workflow with various customer scenarios
-* Observed AI-generated function calls with extracted arguments
+**Key takeaways for technical audiences**:
 
-**Key takeaways:**
+* Tool calling enables AI to interact with backend systems through structured function calls
+* Tool definitions use JSON Schema for parameters - same pattern as Module 2
+* The AI decides which tool to call based on descriptions and conversation context
+* Your application controls execution - AI only generates the function calls
 
-* Tool calling transforms AI from passive responder to active assistant
-* Good tool descriptions are critical for AI decision-making
-* The AI generates structured calls; your systems handle execution
-* Different models have different tool calling capabilities
-* Tool calling is the foundation for agentic AI workflows
+**Business value delivered**:
 
-**Business impact for ACME:**
+* **60-80% reduction in agent handoffs**: AI handles routine data lookups automatically
+* **Faster resolution**: Order status in seconds vs minutes of agent lookup
+* **Backend integration**: Single pattern works across CRM, ERP, order management, inventory
+* **Improved CX**: Customers get answers without waiting for agent availability
 
-* AI can now recognize when it needs customer data
-* Structured tool calls integrate with existing backend APIs
-* Reduces need for customers to provide information multiple ways
-* Foundation for automated support workflows
+**Next module preview**:
 
-**Next steps:**
-
-Module 4 will explore *Advanced Inferencing: MCP Integration* - connecting the AI to actual external tools with human-in-the-loop approval for safe execution.
-
-== References
-
-* link:https://github.com/micytao/vllm-playground[vLLM Playground - Tool Calling Documentation^]
-* link:https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html#tool-calling[vLLM Tool Calling^]
-* link:https://platform.openai.com/docs/guides/function-calling[OpenAI Function Calling Guide^] (compatible format)
+Module 4 explores *MCP Integration* - the full execution cycle for tool calling. You'll see how ACME implements human-in-the-loop approval, executes tools safely, and returns results to the AI conversation. This demonstrates production-ready agentic workflows with enterprise controls.

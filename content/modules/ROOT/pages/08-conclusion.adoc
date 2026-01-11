@@ -1,114 +1,239 @@
-= Conclusion and Next Steps
+= Demonstration conclusion and next steps
 
-Congratulations! You've completed the *vLLM Playground Workshop*! 🎉
+This demonstration showed how ACME Corporation evaluated and implemented vLLM Playground / Red Hat AI Inference Server (RHAIIS) for production AI-powered customer support. From rapid deployment to performance validation, ACME proved the platform can deliver enterprise-grade AI inference with quantified business value.
 
-== What You've Learned
+== Summary
 
-Throughout this workshop, you've gained hands-on experience with:
+=== Know
 
-* ✅ Deploying and managing vLLM servers using Podman containers
-* ✅ Interacting with LLMs through a modern chat interface with streaming responses
-* ✅ Constraining AI outputs using structured output modes (JSON Schema, Regex, Grammar)
-* ✅ Configuring tool calling to enable AI-driven function invocation
-* ✅ Connecting MCP servers for agentic AI with human-in-the-loop approval
-* ✅ Benchmarking and optimizing vLLM performance with GuideLLM
+**Business impact recap**
 
-You now have the skills to build and deploy production-ready AI inference infrastructure using vLLM / RHAIIS.
+Throughout this demonstration, you saw how vLLM Playground addressed ACME's critical business challenges:
 
-== Your Journey with ACME Corporation
+* **Manual deployment overhead**: Solved with container-based deployment → 99% faster (3-5 days → 10 minutes)
+* **Integration failures**: Solved with JSON Schema structured outputs → Zero parsing errors, 100% schema compliance
+* **Limited AI capabilities**: Solved with tool calling → 60-80% reduction in agent handoffs through backend system integration
+* **No production controls**: Solved with MCP integration → Human-in-the-loop approval and full audit trails
+* **Capacity uncertainty**: Solved with performance benchmarking → Data-driven SLA commitments and infrastructure sizing
 
-You helped ACME Corporation transform their customer support operations:
+**ROI and value**
 
-[cols="1,2,2"]
-|===
-|Module |Challenge |Solution
+The solution demonstrated today delivers quantified business value:
 
-|*Module 1*
-|Needed to evaluate AI inference options
-|Deployed vLLM Playground with GPU-accelerated inference
+* **99% faster deployment**: 3-5 days → 10 minutes for model deployment eliminates infrastructure bottlenecks
+* **Zero integration failures**: 100% schema-compliant JSON outputs remove 20-30% parsing error rate
+* **60-80% fewer agent handoffs**: AI handles routine lookups automatically, reducing support workload
+* **Data-driven capacity planning**: Quantified performance metrics enable accurate SLA commitments and infrastructure budgeting
+* **Production confidence**: Complete evaluation from deployment through performance validation proves production readiness
 
-|*Module 2*
-|AI responses were unpredictable for backend integration
-|Implemented structured outputs for consistent, parseable responses
+**Competitive advantages**
 
-|*Module 3*
-|AI couldn't take actions or retrieve data
-|Configured tool calling for intelligent function invocation
+What sets vLLM Playground apart:
 
-|*Module 4*
-|Required real-time data access with safety controls
-|Connected MCP servers with human-in-the-loop approval
+. **Industry-leading performance**: vLLM is the fastest inference engine with proven scalability for enterprise workloads
+. **Modern web interface**: Self-service model deployment without writing deployment scripts or managing infrastructure manually
+. **Enterprise integration ready**: Structured outputs, tool calling, and MCP support enable direct backend system integration
+. **Production-grade controls**: Human-in-the-loop approval, audit logging, and compliance features for regulated industries
+. **Open ecosystem**: Standard protocols (MCP, OpenAI-compatible API) work with any backend system or tool
 
-|*Module 5*
-|Needed to validate production readiness
-|Benchmarked and optimized for target throughput and latency
-|===
+=== Show
 
-== Key Takeaways
+**What we demonstrated**
 
-The most important concepts to remember:
+In this demonstration, you saw:
 
-. **vLLM is the industry-leading inference engine**: High-performance, production-ready LLM serving with continuous batching and efficient memory management.
+. ✅ **Rapid model deployment** - Container-based vLLM serving with Podman (Module 1)
+. ✅ **Modern chat interface** - Streaming responses with system prompts and performance metrics (Module 1)
+. ✅ **Structured outputs** - JSON Schema, Choice mode, Regex patterns for reliable system integration (Module 2)
+. ✅ **Tool calling** - AI-generated function calls for backend system integration (Module 3)
+. ✅ **MCP integration** - Production-ready tool execution with human approval workflows (Module 4)
+. ✅ **Performance validation** - GuideLLM benchmarking for capacity planning and SLA commitments (Module 5)
 
-. **Structured outputs enable reliable AI integration**: JSON Schema, Regex, and Grammar modes transform unpredictable AI text into system-ready data.
+**Key technical highlights**
 
-. **Tool calling bridges AI and actions**: The AI generates function calls; your systems handle execution—a powerful pattern for automation.
+The most impressive technical capabilities:
 
-. **MCP provides safe agentic capabilities**: Human-in-the-loop approval ensures you maintain control while enabling AI to access external tools.
+* **Container-based deployment**: Podman integration provides production-ready architecture from day one
+* **Guided decoding**: JSON Schema and Regex constraints guarantee output compliance through vLLM's built-in support
+* **Tool calling intelligence**: AI automatically selects appropriate tools based on context and descriptions
+* **MCP ecosystem**: Standard protocol enables integration with any backend system through pre-built or custom servers
+* **Performance insights**: GuideLLM provides LLM-specific metrics (TTFT, tokens/sec) for accurate capacity planning
 
-. **Performance testing is essential**: Benchmark before production to validate throughput, latency, and capacity requirements.
+== Next steps for your organization
 
-== Next Steps
+=== Immediate actions
 
-Ready to continue your journey? Here are some recommended next steps:
+Help your team get started:
 
-=== Red Hat AI Inference Server
+. **Try it yourself**: Access link:https://github.com/micytao/vllm-playground[vLLM Playground GitHub Repository^] for installation and setup
+. **Request POC environment**: Contact your Red Hat representative for proof-of-concept environment provisioning on Red Hat Demo Platform
+. **Schedule deep dive**: Book technical architecture session to discuss integration with your specific systems and requirements
 
-image::conclusion-rhaiis.png[Red Hat AI Inference Server,width=700,title="Red Hat AI Inference Server"]
+=== Recommended path
 
-Ready to take your vLLM skills to enterprise production? **Red Hat AI Inference Server** optimizes inference across the hybrid cloud for faster, cost-effective model deployments.
+**Phase 1: Evaluate** (Weeks 1-2)::
+* Deploy vLLM Playground in development environment
+* Test with your models and use cases
+* Evaluate performance characteristics for your workloads
+* Assess fit for production requirements
 
-As one of the largest commercial contributors to vLLM, Red Hat provides:
+**Phase 2: Pilot** (Weeks 3-6)::
+* Deploy proof of concept with realistic workloads
+* Integrate with test backend systems (CRM, databases)
+* Measure performance under expected load
+* Validate security and compliance requirements
 
-* **Powered by vLLM**: Enterprise-grade support for the same high-performance inference engine you learned in this workshop
-* **LLM Compressor**: Compress models to reduce compute utilization and costs while maintaining accuracy
-* **Hybrid cloud flexibility**: Run models on-premise, in the cloud, or at the edge
-* **Red Hat AI repository**: Validated and optimized models ready for inference deployment
+**Phase 3: Production** (Months 2-3)::
+* Roll out to production environment with Red Hat AI Inference Server (enterprise-supported version)
+* Deploy on Red Hat OpenShift for enterprise-grade orchestration
+* Scale across organization with multi-model serving
+* Implement monitoring and SLA tracking
 
-Red Hat AI Inference Server is available as a standalone product or as part of Red Hat Enterprise Linux AI and Red Hat OpenShift AI.
+=== Resources
 
-link:https://www.redhat.com/en/products/ai/inference-server[Learn more about Red Hat AI Inference Server^]
+**vLLM and inference engine**:
 
-=== Documentation and Resources
+* link:https://github.com/vllm-project/vllm[vLLM Project^] - The high-performance inference engine powering this demonstration
+* link:https://github.com/micytao/vllm-playground[vLLM Playground GitHub Repository^] - Source code, documentation, and community support
+* link:https://github.com/vllm-project/guidellm[GuideLLM Documentation^] - Performance benchmarking tool demonstrated in Module 5
 
-Deepen your knowledge with these resources:
+**Model Context Protocol and agentic AI**:
 
-* link:https://github.com/micytao/vllm-playground[vLLM Playground GitHub Repository^] - Source code, documentation, and updates
-* link:https://docs.vllm.ai[vLLM Official Documentation^] - Comprehensive vLLM reference
+* link:https://modelcontextprotocol.io[Model Context Protocol Specification^] - MCP standard and implementation guidelines
+* link:https://github.com/modelcontextprotocol/servers[MCP Servers Repository^] - Pre-built MCP servers for common integrations
 
+**Red Hat AI solutions and enterprise deployment**:
 
-== Share Your Feedback
+* link:https://www.redhat.com/en/technologies/cloud-computing/openshift/openshift-ai[Red Hat OpenShift AI^] - Enterprise AI platform with vLLM support and Red Hat AI Inference Server
+* link:https://access.redhat.com/documentation/en-us/red_hat_openshift_ai_self-managed[OpenShift AI Documentation^] - Deployment and configuration guides for production environments
+* link:https://developers.redhat.com/products/openshift-ai[Red Hat Developers: OpenShift AI^] - Developer resources, tutorials, and getting started guides
+* link:https://www.redhat.com/en/about/red-hat-ai[Red Hat AI^] - Overview of Red Hat's AI portfolio and enterprise solutions
 
-Help us improve this workshop:
+**HuggingFace and model ecosystem**:
 
-* What did you find most valuable?
-* What could be improved?
-* What topics would you like to see covered in future workshops?
+* link:https://huggingface.co/models[HuggingFace Model Hub^] - Explore thousands of open source models compatible with vLLM
+* link:https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0[TinyLlama Model^] - Lightweight model used in demonstrations
+* link:https://huggingface.co/Qwen[Qwen Models^] - Qwen model family used for structured outputs and tool calling demonstrations
 
-Submit feedback through the lab interface or the GitHub repository.
+== Call to action
 
-== Thank You!
+=== For technical teams
 
-Thank you for participating in this workshop. We hope you found it valuable and gained practical skills you can apply immediately.
+**Ready to build production AI inference?**
 
-You've taken a significant step in understanding modern AI inference infrastructure. The combination of vLLM's high-performance serving, structured outputs for reliability, tool calling for automation, and MCP for agentic capabilities represents the cutting edge of AI application development.
+. Access the hands-on workshop: Transform this demo into hands-on learning at link:https://demo.redhat.com[Red Hat Demo Platform^]
+. Clone the demo repository: Get started immediately with link:https://github.com/micytao/vllm-playground[vLLM Playground^]
+. Join the community: Connect with other practitioners at link:https://github.com/vllm-project/vllm/discussions[vLLM Discussions^]
 
-Keep building, keep learning! 🚀
+=== For decision makers
+
+**Ready to transform your AI operations?**
+
+. Schedule a custom demo: Request demonstration tailored to your specific use cases and requirements
+. Request ROI analysis: Get quantified cost-benefit analysis based on your expected workloads and infrastructure
+. Speak with an architect: Discuss enterprise deployment patterns with Red Hat AI specialists
+
+=== For sales engineers and solution architects
+
+**Delivering this demonstration to customers:**
+
+After presenting this demo, follow these steps:
+
+. **Send demonstration recording**: Email recording link with timestamps for key capabilities
+. **Share resources**: Provide links to documentation, workshop, and POC access
+. **Schedule POC planning**: Book session to scope proof-of-concept requirements and success criteria
+. **Connect with product team**: Loop in Red Hat AI specialists for deeper technical discussions if needed
+
+== Common questions presenters should address
+
+**"What's the difference between vLLM Playground and Red Hat AI Inference Server?"**
+→ vLLM Playground is the open source project. Red Hat AI Inference Server (RHAIIS) is the enterprise-supported version with SLAs, security updates, OpenShift integration, and Red Hat's enterprise lifecycle support.
+
+**"Can we use our own models?"**
+→ Yes. vLLM supports any HuggingFace-compatible model. Use gated models (Llama, Mistral) with proper authentication, or deploy proprietary models from local storage.
+
+**"How does this integrate with our existing infrastructure?"**
+→ vLLM provides OpenAI-compatible API endpoints, making it a drop-in replacement for many existing integrations. For custom systems, use tool calling and MCP integration patterns demonstrated in Modules 3-4.
+
+**"What about security and compliance?"**
+→ Red Hat AI Inference Server includes enterprise security features, audit logging (demonstrated in Module 4), and compliance controls. Deploy on OpenShift for additional enterprise security layers.
+
+**"What's the total cost of ownership?"**
+→ Infrastructure costs depend on model size and throughput requirements (demonstrated in Module 5 benchmarking). Red Hat AI Inference Server includes enterprise support in subscription. Calculate TCO based on your measured performance metrics.
+
+== Demonstration delivery tips
+
+**For shorter demos (15-20 min)**:
+* Focus on Module 1 (deployment + chat interface)
+* Mention structured outputs and tool calling as advanced capabilities
+* Emphasize 99% deployment time reduction and modern UX
+
+**For standard demos (30-45 min)**:
+* Modules 1-3 (deployment, structured outputs, tool calling)
+* This covers the essential value proposition for most audiences
+* Provides enough depth for technical evaluation
+
+**For deep dives (60 min)**:
+* All 5 modules with full technical depth
+* Include MCP integration and performance testing
+* Suitable for technical teams evaluating production deployment
+
+== Thank you
+
+Thank you for your time and attention. We're excited to help you build production-ready AI inference infrastructure with enterprise-grade capabilities and quantified business value.
+
+**ACME Corporation's journey showed**:
+
+From evaluation to production readiness in a single demonstration. What traditionally takes months of integration work - deployment automation, structured outputs, backend integration, agentic workflows, and performance validation - was demonstrated in under 60 minutes.
+
+**Your next step**:
+
+Choose your path forward - hands-on workshop, POC deployment, or production planning. Red Hat and the vLLM community are ready to support your AI inference journey.
+
+**Contact information**:
+
+* Sales: Contact your Red Hat account team
+* Technical: Red Hat OpenShift AI specialists
+* Support: Red Hat Customer Portal for enterprise subscriptions
+* Community: vLLM project discussions and contributions
 
 ---
 
-**Workshop**: vLLM Playground Workshop +
-**Completed**: {localdate} +
+**Demonstration**: Building Production-Ready AI Infrastructure with vLLM Playground +
+**Presented**: {localdate} +
 **Platform**: Red Hat Showroom +
-**Duration**: ~90 minutes +
-**Modules Completed**: 5
+**Version**: 1.0
+
+== References
+
+**CRITICAL**: This section consolidates ALL references used across the entire demonstration.
+
+=== vLLM and Inference Engine
+
+* link:https://github.com/vllm-project/vllm[vLLM Project^] - The industry-leading high-performance inference engine - Used in: All modules
+* link:https://github.com/micytao/vllm-playground[vLLM Playground GitHub Repository^] - Source code, installation, and community - Used in: All modules
+* link:https://github.com/vllm-project/guidellm[GuideLLM Documentation^] - Performance benchmarking tool - Used in: Module 5
+* link:https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html#guided-decoding[vLLM Guided Decoding^] - Structured outputs documentation - Used in: Module 2
+
+=== Model Context Protocol
+
+* link:https://modelcontextprotocol.io[Model Context Protocol Specification^] - MCP standard and server implementations - Used in: Module 4
+* link:https://github.com/modelcontextprotocol/servers[MCP Servers Repository^] - Pre-built MCP servers for common integrations - Used in: Module 4
+
+=== Red Hat AI Solutions
+
+* link:https://www.redhat.com/en/technologies/cloud-computing/openshift/openshift-ai[Red Hat OpenShift AI^] - Enterprise AI platform with vLLM support - Used in: Overview, Conclusion
+* link:https://access.redhat.com/documentation/en-us/red_hat_openshift_ai_self-managed[OpenShift AI Documentation^] - Deployment and configuration guides - Used in: Overview, Details
+* link:https://developers.redhat.com/products/openshift-ai[Red Hat Developers: OpenShift AI^] - Developer resources and tutorials - Used in: Details, Conclusion
+* link:https://www.redhat.com/en/about/red-hat-ai[Red Hat AI^] - Overview of Red Hat's AI portfolio - Used in: Overview
+
+=== Models and HuggingFace Ecosystem
+
+* link:https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0[TinyLlama Model^] - Lightweight model for testing and demonstrations - Used in: Module 1
+* link:https://huggingface.co/Qwen[Qwen Models^] - Qwen model family for structured outputs and tool calling - Used in: Modules 2, 3
+* link:https://huggingface.co/models[HuggingFace Model Hub^] - Model discovery and access - Used in: Overview
+
+=== Technical Standards and Specifications
+
+* link:https://json-schema.org/understanding-json-schema/[Understanding JSON Schema^] - JSON Schema specification and validation - Used in: Module 2, Module 3
+* link:https://github.com/ggerganov/llama.cpp/blob/master/grammars/README.md[GBNF Grammar Reference^] - Grammar-based structured outputs - Used in: Module 2
