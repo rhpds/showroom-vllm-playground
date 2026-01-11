@@ -13,7 +13,7 @@ Throughout this workshop, you've gained hands-on experience with:
 * ✅ Connecting MCP servers for agentic AI with human-in-the-loop approval
 * ✅ Benchmarking and optimizing vLLM performance with GuideLLM
 
-You now have the skills to build and deploy production-ready AI inference infrastructure using vLLM Playground.
+You now have the skills to build and deploy production-ready AI inference infrastructure using vLLM / RHAIIS.
 
 == Your Journey with ACME Corporation
 
@@ -62,12 +62,20 @@ The most important concepts to remember:
 
 Ready to continue your journey? Here are some recommended next steps:
 
-=== Recommended Workshops
+=== Red Hat AI Inference Server
 
-Explore related workshops to expand your skills:
+Ready to take your vLLM skills to enterprise production? **Red Hat AI Inference Server** optimizes inference across the hybrid cloud for faster, cost-effective model deployments.
 
-* link:https://demo.redhat.com[Red Hat OpenShift AI Workshop^] - Deploy and manage ML models at scale on OpenShift
-* link:https://demo.redhat.com[Podman Desktop Workshop^] - Master container development with Podman
+As one of the largest commercial contributors to vLLM, Red Hat provides:
+
+* **Powered by vLLM**: Enterprise-grade support for the same high-performance inference engine you learned in this workshop
+* **LLM Compressor**: Compress models to reduce compute utilization and costs while maintaining accuracy
+* **Hybrid cloud flexibility**: Run models on-premise, in the cloud, or at the edge
+* **Red Hat AI repository**: Validated and optimized models ready for inference deployment
+
+Red Hat AI Inference Server is available as a standalone product or as part of Red Hat Enterprise Linux AI and Red Hat OpenShift AI.
+
+link:https://www.redhat.com/en/products/ai/inference-server[Learn more about Red Hat AI Inference Server^]
 
 === Documentation and Resources
 
@@ -75,22 +83,7 @@ Deepen your knowledge with these resources:
 
 * link:https://github.com/micytao/vllm-playground[vLLM Playground GitHub Repository^] - Source code, documentation, and updates
 * link:https://docs.vllm.ai[vLLM Official Documentation^] - Comprehensive vLLM reference
-* link:https://modelcontextprotocol.io[Model Context Protocol Specification^] - MCP standards and server implementations
-* link:https://docs.guidellm.ai[GuideLLM Documentation^] - Advanced benchmarking techniques
 
-=== Practice Projects
-
-Put your new skills to work:
-
-. **Build a customer support chatbot**: Create a complete support bot using tool calling to access your FAQ and order systems.
-
-. **Implement a document analysis pipeline**: Use MCP Filesystem server to build an AI that reads and summarizes documents on demand.
-
-. **Create custom MCP servers**: Build your own MCP servers to connect AI to your internal APIs and databases.
-
-. **Deploy on OpenShift**: Scale your vLLM Playground deployment to OpenShift/Kubernetes for enterprise production use.
-
-. **Experiment with different models**: Try various models (Llama, Mistral, Qwen) and compare their tool calling and structured output capabilities.
 
 == Share Your Feedback
 
