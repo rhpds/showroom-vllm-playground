@@ -33,12 +33,9 @@ You'll configure vLLM to output only valid sentiment labels, ensuring reliable a
 
 === Steps
 
-. Open the vLLM Playground web UI at:
+. Open the vLLM Playground web UI:
 +
-[source,text,subs="attributes"]
-----
-http://{hostname}:7860
-----
+link:http://{hostname}:7860[Open vLLM Playground^]
 
 . For structured outputs to work reliably, we need a more capable model than TinyLlama used in Module 1. Stop the current server if running, then configure a new server with `Qwen/Qwen2.5-3B-Instruct`:
 +

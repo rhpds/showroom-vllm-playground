@@ -64,12 +64,9 @@ Different model families use different formats for tool calling. vLLM supports s
 
 === Steps
 
-. Open the vLLM Playground web UI at:
+. Open the vLLM Playground web UI:
 +
-[source,text,subs="attributes"]
-----
-http://{hostname}:7860
-----
+link:http://{hostname}:7860[Open vLLM Playground^]
 
 . If a server is running, stop it first:
 +

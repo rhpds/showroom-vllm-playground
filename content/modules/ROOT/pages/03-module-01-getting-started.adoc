@@ -149,12 +149,9 @@ NOTE: If you're in a CPU-only environment, use `vllm-playground pull --cpu` inst
 +
 TIP: In this lab environment, the container image has been pre-pulled during setup. The command will complete quickly as the image is already available locally.
 
-. As verified in Exercise 1, vLLM Playground is already running as a daemon service. Access the Web UI by opening your browser to:
+. As verified in Exercise 1, vLLM Playground is already running as a daemon service. Access the Web UI:
 +
-[source,text,subs="attributes"]
-----
-http://{hostname}:7860
-----
+link:http://{hostname}:7860[Open vLLM Playground^]
 +
 image::module-01-figure-01.png[vLLM Playground home page showing the main interface,width=700,title="vLLM Playground Home Page"]
 

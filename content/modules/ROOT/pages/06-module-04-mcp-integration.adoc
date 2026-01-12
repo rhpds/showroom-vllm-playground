@@ -186,10 +186,7 @@ NOTE: The vLLM Playground service needs to be restarted after installing MCP to 
 
 . Open the vLLM Playground web UI:
 +
-[source,text,subs="attributes"]
-----
-http://{hostname}:7860
-----
+link:http://{hostname}:7860[Open vLLM Playground^]
 
 . Navigate to the *MCP Servers* section in the sidebar to verify MCP support is available.
 +

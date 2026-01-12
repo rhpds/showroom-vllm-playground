@@ -35,7 +35,7 @@ Participants have access to:
 
 * GPU-enabled lab host: {targethost}
 * SSH access: `{ssh_command}`
-* vLLM Playground web UI: http://{hostname}:7860
+* vLLM Playground web UI: link:http://{hostname}:7860[Open vLLM Playground^]
 * Pre-installed vLLM Playground CLI
 
 === Network requirements
