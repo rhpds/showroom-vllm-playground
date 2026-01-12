@@ -2,13 +2,7 @@
 
 ## Summary
 
-Critical updates to content quality and Red Hat style compliance. This release adds:
-1. AsciiDoc formatting fixes (list spacing)
-2. Clickable image requirements
-3. **Plagiarism prevention validation**
-4. **Em dash removal enforcement**
-
-All changes enforce Red Hat Corporate Style Guide standards and protect against copyright issues.
+Critical AsciiDoc formatting fixes to prevent text running together in rendered content. All images now required to be clickable for better user experience.
 
 ---
 
@@ -116,116 +110,14 @@ image::architecture.png[Architecture,link=self,window=blank,align="center",width
 
 ---
 
-### 5. Plagiarism Prevention and Content Originality (NEW REQUIREMENT)
-
-**Problem**: Content copied from external sources creates copyright issues and damages Red Hat's reputation for thought leadership.
-
-**What Changed**:
-- Added Section 7 to SKILL-COMMON-RULES.md: Content Originality and Plagiarism Prevention
-- Added Section 8 to redhat_style_guide_validation.txt: Plagiarism Prevention
-- Updated both verification prompts with plagiarism detection
-- Skills now actively check for copied content
-
-**Prohibited Practices**:
-- ❌ Copying documentation verbatim from external sources
-- ❌ Slightly rewording existing tutorials or blog posts
-- ❌ Copy/pasting from Stack Overflow, forums, or vendor docs
-- ❌ Using AI-generated content without significant review
-- ❌ Presenting others' examples as original work
-
-**Required Practices**:
-- ✅ Write original content in your own words
-- ✅ Add Red Hat-specific context and implementation details
-- ✅ Use proper attribution with quotes and citations
-- ✅ Paraphrase completely, don't just rearrange words
-- ✅ Add unique value beyond the original source
-
-**Example Violation**:
-```asciidoc
-❌ WRONG - Copied from kubernetes.io:
-Kubernetes is an open-source system for automating deployment, scaling,
-and management of containerized applications.
-
-✅ CORRECT - Original with attribution:
-According to link:https://kubernetes.io/docs/...[Kubernetes documentation^],
-Kubernetes is "an open-source system for automating deployment, scaling,
-and management of containerized applications." Red Hat OpenShift extends
-Kubernetes with enterprise features including integrated CI/CD, developer
-tools, and enhanced security policies.
-```
-
-**Impact**:
-- Protects Red Hat from copyright infringement
-- Maintains Red Hat's thought leadership credibility
-- Ensures authentic Red Hat expertise
-- Builds customer trust through original content
-
----
-
-### 6. Em Dash Removal - Red Hat Style Compliance (NEW REQUIREMENT)
-
-**Problem**: Em dashes (—) don't follow Red Hat Corporate Style Guide and create inconsistent formatting.
-
-**What Changed**:
-- Added Section 8 to SKILL-COMMON-RULES.md: Punctuation Standards - No Em Dashes
-- Added em dash rules to redhat_style_guide_validation.txt
-- Updated both verification prompts to scan for em dash character (—)
-- Skills now actively flag all em dash usage
-
-**Required Replacements**:
-
-| Use Case | Instead of Em Dash | Use This |
-|----------|-------------------|----------|
-| Parenthetical remark | "Platform—features—benefits" | "Platform, features, benefits" or "Platform (features and benefits)" |
-| Break in thought | "Simple—just do this" | "Simple. Just do this." |
-| Emphasis/list intro | "Three things—speed, scale, security" | "Three things: speed, scale, and security" |
-| Range | "2020—2025" | "2020–2025" (en dash –) |
-
-**Example Violations**:
-```asciidoc
-❌ WRONG - Em dash for parenthetical:
-OpenShift—Red Hat's Kubernetes platform—simplifies deployments.
-
-✅ CORRECT - Use commas:
-OpenShift, Red Hat's Kubernetes platform, simplifies deployments.
-
-✅ CORRECT - Use parentheses:
-OpenShift (Red Hat's Kubernetes platform) simplifies deployments.
-
-❌ WRONG - Em dash as separator:
-The process is simple—just follow these 3 steps.
-
-✅ CORRECT - Use period:
-The process is simple. Just follow these 3 steps.
-
-✅ CORRECT - Use colon:
-The process is simple: just follow these 3 steps.
-```
-
-**Acceptable Dash Usage**:
-- ✅ **En dashes (–)** for ranges: "2020–2025", "pages 10–15"
-- ✅ **Hyphens (-)** for compound words: "multi-cloud", "real-time"
-- ✅ **Regular dashes** in CLI commands: `--namespace`, `--output`
-
-**Impact**:
-- Follows Red Hat Corporate Style Guide
-- Clearer punctuation improves readability
-- Consistent formatting maintains quality standards
-- Better translation for global audiences
-
----
-
 ## Files Changed
 
 **Documentation**:
 ```
-.claude/docs/SKILL-COMMON-RULES.md                              (+293 lines, sections 4, 7, 8 added)
-.claude/prompts/enhanced_verification_demo.txt                  (+187 lines, 4 validation sections)
-.claude/prompts/enhanced_verification_workshop.txt              (+193 lines, 4 validation sections)
-.claude/prompts/redhat_style_guide_validation.txt               (+38 lines, sections 3, 8 added)
-.claude/CHANGELOG-2026-01-12.md                                 (updated with 6 sections)
-.claude/INTERNAL-DEVELOPER-GUIDE.adoc                           (+60 lines, quality standards)
-CLAUDE-SKILLS-GUIDE.adoc                                        (+70 lines, formatting issues)
+.claude/docs/SKILL-COMMON-RULES.md                              (+93 lines, section 4 added)
+.claude/prompts/enhanced_verification_demo.txt                  (+72 lines)
+.claude/prompts/enhanced_verification_workshop.txt              (+74 lines)
+.claude/CHANGELOG-2026-01-12.md                                 (new file)
 ```
 
 **Skills**:
@@ -239,17 +131,7 @@ CLAUDE-SKILLS-GUIDE.adoc                                        (+70 lines, form
 .claude/templates/demo/02-details.adoc                          (+9, -3)
 ```
 
-**Global User Docs**:
-```
-~/.claude/showroom-skill-2026-01-12.md                          (created with full update summary)
-```
-
-**Total**: 11 files changed, 871 insertions(+), 14 deletions(-)
-
-**Deployed to Repositories**:
-- ✅ showroom-generative-ai-rag
-- ✅ showroom-vllm-playground
-- ✅ aap-selfserv-intro-showroom
+**Total**: 7 files changed, 269 insertions(+), 14 deletions(-)
 
 ---
 
