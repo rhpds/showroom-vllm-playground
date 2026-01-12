@@ -64,7 +64,7 @@ Tool calling transforms AI from a chatbot into an intelligent assistant that can
 
 . **Access vLLM Playground** (15 seconds):
 +
-Open browser to: http://{hostname}:7860
+Open browser to: http://{targethost}:7860
 +
 **Business context**: "We're continuing from Module 2. Now we'll configure the AI to call tools - enabling it to access backend data and take actions."
 

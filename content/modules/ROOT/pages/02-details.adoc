@@ -52,7 +52,7 @@ Presenters demonstrate on a pre-configured environment with:
 
 * GPU-enabled demonstration host: {targethost}
 * SSH access available: `{ssh_command}`
-* vLLM Playground web UI: http://{hostname}:7860
+* vLLM Playground web UI: http://{targethost}:7860
 * Pre-installed vLLM Playground CLI
 * Pre-pulled container images for faster demonstrations
 

@@ -64,7 +64,7 @@ vLLM Playground's JSON Schema support eliminates integration failures by constra
 
 . **Access vLLM Playground** (30 seconds):
 +
-Open browser to: http://{hostname}:7860
+Open browser to: http://{targethost}:7860
 +
 **Business context**: "We're picking up where Module 1 left off. The vLLM server is running, now we'll configure it for structured outputs."
 
