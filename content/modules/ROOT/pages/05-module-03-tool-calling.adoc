@@ -80,7 +80,7 @@ link:http://{hostname}:7860[Open vLLM Playground^]
 * Click *Start Server*
 * Wait for green "Server is ready!" notification
 +
-image::module-03-figure-01.png[Server configuration with tool calling enabled,width=500,title="Enable Tool Calling"]
+image::module-03-figure-01.png[Server configuration with tool calling enabled,align="center",width=500,link=module-03-figure-01.png^,title="Enable Tool Calling"]
 +
 **Business talking point**: "Enabling tool calling allows the AI to recognize when it needs external data and generate function calls. Different model families use different formats - Qwen uses Hermes-style, Llama uses llama3_json, Mistral has its own format."
 
@@ -90,7 +90,7 @@ image::module-03-figure-01.png[Server configuration with tool calling enabled,wi
 +
 **Business context**: "This is where ACME defines the tools (functions) their AI can call. Each tool represents a backend API or system capability."
 +
-image::module-03-figure-02.png[Tools definition panel,width=600,title="Tools Panel"]
+image::module-03-figure-02.png[Tools definition panel,align="center",width=600,link=module-03-figure-02.png^,title="Tools Panel"]
 
 . **Define order status lookup tool** (3-4 minutes):
 +
@@ -119,7 +119,7 @@ image::module-03-figure-02.png[Tools definition panel,width=600,title="Tools Pan
 }
 ----
 +
-image::module-03-figure-03.png[Order status lookup tool definition,width=600,title="Order Status Lookup Tool"]
+image::module-03-figure-03.png[Order status lookup tool definition,align="center",width=600,link=module-03-figure-03.png^,title="Order Status Lookup Tool"]
 +
 **Business talking point**: "This tool definition tells the AI: 'When a customer asks about order status, generate a function call to get_order_status with the order_id parameter.' The description helps the AI decide when to use this tool."
 

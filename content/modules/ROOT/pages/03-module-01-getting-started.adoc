@@ -111,7 +111,7 @@ link:http://{hostname}:7860[Open vLLM Playground^]
 +
 **Business talking point**: "ACME's team uses this modern web interface to deploy and manage multiple LLM servers without writing deployment scripts."
 +
-image::module-01-figure-01.png[vLLM Playground home page showing the main interface,width=700,title="vLLM Playground Home Page"]
+image::module-01-figure-01.png[vLLM Playground home page showing the main interface,align="center",width=700,link=module-01-figure-01.png^,title="vLLM Playground Home Page"]
 
 . **Configure and deploy vLLM server** (3-4 minutes):
 +
@@ -123,7 +123,7 @@ image::module-01-figure-01.png[vLLM Playground home page showing the main interf
 * Select `TinyLlama 1.1B Chat (Fast, No token)` for this demo
 * **Business talking point**: "For production, ACME would use larger models like Llama 3.1 or Mistral, but TinyLlama deploys quickly for demonstrations."
 +
-image::module-01-figure-02.png[Model selection showing dropdown and custom model options,width=300,title="Model Selection Options"]
+image::module-01-figure-02.png[Model selection showing dropdown and custom model options,align="center",width=300,link=module-01-figure-02.png^,title="Model Selection Options"]
 +
 **In Run Mode section**:
 +
@@ -131,7 +131,7 @@ image::module-01-figure-02.png[Model selection showing dropdown and custom model
 * Select *Container* mode
 * **Business talking point**: "Container mode provides isolation and matches production deployment patterns. This same approach scales from laptop testing to enterprise Kubernetes clusters."
 +
-image::module-01-figure-03.png[Run Mode selection showing Subprocess and Container options,width=300,title="Run Mode Selection"]
+image::module-01-figure-03.png[Run Mode selection showing Subprocess and Container options,align="center",width=300,link=module-01-figure-03.png^,title="Run Mode Selection"]
 +
 **In Compute Mode section**:
 +
@@ -139,7 +139,7 @@ image::module-01-figure-03.png[Run Mode selection showing Subprocess and Contain
 * Select *GPU* mode
 * **Business talking point**: "GPU acceleration delivers the throughput needed for production customer support workloads. ACME will serve hundreds of concurrent requests with this setup."
 +
-image::module-01-figure-04.png[Compute Mode selection showing CPU and GPU options,width=300,title="Compute Mode Selection"]
+image::module-01-figure-04.png[Compute Mode selection showing CPU and GPU options,align="center",width=300,link=module-01-figure-04.png^,title="Compute Mode Selection"]
 +
 **Review configuration parameters**:
 +
@@ -149,7 +149,7 @@ image::module-01-figure-04.png[Compute Mode selection showing CPU and GPU option
 +
 **Point out Command Preview at bottom**:
 +
-image::module-01-figure-05.png[Command Preview showing the generated vLLM command based on selected parameters,width=300,title="Command Preview"]
+image::module-01-figure-05.png[Command Preview showing the generated vLLM command based on selected parameters,align="center",width=300,link=module-01-figure-05.png^,title="Command Preview"]
 +
 **Business talking point**: "The command preview shows exactly what will run inside the container. This transparency helps DevOps teams understand and customize deployments."
 +
@@ -178,7 +178,7 @@ sudo podman logs -f vllm-service
 * Green toast notification: "Server is ready to chat!"
 * Send button in chat interface turns green
 +
-image::module-01-figure-06.png[Server Logs showing Application startup complete and Server is ready to chat notification,width=700,title="Server Ready Indicators"]
+image::module-01-figure-06.png[Server Logs showing Application startup complete and Server is ready to chat notification,align="center",width=700,link=module-01-figure-06.png^,title="Server Ready Indicators"]
 +
 **Business value callout**: "What traditionally took ACME's team 3-5 days of manual infrastructure setup just completed in under 10 minutes through automated container deployment. This eliminates deployment bottlenecks and enables rapid AI iteration."
 +
@@ -251,7 +251,7 @@ vLLM Playground's chat interface delivers the modern conversational experience c
 +
 **Business talking point**: "This familiar interface means minimal training for ACME's support agents. They already know how to use chat interfaces."
 +
-image::module-01-figure-07.png[vLLM Playground chat interface showing conversation area with message input and Send button,width=700,title="Chat Interface"]
+image::module-01-figure-07.png[vLLM Playground chat interface showing conversation area with message input and Send button,align="center",width=700,link=module-01-figure-07.png^,title="Chat Interface"]
 
 . **Send first test message** (1 minute):
 +
@@ -288,7 +288,7 @@ I'm a customer support agent. A customer is asking about their order status. How
 * Tokens/sec: Throughput rate
 * Avg Prompt Throughput: Processing speed
 +
-image::module-01-figure-08.png[Response Metrics panel showing throughput and token statistics,width=300,title="Response Metrics"]
+image::module-01-figure-08.png[Response Metrics panel showing throughput and token statistics,align="center",width=300,link=module-01-figure-08.png^,title="Response Metrics"]
 +
 **Business talking point**: "These real-time metrics help ACME's operations team understand throughput capacity. For production planning, they can calculate: 'At 50 tokens/second throughput, we can serve X concurrent support conversations.'"
 
@@ -302,7 +302,7 @@ Configure ACME's brand voice:
 You are a helpful customer support assistant for ACME Corporation. Be professional, empathetic, and solution-oriented. Always prioritize customer satisfaction while following company policies.
 ----
 +
-image::module-01-figure-09.png[System Prompt dialog showing the ACME customer support persona configuration,width=500,title="System Prompt Configuration"]
+image::module-01-figure-09.png[System Prompt dialog showing the ACME customer support persona configuration,align="center",width=500,link=module-01-figure-09.png^,title="System Prompt Configuration"]
 +
 **Business talking point**: "System prompts let ACME define their AI's personality and behavior. This ensures consistent brand voice across all AI-generated responses."
 +

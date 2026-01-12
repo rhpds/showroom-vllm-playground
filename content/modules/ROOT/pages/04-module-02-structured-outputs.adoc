@@ -86,7 +86,7 @@ link:http://{hostname}:7860[Open vLLM Playground^]
 +
 **Business context**: "This is where ACME configures output constraints. The same AI that generated free text now conforms to exact schemas."
 +
-image::module-02-figure-01.png[Structured outputs configuration panel showing Enable checkbox and Output Type options,width=600,title="Structured Outputs Panel"]
+image::module-02-figure-01.png[Structured outputs configuration panel showing Enable checkbox and Output Type options,align="center",width=600,link=module-02-figure-01.png^,title="Structured Outputs Panel"]
 
 . **Configure JSON Schema for customer support tickets** (3-4 minutes):
 +
@@ -125,7 +125,7 @@ image::module-02-figure-01.png[Structured outputs configuration panel showing En
 }
 ----
 +
-image::module-02-figure-04.png[JSON Schema configuration in structured outputs panel,width=600,title="JSON Schema Mode"]
+image::module-02-figure-04.png[JSON Schema configuration in structured outputs panel,align="center",width=600,link=module-02-figure-04.png^,title="JSON Schema Mode"]
 +
 **Business talking point**: "This schema matches ACME's ticketing API exactly. Notice the enum constraints - the AI can ONLY output valid categories, priorities, and sentiments. Required fields guarantee the backend never receives incomplete data."
 
@@ -160,7 +160,7 @@ Customer message: "I've been charged twice for my subscription this month! This 
 }
 ----
 +
-image::module-02-figure-05.png[JSON Schema output showing structured ticket extraction,width=600,title="JSON Schema Structured Output"]
+image::module-02-figure-05.png[JSON Schema output showing structured ticket extraction,align="center",width=600,link=module-02-figure-05.png^,title="JSON Schema Structured Output"]
 +
 **Business value callout**: "Notice what just happened. The AI understood the customer's frustration, extracted the issue, correctly classified it as high-priority billing with negative sentiment, and flagged for escalation - all in perfectly formatted JSON that ACME's ticketing API can consume directly. No parsing code needed."
 
@@ -193,7 +193,7 @@ Customer message: "Hey, just wondering if you have any plans to add dark mode to
 +
 **Business talking point**: "The response panel validates JSON formatting automatically. If you see properly formatted JSON, it's valid. ACME's backend teams can trust every response conforms to their API specification."
 +
-image::module-02-figure-06.png[Verified JSON output displayed in the response panel,width=600,title="Verified JSON Format"]
+image::module-02-figure-06.png[Verified JSON output displayed in the response panel,align="center",width=600,link=module-02-figure-06.png^,title="Verified JSON Format"]
 +
 **Optional CLI validation** (if technical audience):
 +
@@ -249,7 +249,7 @@ Choice mode provides the simplest structured output method for category classifi
 * In Structured Outputs panel, select *Choice* mode
 * Enter choices: `["positive", "negative", "neutral"]`
 +
-image::module-02-figure-01.png[Structured outputs configuration panel with Choice mode,width=600,title="Choice Mode Configuration"]
+image::module-02-figure-01.png[Structured outputs configuration panel with Choice mode,align="center",width=600,link=module-02-figure-01.png^,title="Choice Mode Configuration"]
 
 . **Set sentiment analysis prompt** (30 seconds):
 +
@@ -267,7 +267,7 @@ Feedback: "I absolutely love your product! It exceeded all my expectations and t
 +
 Expected: `positive`
 +
-image::module-02-figure-02.png[Chat interface showing sentiment analysis with Choice mode outputting positive,width=600,title="Sentiment Analysis with Choice"]
+image::module-02-figure-02.png[Chat interface showing sentiment analysis with Choice mode outputting positive,align="center",width=600,link=module-02-figure-02.png^,title="Sentiment Analysis with Choice"]
 +
 **Test negative**:
 +
@@ -319,7 +319,7 @@ _ACME's systems require specific ID formats, phone number formatting, and custom
 * Select *Regex* mode in Structured Outputs
 * Enter pattern: `ACME-[A-Z]{4}-[0-9]{4}`
 +
-image::module-02-figure-07.png[Regex pattern configuration in structured outputs panel,width=600,title="Regex Mode"]
+image::module-02-figure-07.png[Regex pattern configuration in structured outputs panel,align="center",width=600,link=module-02-figure-07.png^,title="Regex Mode"]
 
 . **Test ID generation** (1 minute):
 +
@@ -329,7 +329,7 @@ image::module-02-figure-07.png[Regex pattern configuration in structured outputs
 +
 **Expected output**: `ACME-WXYZ-1234` (exact letters/numbers vary but format is guaranteed)
 +
-image::module-02-figure-08.png[Regex output showing ACME ticket ID format,width=600,title="Regex Constrained Output"]
+image::module-02-figure-08.png[Regex output showing ACME ticket ID format,align="center",width=600,link=module-02-figure-08.png^,title="Regex Constrained Output"]
 +
 **Business talking point**: "Regex guarantees ACME's ticket IDs match the exact format their tracking system expects. The AI literally cannot generate IDs in any other format."
 
