@@ -97,7 +97,7 @@ Performance benchmarking transforms proof-of-concept into production-ready deplo
 
 . **Access vLLM Playground performance panel** (1 minute):
 +
-Open browser to: http://{targethost}:7860
+link:http://{hostname}:7860[Open vLLM Playground^]
 +
 **Navigate to Performance/Benchmarking section** (if available in UI)
 +

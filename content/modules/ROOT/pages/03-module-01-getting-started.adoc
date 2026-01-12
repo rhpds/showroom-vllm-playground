@@ -105,7 +105,7 @@ nvidia-smi
 
 . **Access vLLM Playground web interface** (1 minute):
 +
-Open browser to: http://{targethost}:7860
+link:http://{hostname}:7860[Open vLLM Playground^]
 +
 **What they'll see**: vLLM Playground home page
 +

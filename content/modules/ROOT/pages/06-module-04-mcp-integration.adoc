@@ -64,7 +64,7 @@ MCP transforms tool calling from a demo feature into production-ready agentic AI
 
 . **Access vLLM Playground** (15 seconds):
 +
-Open browser to: http://{targethost}:7860
+link:http://{hostname}:7860[Open vLLM Playground^]
 +
 **Business context**: "Continuing from Module 3 where we defined tools. Now we'll connect those tools to actual execution via MCP."
 
