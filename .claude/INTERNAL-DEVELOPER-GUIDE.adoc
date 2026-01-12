@@ -671,23 +671,17 @@ image::diagram.png[Diagram,link=self,window=blank,width=700]
 
 ### Version History
 
-**January 12, 2026** - Content Quality and Red Hat Style Enforcement
-- **AsciiDoc Formatting**: Added mandatory blank line requirements for all lists
-- **Clickable Images**: All images must include `link=self,window=blank`
-- **Plagiarism Prevention**: Added Section 7 to SKILL-COMMON-RULES.md for content originality
-- **Em Dash Removal**: Added Section 8 to SKILL-COMMON-RULES.md prohibiting em dashes (—)
-- Updated verification prompts to actively scan for:
-  - List formatting violations
-  - Missing clickable image links
-  - Plagiarized or copied content
-  - Em dash usage (must use commas, periods, or en dashes instead)
-- Updated redhat_style_guide_validation.txt with punctuation and plagiarism sections
+**January 12, 2026** - AsciiDoc Formatting Enforcement
+- Added mandatory blank line requirements for all lists
+- All images must now include `link=self,window=blank` for clickability
+- Updated verification prompts to actively scan for formatting violations
 - Fixed demo template (02-details.adoc) with proper spacing
-- Added AsciiDoc Formatting, Plagiarism Prevention, and Em Dash sections to Quality Standards
-- Created comprehensive CHANGELOG-2026-01-12.md with 6 major sections
-- Updated CLAUDE-SKILLS-GUIDE.adoc with plagiarism and em dash warnings
-- Deployed to 3 repositories: genai, vllm, self-service
-- Files changed: 11 files, 871 insertions(+), 14 deletions(-)
+- Added AsciiDoc Formatting section to Quality Standards
+- Updated SKILL-COMMON-RULES.md with section 4 (List Formatting)
+- Updated both create-lab and create-demo skills with clickable image requirements
+- Created CHANGELOG-2026-01-12.md with complete documentation
+- Updated CLAUDE-SKILLS-GUIDE.adoc with Common Formatting Issues section
+- Files changed: 8 files, 322 insertions(+), 14 deletions(-)
 
 **January 9, 2026** - Interactive Questions Update
 - Made all questions conversational and friendly
