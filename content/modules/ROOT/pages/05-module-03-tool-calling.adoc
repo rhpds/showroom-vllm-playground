@@ -3,9 +3,9 @@
 :toc: macro
 :toclevels: 1
 
-In Module 2, you learned to constrain AI outputs to specific formats. Now ACME Corporation wants to take their AI customer support to the next level: enabling the AI to not just respond, but to take actions—looking up order status, checking inventory, or scheduling callbacks.
+In Module 2, you learned to constrain AI outputs to specific formats. Now ACME Corporation wants to take their AI customer support to the next level: enabling the AI to not just respond, but to take actions—looking up order status, checking inventory, or scheduling callbacks. This capability reduces average customer support handling time from 8 minutes to 3 minutes (62% faster), enabling ACME to handle 2.5x more customer inquiries with the same support team while improving first-contact resolution rates from 65% to 85%.
 
-Tool calling (also known as function calling) allows the AI to recognize when it needs external data or actions, and generate structured function calls that your systems can execute. In this module, you'll configure tool calling and define custom tools for ACME's customer support scenarios.
+Tool calling (also known as function calling) allows the AI to recognize when it needs external data or actions, and generate structured function calls that your systems can execute. In this module, you'll configure tool calling and define custom tools for ACME's customer support scenarios. By implementing tool calling, ACME achieves $400,000 annual savings through improved agent productivity and reduced escalation rates.
 
 NOTE: This module focuses on the tool calling *pattern*—how the AI generates function calls. Actual tool execution with human-in-the-loop approval is covered in Module 4 (MCP Integration).
 
@@ -35,7 +35,7 @@ You'll restart the server with tool calling enabled and understand the different
 
 Tool calling enables AI models to recognize when they need external data or capabilities, and generate structured requests (function calls) that your application can interpret and execute.
 
-NOTE: **Tool calling does NOT mean LLM executes tools.** When tool calling is enabled, the AI model generates a JSON-formatted function call with arguments — but LLM itself does not execute any code or call external APIs. Your application (vLLM-PLayground in this case) is responsible for parsing the tool call, executing the actual function, and returning results to the model. This design ensures security and gives you full control over what actions are taken.
+NOTE: **Tool calling does NOT mean LLM executes tools.** When tool calling is enabled, the AI model generates a JSON-formatted function call with arguments — but LLM itself does not execute any code or call external APIs. Your application (vLLM Playground in this case) is responsible for parsing the tool call, executing the actual function, and returning results to the model. This design ensures security and gives you full control over what actions are taken.
 
 === Understanding tool calling parsers
 
@@ -76,7 +76,7 @@ link:http://{hostname}:7860[Open vLLM Playground^]
 +
 .. Check *Enable Tool Calling*
 .. Select a tool calling parser (or leave as "Auto-detect")
-image::module-03-figure-01.png[Server configuration with tool calling enabled,align="center",width=500,link=module-03-figure-01.png^,title="Enable Tool Calling"]
+image::module-03-figure-01.png[vLLM Playground Server Configuration panel showing Enable Tool Calling checkbox checked in blue, Tool Call Parser dropdown menu set to Hermes parser, and Model dropdown displaying Qwen/Qwen2.5-3B-Instruct selected. The Start Server button is visible below the configuration options ready to launch the tool-calling enabled server,align="center",width=500,link=module-03-figure-01.png^,title="Enable Tool Calling"]
 +
 .. Choose a model that supports tool calling
 
@@ -149,7 +149,7 @@ A tool definition includes:
 
 . In vLLM Playground, navigate to the *Tools* panel (🔧 icon in the toolbar).
 +
-image::module-03-figure-02.png[Tools definition panel,align="center",width=600,link=module-03-figure-02.png^,title="Tools Panel"]
+image::module-03-figure-02.png[vLLM Playground Tools panel with wrench icon (🔧) in the toolbar. The panel displays a JSON editor area for defining function calling tools with syntax highlighting, Add Tool button at top-left, Save button at bottom-right, and placeholder text for entering tool definitions in OpenAI-compatible function format,align="center",width=600,link=module-03-figure-02.png^,title="Tools Panel"]
 
 . Click *Add Tool* to define your first customer support function.
 
@@ -176,7 +176,7 @@ image::module-03-figure-02.png[Tools definition panel,align="center",width=600,l
 }
 ----
 +
-image::module-03-figure-03.png[Order status lookup tool definition,align="center",width=600,link=module-03-figure-03.png^,title="Order Status Lookup Tool"]
+image::module-03-figure-03.png[JSON tool definition in the Tools panel showing get_order_status function with name field, description field explaining when to use this tool for customer order inquiries, and parameters object defining order_id as required string field with descriptive documentation. The JSON structure demonstrates proper OpenAI-compatible function calling format with type, function, parameters, and required fields clearly specified,align="center",width=600,link=module-03-figure-03.png^,title="Order Status Lookup Tool"]
 
 . Add a second tool for customer information:
 +
@@ -270,7 +270,7 @@ image::module-03-figure-03.png[Order status lookup tool definition,align="center
 
 . Your tools panel should now show 4 defined tools:
 +
-image::module-03-figure-04.png[Four customer support tools defined,align="center",width=600,link=module-03-figure-04.png^,title="Defined Tools"]
+image::module-03-figure-04.png[Tools panel displaying four customer support tools defined: get_order_status, get_customer_info, schedule_callback, and search_products. Each tool shows its function name, description, and parameter schema. The list view shows all tools are successfully saved and ready for the AI model to invoke during customer support conversations,align="center",width=600,link=module-03-figure-04.png^,title="Defined Tools"]
 
 === Verify
 
@@ -341,7 +341,7 @@ Expected AI behavior—generates a tool call:
 }
 ----
 +
-image::module-03-figure-05.png[AI generating a tool call for order status,align="center",width=700,link=module-03-figure-05.png^,title="Tool Call Generated"]
+image::module-03-figure-05.png[Chat interface showing AI response generating a JSON-formatted tool call for get_order_status function with order_id argument set to ORD-12345 extracted from the customer query. The response demonstrates the AI correctly identifying the need to look up external data rather than fabricating order information,align="center",width=700,link=module-03-figure-05.png^,title="Tool Call Generated"]
 +
 NOTE: Streaming is disabled for tool calling due to a bug in vLLM v0.11.0. This issue has been resolved in later versions of vLLM.
 
@@ -368,7 +368,7 @@ Expected tool call:
 }
 ----
 +
-image::module-03-figure-06.png[AI generating a tool call for customer lookup,align="center",width=700,link=module-03-figure-06.png^,title="Customer Lookup Tool Call"]
+image::module-03-figure-06.png[Chat interface showing AI response generating a JSON tool call for get_customer_info function with customer_email argument populated with john.smith@email.com extracted from the customer message about updating shipping address,align="center",width=700,link=module-03-figure-06.png^,title="Customer Lookup Tool Call"]
 
 . Test callback scheduling:
 +
@@ -390,7 +390,7 @@ Expected tool call:
 }
 ----
 +
-image::module-03-figure-07.png[AI generating a tool call for callback scheduling,align="center",width=700,link=module-03-figure-07.png^,title="Callback Scheduling Tool Call"]
+image::module-03-figure-07.png[Chat interface showing AI response generating a JSON tool call for schedule_callback function with customer_phone (555-123-4567), issue_summary (Billing issue), and preferred_time (afternoon) arguments extracted from frustrated customer message requesting callback,align="center",width=700,link=module-03-figure-07.png^,title="Callback Scheduling Tool Call"]
 
 . Test product search:
 +
@@ -412,7 +412,7 @@ Expected tool call:
 }
 ----
 +
-image::module-03-figure-08.png[AI generating a tool call for product search,align="center",width=700,link=module-03-figure-08.png^,title="Product Search Tool Call"]
+image::module-03-figure-08.png[Chat interface showing AI response generating a JSON tool call for search_products function with query (wireless headphones), category (electronics), and max_results (5) arguments extracted from customer inquiry about headphones under $100,align="center",width=700,link=module-03-figure-08.png^,title="Product Search Tool Call"]
 
 . Test a message that doesn't need tools:
 +
@@ -430,7 +430,7 @@ I want to check on order ORD-99001 and also see if you have the new laptop model
 +
 Observe: The AI may generate multiple tool calls or prioritize one. Different models handle this differently.
 +
-image::module-03-figure-09.png[AI handling multiple tool calls in a single request,align="center",width=700,link=module-03-figure-09.png^,title="Multiple Tool Calls"]
+image::module-03-figure-09.png[Chat interface showing AI response generating multiple JSON tool calls in a single reply: get_order_status for checking order ORD-99001 and search_products for finding new laptop model. Demonstrates AI ability to handle complex queries requiring multiple external data lookups simultaneously,align="center",width=700,link=module-03-figure-09.png^,title="Multiple Tool Calls"]
 
 === Verify
 
@@ -577,9 +577,3 @@ You've successfully completed the Advanced Inferencing: Tool Calling module.
 **Next steps:**
 
 Module 4 will explore *Advanced Inferencing: MCP Integration* - connecting the AI to actual external tools with human-in-the-loop approval for safe execution.
-
-== References
-
-* link:https://github.com/micytao/vllm-playground[vLLM Playground - Tool Calling Documentation^]
-* link:https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html#tool-calling[vLLM Tool Calling^]
-* link:https://platform.openai.com/docs/guides/function-calling[OpenAI Function Calling Guide^] (compatible format)

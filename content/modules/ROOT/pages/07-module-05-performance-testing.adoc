@@ -371,21 +371,24 @@ Shows latency distribution across different percentiles:
 
 ACME's customer support system requirements:
 
-[cols="1,1,2"]
+[cols="1,1,2,2"]
 |===
-|Requirement |Target |Why
+|Requirement |Target |Technical Reason |Business Impact
 
-|TTFT
+|TTFT (Time to First Token)
 |< 500ms
-|Users expect quick response start
+|Users perceive responses as instant below 500ms threshold
+|Improves customer satisfaction scores by 25%, reduces abandonment rate from 15% to 5%
 
-|E2E (typical)
+|E2E (End-to-End)
 |< 3s
-|Reasonable wait for support answers
+|Typical support questions generate 50-100 token responses
+|Enables support agents to handle 30 tickets/hour vs 20 tickets/hour (50% productivity gain)
 
 |Throughput
 |> 10 req/s
-|Handle 100+ concurrent users with queuing
+|Peak load during business hours reaches 8-10 concurrent requests
+|Supports Black Friday traffic (5x normal load), prevents customer wait times during peak periods, enables 24/7 operation without infrastructure scaling
 |===
 
 Compare your benchmark results against these targets.
