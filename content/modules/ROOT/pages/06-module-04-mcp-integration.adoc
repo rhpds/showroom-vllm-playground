@@ -190,7 +190,7 @@ link:http://{hostname}:7860[Open vLLM Playground^]
 
 . Navigate to the *MCP Servers* section in the sidebar to verify MCP support is available.
 +
-image::module-04-figure-01.png[MCP Server Configuration panel showing MCP Available status,width=700,title="MCP Server Configuration"]
+image::module-04-figure-01.png[MCP Server Configuration panel showing MCP Available status,align="center",width=700,link=module-04-figure-01.png^,title="MCP Server Configuration"]
 
 . You should see preset MCP server options:
 +
@@ -292,7 +292,7 @@ Monitor the *Server Logs* panel until you see the server is ready to accept conn
 +
 The Time server configuration dialog appears. No additional settings are needed — the defaults work out of the box.
 +
-image::module-04-figure-02.png[Time server configuration dialog,width=500,title="Time Server Configuration"]
+image::module-04-figure-02.png[Time server configuration dialog,align="center",width=500,link=module-04-figure-02.png^,title="Time Server Configuration"]
 
 . Click *Save Server* to save the MCP server configuration.
 +
@@ -305,7 +305,7 @@ NOTE: Different MCP servers require different transport dependencies. The Time s
 * Status indicator turns green
 * Available tools from the server are listed
 +
-image::module-04-figure-03.png[Time server connected showing available tools,width=500,title="Time Server Connected"]
+image::module-04-figure-03.png[Time server connected showing available tools,align="center",width=500,link=module-04-figure-03.png^,title="Time Server Connected"]
 
 . Review the tools provided by the Time server:
 +
@@ -317,7 +317,7 @@ image::module-04-figure-03.png[Time server connected showing available tools,wid
 * Look for the MCP tools toggle or checkbox
 * Ensure Time server tools are enabled for the conversation
 +
-image::module-04-figure-04.png[Enable MCP tools in Chat panel,width=500,title="Enable MCP Tools"]
+image::module-04-figure-04.png[Enable MCP tools in Chat panel,align="center",width=500,link=module-04-figure-04.png^,title="Enable MCP Tools"]
 
 . Test the Time server with a prompt:
 +
@@ -332,15 +332,15 @@ The AI should:
 .. *Wait for your approval* (human-in-the-loop)
 .. Return the actual current time after approval
 +
-image::module-04-figure-05.png[Human-in-the-loop approval dialog,width=500,title="Tool Approval Dialog"]
+image::module-04-figure-05.png[Human-in-the-loop approval dialog,align="center",width=500,link=module-04-figure-05.png^,title="Tool Approval Dialog"]
 
 . When prompted for approval, review the tool call and click *Execute*.
 +
-image::module-04-figure-06.png[AI response after human-in-the-loop approval,width=600,title="AI Response After Approval"]
+image::module-04-figure-06.png[AI response after human-in-the-loop approval,align="center",width=600,link=module-04-figure-06.png^,title="AI Response After Approval"]
 
 . Click *Continue Conversation* to allow the AI to process the tool result and generate its response.
 +
-image::module-04-figure-07.png[AI response with time information,width=600,title="AI Response with Time Information"]
+image::module-04-figure-07.png[AI response with time information,align="center",width=600,link=module-04-figure-07.png^,title="AI Response with Time Information"]
 
 . Observe the complete flow:
 +
@@ -462,7 +462,7 @@ mkdir -p /home/{ssh_username}/documents
 
 . Configure the Filesystem server:
 +
-image::module-04-figure-08.png[Filesystem server configuration,width=500,title="Filesystem Configuration"]
+image::module-04-figure-08.png[Filesystem server configuration,align="center",width=500,link=module-04-figure-08.png^,title="Filesystem Configuration"]
 +
 [cols="1,2"]
 |===
@@ -478,7 +478,7 @@ IMPORTANT: Only grant access to directories the AI should read. Be careful when 
 
 . Click *Connect* and verify the server connects successfully.
 +
-image::module-04-figure-09.png[Filesystem server connected,width=500,title="Filesystem Server Connected"]
+image::module-04-figure-09.png[Filesystem server connected,align="center",width=500,link=module-04-figure-09.png^,title="Filesystem Server Connected"]
 
 . Create some test files for the AI to analyze:
 +
@@ -539,7 +539,7 @@ Review what the AI is requesting:
 * What operation (read/write/list)
 * Click *Execute* only if appropriate
 +
-image::module-04-figure-10.png[AI response after file read approval,width=600,title="AI Response After File Read"]
+image::module-04-figure-10.png[AI response after file read approval,align="center",width=600,link=module-04-figure-10.png^,title="AI Response After File Read"]
 
 . Test directory listing:
 +
@@ -549,7 +549,7 @@ What files are available in the /home/lab-user/documents folder?
 +
 The AI should list the available files after approval.
 +
-image::module-04-figure-11.png[Directory listing response,width=600,title="Directory Listing Response"]
+image::module-04-figure-11.png[Directory listing response,align="center",width=600,link=module-04-figure-11.png^,title="Directory Listing Response"]
 
 . Test document analysis:
 +
@@ -559,7 +559,7 @@ Based on the file /home/lab-user/documents/products.txt, what's the most expensi
 +
 Observe the AI reading the file and analyzing the content.
 +
-image::module-04-figure-12.png[Document analysis response,width=600,title="Document Analysis Response"]
+image::module-04-figure-12.png[Document analysis response,align="center",width=600,link=module-04-figure-12.png^,title="Document Analysis Response"]
 
 === Verify
 
@@ -675,7 +675,7 @@ Watch the AI:
 * *FAQ read*: Get support hours and return policy
 * *Products read*: Get earbuds information
 +
-image::module-04-figure-13.png[Multiple tool calls in an agentic workflow,width=700,title="Agentic Workflow with Multiple Tools"]
+image::module-04-figure-13.png[Multiple tool calls in an agentic workflow,align="center",width=700,link=module-04-figure-13.png^,title="Agentic Workflow with Multiple Tools"]
 +
 NOTE: The directories and files referenced in these examples may not exist in your environment. This is for demonstration purposes only.
 
@@ -690,7 +690,7 @@ Expected behavior:
 * If directory is not in allowed list: Tool call should fail or not be attempted
 * AI should explain it can only access authorized directories
 +
-image::module-04-figure-14.png[Safety controls preventing unauthorized file access,width=600,title="Safety Controls in Action"]
+image::module-04-figure-14.png[Safety controls preventing unauthorized file access,align="center",width=600,link=module-04-figure-14.png^,title="Safety Controls in Action"]
 
 . Experiment with denying a request:
 +

@@ -76,7 +76,7 @@ link:http://{hostname}:7860[Open vLLM Playground^]
 +
 .. Check *Enable Tool Calling*
 .. Select a tool calling parser (or leave as "Auto-detect")
-image::module-03-figure-01.png[Server configuration with tool calling enabled,width=500,title="Enable Tool Calling"]
+image::module-03-figure-01.png[Server configuration with tool calling enabled,align="center",width=500,link=module-03-figure-01.png^,title="Enable Tool Calling"]
 +
 .. Choose a model that supports tool calling
 
@@ -149,7 +149,7 @@ A tool definition includes:
 
 . In vLLM Playground, navigate to the *Tools* panel (🔧 icon in the toolbar).
 +
-image::module-03-figure-02.png[Tools definition panel,width=600,title="Tools Panel"]
+image::module-03-figure-02.png[Tools definition panel,align="center",width=600,link=module-03-figure-02.png^,title="Tools Panel"]
 
 . Click *Add Tool* to define your first customer support function.
 
@@ -176,7 +176,7 @@ image::module-03-figure-02.png[Tools definition panel,width=600,title="Tools Pan
 }
 ----
 +
-image::module-03-figure-03.png[Order status lookup tool definition,width=600,title="Order Status Lookup Tool"]
+image::module-03-figure-03.png[Order status lookup tool definition,align="center",width=600,link=module-03-figure-03.png^,title="Order Status Lookup Tool"]
 
 . Add a second tool for customer information:
 +
@@ -270,7 +270,7 @@ image::module-03-figure-03.png[Order status lookup tool definition,width=600,tit
 
 . Your tools panel should now show 4 defined tools:
 +
-image::module-03-figure-04.png[Four customer support tools defined,width=600,title="Defined Tools"]
+image::module-03-figure-04.png[Four customer support tools defined,align="center",width=600,link=module-03-figure-04.png^,title="Defined Tools"]
 
 === Verify
 
@@ -341,7 +341,7 @@ Expected AI behavior—generates a tool call:
 }
 ----
 +
-image::module-03-figure-05.png[AI generating a tool call for order status,width=700,title="Tool Call Generated"]
+image::module-03-figure-05.png[AI generating a tool call for order status,align="center",width=700,link=module-03-figure-05.png^,title="Tool Call Generated"]
 +
 NOTE: Streaming is disabled for tool calling due to a bug in vLLM v0.11.0. This issue has been resolved in later versions of vLLM.
 
@@ -368,7 +368,7 @@ Expected tool call:
 }
 ----
 +
-image::module-03-figure-06.png[AI generating a tool call for customer lookup,width=700,title="Customer Lookup Tool Call"]
+image::module-03-figure-06.png[AI generating a tool call for customer lookup,align="center",width=700,link=module-03-figure-06.png^,title="Customer Lookup Tool Call"]
 
 . Test callback scheduling:
 +
@@ -390,7 +390,7 @@ Expected tool call:
 }
 ----
 +
-image::module-03-figure-07.png[AI generating a tool call for callback scheduling,width=700,title="Callback Scheduling Tool Call"]
+image::module-03-figure-07.png[AI generating a tool call for callback scheduling,align="center",width=700,link=module-03-figure-07.png^,title="Callback Scheduling Tool Call"]
 
 . Test product search:
 +
@@ -412,7 +412,7 @@ Expected tool call:
 }
 ----
 +
-image::module-03-figure-08.png[AI generating a tool call for product search,width=700,title="Product Search Tool Call"]
+image::module-03-figure-08.png[AI generating a tool call for product search,align="center",width=700,link=module-03-figure-08.png^,title="Product Search Tool Call"]
 
 . Test a message that doesn't need tools:
 +
@@ -430,7 +430,7 @@ I want to check on order ORD-99001 and also see if you have the new laptop model
 +
 Observe: The AI may generate multiple tool calls or prioritize one. Different models handle this differently.
 +
-image::module-03-figure-09.png[AI handling multiple tool calls in a single request,width=700,title="Multiple Tool Calls"]
+image::module-03-figure-09.png[AI handling multiple tool calls in a single request,align="center",width=700,link=module-03-figure-09.png^,title="Multiple Tool Calls"]
 
 === Verify
 

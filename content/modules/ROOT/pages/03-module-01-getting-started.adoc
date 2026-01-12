@@ -153,7 +153,7 @@ TIP: In this lab environment, the container image has been pre-pulled during set
 +
 link:http://{hostname}:7860[Open vLLM Playground^]
 +
-image::module-01-figure-01.png[vLLM Playground home page showing the main interface,width=700,title="vLLM Playground Home Page"]
+image::module-01-figure-01.png[vLLM Playground home page showing the main interface,align="center",width=700,link=module-01-figure-01.png^,title="vLLM Playground Home Page"]
 
 . In the vLLM Playground web interface, configure your first model:
 +
@@ -167,7 +167,7 @@ image::module-01-figure-01.png[vLLM Playground home page showing the main interf
 +
 For this exercise, select `TinyLlama 1.1B Chat` from the dropdown - it's fast and doesn't require authentication.
 +
-image::module-01-figure-02.png[Model selection showing dropdown and custom model options,width=300,title="Model Selection Options"]
+image::module-01-figure-02.png[Model selection showing dropdown and custom model options,align="center",width=300,link=module-01-figure-02.png^,title="Model Selection Options"]
 
 .. In the *Run Mode* section, select how vLLM will run:
 +
@@ -176,7 +176,7 @@ image::module-01-figure-02.png[Model selection showing dropdown and custom model
 +
 For this exercise, select *Container* mode - it provides better isolation and matches production deployments.
 +
-image::module-01-figure-03.png[Run Mode selection showing Subprocess and Container options,width=300,title="Run Mode Selection"]
+image::module-01-figure-03.png[Run Mode selection showing Subprocess and Container options,align="center",width=300,link=module-01-figure-03.png^,title="Run Mode Selection"]
 
 .. In the *Compute Mode* section, select your hardware:
 +
@@ -185,7 +185,7 @@ image::module-01-figure-03.png[Run Mode selection showing Subprocess and Contain
 +
 Select *GPU* mode since your lab environment has GPU available.
 +
-image::module-01-figure-04.png[Compute Mode selection showing CPU and GPU options,width=300,title="Compute Mode Selection"]
+image::module-01-figure-04.png[Compute Mode selection showing CPU and GPU options,align="center",width=300,link=module-01-figure-04.png^,title="Compute Mode Selection"]
 
 .. Review the remaining default settings:
 +
@@ -199,7 +199,7 @@ NOTE: These parameters are powered by vLLM's extensive configuration options, ma
 +
 As you adjust these settings, the *Command Preview* at the bottom dynamically generates the corresponding vLLM command that will run inside the container. This helps you understand exactly what parameters are being passed to vLLM.
 +
-image::module-01-figure-05.png[Command Preview showing the generated vLLM command based on selected parameters,width=300,title="Command Preview"]
+image::module-01-figure-05.png[Command Preview showing the generated vLLM command based on selected parameters,align="center",width=300,link=module-01-figure-05.png^,title="Command Preview"]
 
 .. Click *Start Server*
 
@@ -220,7 +220,7 @@ Look for these indicators that the server is ready:
 * A green *"Server is ready to chat!"* toast notification appears
 * The *Send* button in the chat interface turns green
 
-image::module-01-figure-06.png[Server Logs showing Application startup complete and Server is ready to chat notification,width=700,title="Server Ready Indicators"]
+image::module-01-figure-06.png[Server Logs showing Application startup complete and Server is ready to chat notification,align="center",width=700,link=module-01-figure-06.png^,title="Server Ready Indicators"]
 
 You can also verify the container is running via Podman:
 
@@ -275,7 +275,7 @@ Now that the vLLM server is running, you'll explore the chat interface and have 
 * Conversation history in the main panel
 * Model settings in the sidebar
 +
-image::module-01-figure-07.png[vLLM Playground chat interface showing conversation area with message input and Send button,width=700,title="Chat Interface"]
+image::module-01-figure-07.png[vLLM Playground chat interface showing conversation area with message input and Send button,align="center",width=700,link=module-01-figure-07.png^,title="Chat Interface"]
 
 . Send your first message to test the model:
 +
@@ -304,7 +304,7 @@ Notice how the model provides helpful guidance for the support scenario.
 +
 These metrics highlight the high throughput that vLLM delivers.
 +
-image::module-01-figure-08.png[Response Metrics panel showing throughput and token statistics,width=300,title="Response Metrics"]
+image::module-01-figure-08.png[Response Metrics panel showing throughput and token statistics,align="center",width=300,link=module-01-figure-08.png^,title="Response Metrics"]
 
 . Explore the chat settings:
 +
@@ -318,7 +318,7 @@ Try setting a system prompt:
 You are a helpful customer support assistant for ACME Corporation. Be professional, empathetic, and solution-oriented.
 ----
 +
-image::module-01-figure-09.png[System Prompt dialog showing the ACME customer support persona configuration,width=500,title="System Prompt Configuration"]
+image::module-01-figure-09.png[System Prompt dialog showing the ACME customer support persona configuration,align="center",width=500,link=module-01-figure-09.png^,title="System Prompt Configuration"]
 +
 TIP: Click the *Templates* dropdown to access preset system prompt templates for common use cases like coding assistant, translator, or summarizer.
 +

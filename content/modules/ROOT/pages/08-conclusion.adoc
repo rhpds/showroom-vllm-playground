@@ -64,7 +64,7 @@ Ready to continue your journey? Here are some recommended next steps:
 
 === Red Hat AI Inference Server
 
-image::conclusion-rhaiis.png[Red Hat AI Inference Server,width=700,title="Red Hat AI Inference Server"]
+image::conclusion-rhaiis.png[Red Hat AI Inference Server,align="center",width=700,link=conclusion-rhaiis.png^,title="Red Hat AI Inference Server"]
 
 Ready to take your vLLM skills to enterprise production? **Red Hat AI Inference Server** optimizes inference across the hybrid cloud for faster, cost-effective model deployments.
 

@@ -51,7 +51,7 @@ NOTE: Qwen2.5-3B-Instruct is a 3 billion parameter model that provides better in
 . Navigate to the *Structured Outputs* section in the toolbar panel.
 . Click "Enable Structured Outputs".
 +
-image::module-02-figure-01.png[Structured outputs configuration panel showing Enable checkbox and Output Type options,width=600,title="Structured Outputs Panel"]
+image::module-02-figure-01.png[Structured outputs configuration panel showing Enable checkbox and Output Type options,align="center",width=600,link=module-02-figure-01.png^,title="Structured Outputs Panel"]
 
 . Select *Choice* mode for simple constrained outputs.
 
@@ -78,7 +78,7 @@ Feedback: "I absolutely love your product! It exceeded all my expectations and t
 +
 Expected output: `positive`
 +
-image::module-02-figure-02.png[Chat interface showing sentiment analysis with Choice mode outputting positive,width=600,title="Sentiment Analysis with Choice Mode"]
+image::module-02-figure-02.png[Chat interface showing sentiment analysis with Choice mode outputting positive,align="center",width=600,link=module-02-figure-02.png^,title="Sentiment Analysis with Choice Mode"]
 
 . Test with negative feedback:
 +
@@ -96,7 +96,7 @@ Feedback: "The product works as described. Delivery was on time. Nothing special
 +
 Expected output: `neutral`
 +
-image::module-02-figure-03.png[Sentiment analysis showing neutral classification result,width=600,title="Neutral Sentiment Classification"]
+image::module-02-figure-03.png[Sentiment analysis showing neutral classification result,align="center",width=600,link=module-02-figure-03.png^,title="Neutral Sentiment Classification"]
 
 === Verify
 
@@ -130,7 +130,7 @@ You'll define a JSON Schema that constrains the model to output properly structu
 
 . In the *Structured Outputs* panel, select *JSON* mode.
 +
-image::module-02-figure-04.png[JSON Schema configuration in structured outputs panel,width=600,title="JSON Schema Mode"]
+image::module-02-figure-04.png[JSON Schema configuration in structured outputs panel,align="center",width=600,link=module-02-figure-04.png^,title="JSON Schema Mode"]
 
 . Define a schema for customer support ticket extraction:
 +
@@ -188,7 +188,7 @@ Expected output (formatted):
 }
 ----
 +
-image::module-02-figure-05.png[JSON Schema output showing structured ticket extraction,width=600,title="JSON Schema Structured Output"]
+image::module-02-figure-05.png[JSON Schema output showing structured ticket extraction,align="center",width=600,link=module-02-figure-05.png^,title="JSON Schema Structured Output"]
 
 . Test with a different scenario:
 +
@@ -224,7 +224,7 @@ EOF
 python3 -c "import json; print(json.load(open('/tmp/output.json')))"
 ----
 
-image::module-02-figure-06.png[Verified JSON output displayed in the response panel,width=600,title="Verified JSON Format"]
+image::module-02-figure-06.png[Verified JSON output displayed in the response panel,align="center",width=600,link=module-02-figure-06.png^,title="Verified JSON Format"]
 
 TIP: The vLLM Playground response panel already validates JSON formatting - if the output displays properly formatted, it's valid JSON.
 
@@ -278,7 +278,7 @@ This pattern enforces:
 * Exactly 4 uppercase letters
 * A hyphen `-`
 * Exactly 4 digits
-image::module-02-figure-07.png[Regex pattern configuration in structured outputs panel,width=600,title="Regex Mode"]
+image::module-02-figure-07.png[Regex pattern configuration in structured outputs panel,align="center",width=600,link=module-02-figure-07.png^,title="Regex Mode"]
 +
 . Set a system prompt:
 +
@@ -294,7 +294,7 @@ Generate a ticket ID for a new billing inquiry.
 +
 Expected output format: `ACME-BXYZ-1234` (exact letters/numbers will vary)
 +
-image::module-02-figure-08.png[Regex output showing ACME ticket ID format,width=600,title="Regex Constrained Output"]
+image::module-02-figure-08.png[Regex output showing ACME ticket ID format,align="center",width=600,link=module-02-figure-08.png^,title="Regex Constrained Output"]
 
 . Verify the format matches by checking:
 * Starts with `ACME-`
@@ -319,7 +319,7 @@ Format this phone number: 5551234567
 +
 Expected output: `(555) 123-4567`
 +
-image::module-02-figure-09.png[Regex output showing formatted phone number,width=600,title="Phone Number Formatting with Regex"]
+image::module-02-figure-09.png[Regex output showing formatted phone number,align="center",width=600,link=module-02-figure-09.png^,title="Phone Number Formatting with Regex"]
 
 === Verify
 
@@ -404,7 +404,7 @@ Expected output format:
 ## REPORT END ##
 ----
 +
-image::module-02-figure-10.png[Grammar output showing structured report format with GBNF,width=600,title="Grammar Structured Output"]
+image::module-02-figure-10.png[Grammar output showing structured report format with GBNF,align="center",width=600,link=module-02-figure-10.png^,title="Grammar Structured Output"]
 
 
 === Verify
