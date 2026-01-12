@@ -157,6 +157,79 @@ You MUST actively search the content for formatting inconsistencies. Look for:
 4. Different header styles (=== vs :: vs ** vs ##)
 5. Scan ALL content files for these patterns - do not skip this step
 
+## ASCIIDOC LIST FORMATTING VALIDATION (CRITICAL):
+
+**MANDATORY CHECK**: All lists MUST have proper blank lines for correct rendering.
+
+**Problem**: Improper list formatting causes text to run together when rendered in Showroom, making content unreadable and unprofessional.
+
+**Required blank lines**:
+1. **Blank line BEFORE every list**
+2. **Blank line AFTER every list** (before next content)
+3. **Blank line after bold text or headings before lists**
+
+**Common violations to actively scan for**:
+
+❌ **BAD - Text/heading immediately followed by list:**
+```
+Some text:**Heading:*** Item 1
+* Item 2
+```
+
+✅ **CORRECT - Blank line before list:**
+```
+Some text:
+
+**Heading:**
+
+* Item 1
+* Item 2
+```
+
+❌ **BAD - List immediately followed by next content:**
+```
+* Item 1
+* Item 2
+Next paragraph
+```
+
+✅ **CORRECT - Blank line after list:**
+```
+* Item 1
+* Item 2
+
+Next paragraph
+```
+
+**ACTIVELY SCAN the content for**:
+- Bold text (`**Text:**`) immediately followed by `*` or `.` (list marker)
+- Colons (`:`) immediately followed by list items on next line
+- List items followed immediately by paragraphs (no blank line)
+- Lists after headings without blank line separation
+
+**Business Impact of Poor List Formatting**:
+- **Unprofessional appearance**: Text running together damages Red Hat brand credibility
+- **Reduced readability**: Prospects can't quickly scan key benefits
+- **Presenter frustration**: Sales engineers struggle with poorly formatted content
+- **Lost technical credibility**: Technical buyers notice rendering issues immediately
+
+**For EVERY list formatting issue, report**:
+```json
+{
+  "type": "critical_issue",
+  "category": "asciidoc_formatting",
+  "message": "Missing blank lines around lists - causes text to run together",
+  "current_example": "**Benefits:**\n* Cost reduction\n* Faster deployment\nNext section...",
+  "improved_example": "**Benefits:**\n\n* Cost reduction\n* Faster deployment\n\nNext section...",
+  "implementation_steps": [
+    "Add blank line after bold heading/colon",
+    "Ensure blank line before first list item",
+    "Add blank line after last list item"
+  ],
+  "files": ["affected-file.adoc"]
+}
+```
+
 ## MISSING ASSET DETECTION - SPECIFIC REPORTING REQUIREMENTS:
 
 When reporting missing images or assets, provide DETAILED information:
@@ -318,15 +391,43 @@ Provide your analysis as a JSON object with this structure:
 {
   "file_type": "demo_content|navigation|infrastructure|technical_reference|presenter_support",
   "evaluation_focus": "Brief description of what was evaluated for this file type",
-  "overall_score": 85,
-  "dimension_scores": {
-    "business_messaging": 8,
-    "narrative_structure": 9,
-    "technical_demonstration": 8,
-    "customer_relevance": 7,
-    "redhat_compliance": 9,
-    "sales_enablement": 8,
-    "presentation_logistics": 7
+  "validation_summary": {
+    "total_errors": 0,
+    "total_warnings": 0,
+    "total_improvements": 0,
+    "checks_performed": {
+      "external_link_caret": {
+        "violations_found": 0,
+        "severity": "error",
+        "files_affected": []
+      },
+      "clickable_image_caret": {
+        "violations_found": 0,
+        "severity": "error",
+        "files_affected": []
+      },
+      "list_marker_semantic": {
+        "violations_found": 0,
+        "severity": "warning",
+        "files_affected": []
+      },
+      "list_blank_lines": {
+        "violations_found": 0,
+        "severity": "error",
+        "files_affected": []
+      },
+      "formatting_consistency": {
+        "violations_found": 0,
+        "severity": "warning",
+        "files_affected": []
+      }
+    },
+    "severity_breakdown": {
+      "critical": 0,
+      "error": 0,
+      "warning": 0,
+      "info": 0
+    }
   },
   "strengths": [
     "Strong quantified business value messaging",
@@ -449,25 +550,134 @@ Reference the comprehensive style guidelines: `prompts/redhat_style_guide_valida
   - Clickable external: `image::roi.png[ROI Analysis,link=https://www.redhat.com/study^]` ✅
   - Regular image: `image::dashboard.png[Dashboard]` ✅ (no link, no caret needed)
 
-**VALIDATION CHECKS - You MUST actively scan content and flag these issues:**
+## MANDATORY ACTIVE VALIDATION FRAMEWORK
 
-1. **Scan for image macros with external links missing caret:**
+You MUST perform these validation checks and produce ERROR or WARNING findings when violations are detected. These checks are NOT optional - every violation MUST be reported with counts and specific examples.
+
+### Check 1: External Link Caret Enforcement
+**What to scan**: All `link:https://` and `link:http://` patterns in content
+**Pattern to detect violations**: `link:https?://[^\^]+\[[^\]]+\]` (link without `^` before closing bracket)
+**Error condition**: External link without `^` caret
+**Severity**: ERROR
+**Why this matters**: External links without caret replace the current tab, causing users to lose their place in the demo
+**Example violation**: `link:https://docs.redhat.com[Documentation]`
+**Required fix**: `link:https://docs.redhat.com[Documentation^]`
+**Count tracking**: MUST count total violations and list all file locations
+
+### Check 2: Clickable Image Link Caret Enforcement
+**What to scan**: All `image::` macros with `link=` attribute pointing to external URLs
+**Pattern to detect violations**:
+- `image::[^[]+\[.*link=https?://[^\^]+\]` (image macro with external link, no caret)
+- `link:https?://[^\^]+\[image:` (link macro wrapping image, no caret)
+**Error condition**: Image with external link without `^` caret
+**Severity**: ERROR
+**Why this matters**: Clickable images without caret lose demo context when opening external content
+**Example violation**: `image::diagram.png[Architecture,link=https://example.com]`
+**Required fix**: `image::diagram.png[Architecture,link=https://example.com^]`
+**Count tracking**: MUST count total violations and list all file locations
+
+### Check 3: List Marker Semantic Validation (NEW)
+**What to scan**: All list markers in relation to their section context
+**Section Detection Patterns**:
+- **Knowledge sections**: Headers containing "Know", "Overview", "Introduction", "Background", "Learning objectives", "Prerequisites", "Concepts", "Benefits", "Value proposition"
+- **Task sections**: Headers containing "Show", "Exercise", "Steps", "Procedure", "Activity", "Demo", "Demonstration", "What I do", "What I say"
+- **Verification sections**: Headers containing "Verify", "Check", "Validation", "Confirm", "What they should notice", "Success indicators"
+
+**Expected list markers by section type**:
+- Knowledge sections → MUST use `* ` (bullets) for information points
+- Task sections → MUST use `. ` (numbers) for sequential steps
+- Verification sections → MUST use `* ` (bullets) for success indicators
+
+**Error conditions to detect**:
+1. Numbered list (`. `) found in knowledge/information section
+2. Bulleted list (`* `) found in task/procedure section
+3. Mixed markers (both `*` and `.`) within same logical section
+4. Numbered list (`. `) found in verification section
+
+**Severity**: WARNING (affects readability but doesn't break functionality)
+**Why this matters**: Bullets indicate information to absorb; numbers indicate sequential actions to perform. Mixing them confuses the instructional pattern.
+
+**Example violation in Know section**:
+```asciidoc
+=== Know
+
+**Business Challenge:**
+
+. Manual deployments take 8-10 weeks    ← ERROR: Should use *
+. Security vulnerabilities found late    ← ERROR: Should use *
+. Infrastructure costs too high          ← ERROR: Should use *
+```
+
+**Required fix**:
+```asciidoc
+=== Know
+
+**Business Challenge:**
+
+* Manual deployments take 8-10 weeks    ← CORRECT: Bullets for knowledge
+* Security vulnerabilities found late    ← CORRECT
+* Infrastructure costs too high          ← CORRECT
+```
+
+**Example violation in Show section**:
+```asciidoc
+=== Show
+
+**What I do:**
+
+* Log into OpenShift Console              ← ERROR: Should use .
+* Navigate to Developer perspective       ← ERROR: Should use .
+* Click "+Add" → "Import from Git"        ← ERROR: Should use .
+```
+
+**Required fix**:
+```asciidoc
+=== Show
+
+**What I do:**
+
+. Log into OpenShift Console              ← CORRECT: Numbers for steps
+. Navigate to Developer perspective       ← CORRECT
+. Click "+Add" → "Import from Git"        ← CORRECT
+```
+
+**Count tracking**: MUST count violations by section type and list all affected sections with line numbers
+
+---
+
+**VALIDATION EXECUTION - You MUST perform these scans and produce ERROR findings:**
+
+1. **MUST scan EVERY file for image macros with external links missing caret:**
    - Search pattern: `image::[^[]+\[.*link=https?://[^\^]+\]`
-   - Flag as ERROR: Missing `^` caret in clickable image
+   - MUST produce ERROR for each violation found
+   - MUST track count of violations per file
+   - MUST include file name and line number for each violation
    - Example to flag: `image::case-study.png[Case Study,link=https://www.redhat.com]`
    - Correct version: `image::case-study.png[Case Study,link=https://www.redhat.com^]`
 
-2. **Scan for link macros wrapping images, missing caret:**
+2. **MUST scan EVERY file for link macros wrapping images, missing caret:**
    - Search pattern: `link:https?://[^\^]+\[image:`
-   - Flag as ERROR: Missing `^` caret in image link
+   - MUST produce ERROR for each violation found
+   - MUST track count of violations per file
+   - MUST include file name and line number for each violation
    - Example to flag: `link:https://www.redhat.com/case[image:case-study.png[Case]]`
    - Correct version: `link:https://www.redhat.com/case^[image:case-study.png[Case]]`
 
-3. **Scan for text links to external URLs missing caret:**
+3. **MUST scan EVERY file for text links to external URLs missing caret:**
    - Search pattern: `link:https?://[^\^]+\[[^\]]+\]` (without ^ before bracket)
-   - Flag as ERROR: Missing `^` caret in external link
+   - MUST produce ERROR for each violation found
+   - MUST track count of violations per file
+   - MUST include file name and line number for each violation
    - Example to flag: `link:https://www.redhat.com/solutions[Solutions]`
    - Correct version: `link:https://www.redhat.com/solutions[Solutions^]`
+
+4. **MUST scan EVERY section for list marker type mismatches:**
+   - Detect section type from header keywords (Know/Show/Verify)
+   - MUST produce WARNING for bullets (*) in Show/task sections
+   - MUST produce WARNING for numbers (.) in Know/knowledge sections
+   - MUST produce WARNING for numbers (.) in Verify sections
+   - MUST track count of violations by section type
+   - MUST include section header name and line numbers for each violation
 
 **Troubleshooting Section Guidance for Demos:**
 - ⚠️ **Optional for most demos**: Presenter-led demos typically handle issues live without documented troubleshooting
@@ -520,73 +730,294 @@ Use these comprehensive examples to provide specific, actionable feedback with p
 
 ## CRITICAL OUTPUT FORMAT REQUIREMENT
 
-**YOU MUST RESPOND WITH VALID JSON FORMAT ONLY. NO EXPLANATORY TEXT BEFORE OR AFTER THE JSON.**
+**YOU MUST RESPOND IN MARKDOWN FORMAT WITH DETAILED SECTIONS FIRST, SUMMARY TABLE LAST.**
 
-Required JSON structure:
-```json
-{
-  "overall_score": 85,
-  "dimension_scores": {
-    "business_messaging": 8,
-    "narrative_structure": 9,
-    "technical_demonstration": 8,
-    "customer_relevance": 7,
-    "redhat_compliance": 9,
-    "sales_enablement": 8,
-    "presentation_logistics": 7
-  },
-  "strengths": [
-    "Specific positive aspects with detailed examples"
-  ],
-  "issues": [
-    {
-      "type": "error",
-      "category": "redhat_compliance",
-      "message": "Missing document title (= Title) - This is a basic requirement that significantly impacts professionalism",
-      "why_problematic": "Without titles, demo content lacks professional credibility and fails Red Hat's documentation standards",
-      "business_impact": "Unprofessional presentation reduces prospect confidence by 30% and extends sales cycles",
-      "current_example": "File starts with: :source-highlighter: rouge",
-      "improved_example": "= Accelerating Digital Transformation with Red Hat OpenShift Platform\n:imagesdir: ../assets/images\n:source-highlighter: rouge",
-      "implementation_steps": [
-        "Add title as first line using = [Business Outcome] with [Red Hat Product]",
-        "Include proper AsciiDoc formatting variables",
-        "Ensure title focuses on business outcome, not features"
-      ],
-      "priority": "high",
-      "files": ["index.adoc"]
-    }
-  ],
-  "recommendations": [
-    {
-      "type": "improvement",
-      "title": "Add Quantified Business Value Metrics",
-      "message": "Transform generic benefits into specific, measurable outcomes",
-      "priority": "high",
-      "current_example": "Our solution improves your development workflow",
-      "improved_example": "Red Hat Advanced Developer Suite reduces staging deployment time from 3-5 days to 30 minutes (95% improvement), enabling teams to deliver features 4x faster",
-      "implementation_steps": [
-        "Replace generic terms with specific timeframes",
-        "Add percentage improvements with before/after metrics",
-        "Include downstream business benefits"
-      ],
-      "red_hat_example": "Follow Red Hat's concrete outcomes approach with quantified customer success metrics",
-      "files": ["01-overview.adoc", "02-business-value.adoc"]
-    }
-  ],
-  "improvementOpportunities": [
-    {
-      "area": "Business Messaging Enhancement",
-      "suggestion": "Add competitive differentiation with specific Red Hat advantages",
-      "priority": "medium",
-      "files": ["index.adoc"]
-    }
-  ]
-}
+### Output Structure:
+
+1. **Detailed Issue Sections** (one section per issue, in order of priority)
+2. **Summary Table** (at the very end)
+
+---
+
+### Format for Each Detailed Issue Section:
+
+```markdown
+## [COUNT] [SPECIFIC ISSUE DESCRIPTION]
+**Priority: [Critical|High|Medium|Low|Warning]**
+**Affected Files:** [file1.adoc, file2.adoc]
+
+### Details:
+
+1. **[Location: Line X, filename.adoc]**
+   - Current: [exact problematic text or code]
+   - Required: [exact corrected text or code]
+   - Why: [reason this violates standards]
+   - Fix: [step-by-step how to fix]
+
+2. **[Location: Line Y, filename.adoc]**
+   - Current: [exact problematic text]
+   - Required: [exact corrected text]
+   - Why: [reason]
+   - Fix: [steps]
+
+[Continue for all instances of this issue]
+
+---
 ```
 
-**IMPORTANT:** 
-- Always include detailed "current_example" and "improved_example" fields for issues
-- Provide specific "implementation_steps" for every recommendation
-- Include "business_impact" explanations for why changes matter
-- Use "files" arrays to specify which files are affected
-- Ensure all JSON is properly formatted and valid
+### Format for Summary Table (AT THE END):
+
+```markdown
+---
+
+## Validation Summary
+
+┌──────────────────────────────────────────┬──────────┬─────────────────────────┐
+│                 Issue                    │ Priority │    Affected Files       │
+├──────────────────────────────────────────┼──────────┼─────────────────────────┤
+│ [COUNT] [SPECIFIC ISSUE DESCRIPTION]     │ [Level]  │ [files]                 │
+├──────────────────────────────────────────┼──────────┼─────────────────────────┤
+│ [COUNT] [SPECIFIC ISSUE DESCRIPTION]     │ [Level]  │ [files]                 │
+└──────────────────────────────────────────┴──────────┴─────────────────────────┘
+
+**Total Issues:** [X] ([Y] Critical, [Z] High, [A] Medium, [B] Low)
+**Files Affected:** [total unique file count]
+```
+
+---
+
+### CRITICAL REQUIREMENTS:
+
+1. **Issue Description Must Be Specific and Include Count:**
+   - ❌ WRONG: "Style Guide violations"
+   - ❌ WRONG: "Accessibility issues"
+   - ✅ CORRECT: "7 external links missing ^ caret"
+   - ✅ CORRECT: "4 images missing alt text"
+   - ✅ CORRECT: "2 em dashes found in content"
+   - ✅ CORRECT: "12 lists missing blank lines"
+
+2. **Break Down Generic Categories Into Specific Issues:**
+   - Instead of "Red Hat Style Guide" → Multiple specific issues:
+     - "2 em dashes found in content"
+     - "3 product abbreviations not expanded"
+     - "1 header using title case instead of sentence case"
+   - Instead of "Accessibility (WCAG 2.1 AA)" → Multiple specific issues:
+     - "4 images missing alt text"
+     - "3 links missing descriptive text"
+     - "2 headings not in logical order"
+
+3. **Table Issue Text MUST EXACTLY Match Section Header:**
+   - Table row: "7 external links missing ^ caret"
+   - Section header: "## 7 external links missing ^ caret"
+   - EXACT MATCH including count, wording, and punctuation
+
+4. **User Navigation Workflow:**
+   - User reads detailed sections from top
+   - User scrolls to bottom to see summary table
+   - User sees issue in table (e.g., "12 lists missing blank lines")
+   - User scrolls back up and searches for EXACT text
+   - Finds matching section with full details
+
+---
+
+### Example Complete Output:
+
+```markdown
+## 2 em dashes found in content
+**Priority: High**
+**Affected Files:** 01-overview.adoc
+
+### Details:
+
+1. **Line 45, 01-overview.adoc**
+   - Current: "Platform—features—benefits"
+   - Required: "Platform, features, and benefits"
+   - Why: Red Hat Style Guide prohibits em dashes
+   - Fix: Replace — with commas or periods
+
+2. **Line 89, 01-overview.adoc**
+   - Current: "The process is simple—just follow these steps"
+   - Required: "The process is simple. Just follow these steps."
+   - Why: Use periods instead of em dashes for clarity
+   - Fix: Replace — with period and capitalize next word
+
+---
+
+## 7 external links missing ^ caret
+**Priority: Critical**
+**Affected Files:** 01-overview.adoc, 03-module-01.adoc
+
+### Details:
+
+1. **Line 67, 01-overview.adoc**
+   - Current: `link:https://docs.redhat.com[Documentation]`
+   - Required: `link:https://docs.redhat.com[Documentation^]`
+   - Why: External links without ^ replace current tab, losing place in demo
+   - Fix: Add ^ before closing bracket
+
+[... all other detailed sections ...]
+
+---
+
+## Validation Summary
+
+┌──────────────────────────────────────────┬──────────┬─────────────────────────┐
+│                 Issue                    │ Priority │    Affected Files       │
+├──────────────────────────────────────────┼──────────┼─────────────────────────┤
+│ 7 external links missing ^ caret         │ Critical │ 01-overview.adoc,       │
+│                                          │          │ 03-module-01.adoc       │
+├──────────────────────────────────────────┼──────────┼─────────────────────────┤
+│ 5 clickable images missing ^ caret       │ Critical │ 02-details.adoc         │
+├──────────────────────────────────────────┼──────────┼─────────────────────────┤
+│ 12 lists missing blank lines             │ High     │ 01-overview.adoc,       │
+│                                          │          │ 03-module-01.adoc       │
+├──────────────────────────────────────────┼──────────┼─────────────────────────┤
+│ 2 em dashes found in content             │ High     │ 01-overview.adoc        │
+├──────────────────────────────────────────┼──────────┼─────────────────────────┤
+│ 4 images missing alt text                │ High     │ 03-module-01.adoc       │
+├──────────────────────────────────────────┼──────────┼─────────────────────────┤
+│ 3 product abbreviations not expanded     │ Medium   │ 03-module-01.adoc       │
+├──────────────────────────────────────────┼──────────┼─────────────────────────┤
+│ 2 modules contain duplicate References   │ Medium   │ 03-module-01.adoc,      │
+│ sections                                 │          │ 04-module-02.adoc       │
+└──────────────────────────────────────────┴──────────┴─────────────────────────┘
+
+**Total Issues:** 35 (12 Critical, 18 High, 5 Medium)
+**Files Affected:** 4 files
+```
+
+---
+
+**IMPORTANT:**
+- Output ONLY markdown format (no JSON)
+- Detailed sections come FIRST
+- Summary table comes LAST
+- Issue descriptions must be specific with counts
+- Table text must EXACTLY match section headers
+- Break down generic categories into specific, understandable issues
+
+---
+
+## SCANNING EXECUTION PROTOCOL
+
+**CRITICAL: You MUST follow this exact scanning workflow to ensure complete validation coverage.**
+
+### Scanning Workflow (Execute in Order)
+
+When performing validation, you MUST:
+
+1. **Read entire content**:
+   - Don't skip any files in the provided content
+   - Don't sample or spot-check - scan EVERY line
+   - Process all .adoc files completely
+
+2. **Track violations systematically**:
+   - Count EVERY occurrence of each validation check
+   - Record file name for each violation
+   - Note line numbers or section headers for each violation
+   - Group violations by check type
+
+3. **Build summary FIRST**:
+   - Count all violations across all checks BEFORE writing JSON response
+   - Calculate totals: total_errors, total_warnings, total_improvements
+   - Calculate per-check counts: violations_found for each check type
+   - List affected files for each check type
+   - Build severity_breakdown from counts
+
+4. **Verify summary matches details**:
+   - BEFORE finalizing JSON, verify validation_summary totals equal issues array length
+   - Verify validation_summary.checks_performed counts match detailed findings
+   - Verify validation_summary.severity_breakdown matches issue types
+   - If counts don't match, recount and correct
+
+5. **Report systematically**:
+   - Group issues by check type in the issues array
+   - Within each check type, group by file
+   - Provide specific examples for each violation
+   - Include before/after fixes for each violation
+
+### Scanning Order (Execute All Checks)
+
+1. **External Link Caret Check** (Scan all files)
+   - Pattern: `link:https?://[^\^]+\[[^\]]+\]`
+   - Count: Total violations across all files
+   - Track: File names where violations found
+
+2. **Clickable Image Caret Check** (Scan all files)
+   - Pattern 1: `image::[^[]+\[.*link=https?://[^\^]+\]`
+   - Pattern 2: `link:https?://[^\^]+\[image:`
+   - Count: Total violations across all files
+   - Track: File names where violations found
+
+3. **List Marker Semantic Check** (Scan all sections)
+   - Classify each section by header keywords
+   - Check list markers match section type
+   - Count: Violations by section type (Know/Show/Verify)
+   - Track: Section headers and file names
+
+4. **List Blank Line Check** (Scan all lists)
+   - Check for blank lines before/after lists
+   - Count: Total spacing violations
+   - Track: File names and approximate line numbers
+
+5. **Formatting Consistency Check** (Scan all content)
+   - Check other formatting issues
+   - Count: Total formatting violations
+   - Track: Issue types and file names
+
+6. **Build Summary Table**
+   - Sum all error-level violations → total_errors
+   - Sum all warning-level violations → total_warnings
+   - Sum all improvement suggestions → total_improvements
+   - Populate checks_performed with individual counts
+   - Build severity_breakdown
+
+7. **Write Detailed Issues**
+   - For each violation found, create issue object
+   - Include all required fields (type, category, message, etc.)
+   - Provide current_example and improved_example
+   - Add implementation_steps
+
+8. **Final Verification**
+   - Count issues array length
+   - Compare with validation_summary.total_errors + total_warnings
+   - If mismatch, identify and fix discrepancy
+   - Ensure JSON is valid before returning
+
+### Count Consistency Requirements
+
+**THESE MUST MATCH EXACTLY:**
+
+- `validation_summary.total_errors` = count of `issues` where `type: "error"`
+- `validation_summary.total_warnings` = count of `issues` where `type: "warning"`
+- `validation_summary.checks_performed.external_link_caret.violations_found` = count of external link caret errors in `issues`
+- `validation_summary.checks_performed.clickable_image_caret.violations_found` = count of clickable image caret errors in `issues`
+- `validation_summary.checks_performed.list_marker_semantic.violations_found` = count of list marker warnings in `issues`
+- `validation_summary.checks_performed.list_blank_lines.violations_found` = count of list blank line errors in `issues`
+- `validation_summary.severity_breakdown.error` = `total_errors`
+- `validation_summary.severity_breakdown.warning` = `total_warnings`
+
+**If these don't match, the validation is INCORRECT and must be redone.**
+
+### Error Reporting Standards
+
+Every validation error in the `issues` array MUST include:
+
+- **type**: "error" | "warning" | "improvement"
+- **category**: The check that triggered it (e.g., "external_link_caret", "list_marker_semantic")
+- **message**: Clear description with count (e.g., "7 external links missing required `^` caret")
+- **file**: Exact filename containing issue (e.g., "01-overview.adoc")
+- **why_problematic**: Why this violates standards
+- **business_impact**: How this affects user experience
+- **current_example**: Actual problematic code from the file
+- **improved_example**: Corrected version
+- **implementation_steps**: Array of how to fix it
+
+### No Optional Checks
+
+**DO NOT ask users:**
+- "Do you want to enforce caret for images?"
+- "Should external links open in new tab?"
+- "Would you like to check list formatting?"
+
+**ALL checks listed above are MANDATORY.** Run them all and report all violations.
