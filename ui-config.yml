@@ -7,23 +7,5 @@ default_width: 30
 persist_url_state: true
 
 tabs:
-  # OCP Console
-  # - name: OCP Console
-  #   url: 'https://console-openshift-console.${DOMAIN}'
-
-  # Single terminal
-  # - name: Bastion
-  #   path: /wetty
-  #   port: 443
-
-  # Vertical split terminals
-  # - name: Bastion
-  #   path: /wetty
-  #   port: 443
-  #   secondary_name: Bastion
-  #   secondary_path: /wetty
-  #   secondary_port: 443
-
-  # External page
-  - name: vLLM Playground Docs
-    url: 'https://github.com/micytao/vllm-playground'
+  - name: vLLM Playground
+    url: 'https://vllm.${DOMAIN}:7860/'

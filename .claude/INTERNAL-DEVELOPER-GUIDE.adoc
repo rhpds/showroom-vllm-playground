@@ -601,6 +601,53 @@ All content must follow:
 - ✅ Keyboard-accessible instructions
 - ✅ Clear, inclusive language
 
+### AsciiDoc Formatting (CRITICAL - Added Jan 12, 2026)
+
+**List Formatting Requirements:**
+- ✅ Blank line BEFORE every list
+- ✅ Blank line AFTER every list (before next content)
+- ✅ Blank line after bold headings (`**Text:**`) before lists
+- ✅ Blank line after colons (`:`) before lists
+
+**Image Requirements:**
+- ✅ All images must include `link=self,window=blank`
+- ✅ Makes images clickable to open full-size in new tab
+- ✅ Prevents users from losing their place
+
+**Why This Matters:**
+- Lists without blank lines cause text to run together when rendered
+- Makes content unreadable and unprofessional
+- Damages Red Hat brand credibility
+- Images without clickable links frustrate users trying to see details
+
+**Example:**
+```asciidoc
+❌ WRONG - Text runs together:
+**Prerequisites:**
+* OpenShift installed
+* Admin access
+Next section...
+
+✅ CORRECT - Proper spacing:
+**Prerequisites:**
+
+* OpenShift installed
+* Admin access
+
+Next section...
+
+❌ WRONG - Image not clickable:
+image::diagram.png[Diagram,width=700]
+
+✅ CORRECT - Clickable image:
+image::diagram.png[Diagram,link=self,window=blank,width=700]
+```
+
+**Verification:**
+- `/verify-content` actively scans for these violations
+- Provides specific before/after examples
+- Shows exact file locations and fix instructions
+
 ---
 
 ## Maintenance and Updates
@@ -623,6 +670,24 @@ All content must follow:
 6. Document changes in this guide
 
 ### Version History
+
+**January 12, 2026** - Content Quality and Red Hat Style Enforcement
+- **AsciiDoc Formatting**: Added mandatory blank line requirements for all lists
+- **Clickable Images**: All images must include `link=self,window=blank`
+- **Plagiarism Prevention**: Added Section 7 to SKILL-COMMON-RULES.md for content originality
+- **Em Dash Removal**: Added Section 8 to SKILL-COMMON-RULES.md prohibiting em dashes (—)
+- Updated verification prompts to actively scan for:
+  - List formatting violations
+  - Missing clickable image links
+  - Plagiarized or copied content
+  - Em dash usage (must use commas, periods, or en dashes instead)
+- Updated redhat_style_guide_validation.txt with punctuation and plagiarism sections
+- Fixed demo template (02-details.adoc) with proper spacing
+- Added AsciiDoc Formatting, Plagiarism Prevention, and Em Dash sections to Quality Standards
+- Created comprehensive CHANGELOG-2026-01-12.md with 6 major sections
+- Updated CLAUDE-SKILLS-GUIDE.adoc with plagiarism and em dash warnings
+- Deployed to 3 repositories: genai, vllm, self-service
+- Files changed: 11 files, 871 insertions(+), 14 deletions(-)
 
 **January 9, 2026** - Interactive Questions Update
 - Made all questions conversational and friendly

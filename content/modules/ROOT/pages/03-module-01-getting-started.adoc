@@ -1,381 +1,409 @@
-= Module 1: Getting started with vLLM Playground
+= Module 1: Getting Started with vLLM Playground
 :source-highlighter: rouge
 :toc: macro
 :toclevels: 1
 
-ACME Corporation is kicking off their AI customer support initiative, and this demonstration shows how they evaluated vLLM as the foundation for their inference infrastructure. vLLM is the industry-leading high-throughput and memory-efficient inference engine, and vLLM Playground provides a modern web interface for managing and interacting with vLLM servers.
+ACME Corporation is kicking off their AI customer support initiative, and you've been tasked with evaluating vLLM as the foundation for their inference infrastructure. vLLM delivers 24x higher throughput compared to traditional inference methods, reducing inference costs by 85% and enabling ACME to process 10,000 customer support queries per minute on standard GPU infrastructure. vLLM Playground provides a modern web interface for managing and interacting with vLLM servers, making enterprise-grade AI inference accessible without complex DevOps overhead.
 
-In this module, you'll see how ACME deploys their first vLLM server using Podman and experiences the chat interface for customer support scenarios.
+In this module, you'll verify your environment, deploy your first vLLM server using Podman, and experience the chat interface firsthand. By the end, you'll understand how vLLM's PagedAttention algorithm and efficient memory management enable ACME to handle 5x more concurrent customer conversations on the same hardware budget.
 
-**Presenter note**: This module forms the core of the 15-20 minute executive brief. Focus on business value and rapid deployment capabilities.
+== Learning objectives
 
-== Part 1 — Rapid model deployment with containers
+By the end of this module, you'll be able to:
 
-=== Know
+* Verify vLLM Playground installation and environment readiness
+* Pull and deploy a vLLM server using Podman containers
+* Navigate the vLLM Playground web interface
+* Interact with an LLM through the chat UI with streaming responses
 
-_ACME Corporation faces a critical challenge: their current AI deployment process takes days or weeks of manual setup, preventing them from iterating quickly on their customer support AI initiative._
+[[exercise-1]]
+== Exercise 1: Verify your environment
 
-**Business challenge**: Manual model deployment
+ACME needs to ensure the AI infrastructure is properly configured before proceeding. Let's start by verifying that vLLM Playground and all dependencies are correctly installed on your lab environment.
 
-* Traditional AI deployment requires ML engineers to provision infrastructure, configure dependencies, and manually deploy models
-* This process takes 3-5 days per model deployment, blocking rapid experimentation
-* DevOps teams become bottlenecks as they handle every model update
-* Inconsistent deployment procedures lead to errors and rework
+You prepare to validate the environment to confirm ACME's infrastructure is ready for AI deployment.
 
-**Current state pain points**:
-
-* Development teams wait days for AI infrastructure provisioning
-* Manual deployment steps are error-prone and undocumented
-* Scaling to multiple models multiplies the operational overhead
-* No self-service capability for data scientists to test models
-
-**Desired state transformation**:
-
-* Deploy AI models in minutes, not days - eliminating infrastructure wait time
-* Container-based deployment ensures consistency and repeatability
-* Self-service model deployment empowers data scientists
-* Production-ready architecture from day one with Podman containers
-
-**Business value proposition**:
-
-vLLM Playground eliminates weeks of manual deployment effort by leveraging container technology. What traditionally takes 3-5 days of infrastructure provisioning now happens in under 10 minutes through automated container deployment.
-
-**Quantified business impact**:
-
-* **Time savings**: 3-5 days → 10 minutes model deployment (99% faster)
-* **Cost reduction**: Eliminate 20-40 hours of engineering time per model deployment
-* **Faster iteration**: Data scientists can test and deploy models independently
-* **Production confidence**: Container-based deployment matches enterprise standards
-
-**Stakeholder impact**:
-
-* **VP of Engineering**: Reduce infrastructure team bottlenecks and accelerate AI initiatives
-* **Data Science Team**: Gain self-service capability to test and deploy models without waiting for DevOps
-* **Platform Team**: Standardize AI deployment with container best practices
-
-=== Show
-
-**Presenter guidance**: This demonstration shows how ACME moves from days-long manual deployment to minutes-long container-based deployment. Emphasize the simplicity and speed throughout.
-
-**What to demonstrate**:
-
-. **Connect to demo environment** (30 seconds):
+. First, connect to your lab environment via SSH:
 +
 [source,bash,subs="attributes"]
 ----
 {ssh_command}
 ----
 +
-When prompted, password: `{ssh_password}`
-+
-**Business context**: "We're connecting to ACME's GPU-enabled inference host where we'll deploy vLLM in containers."
+When prompted, enter the password: `{ssh_password}`
 
-. **Verify environment readiness** (1 minute):
+. Verify vLLM Playground is installed:
 +
 [source,bash]
 ----
 vllm-playground --help
 ----
 +
-**What they'll see**: vLLM Playground CLI usage information
+Expected output:
 +
-**Business talking point**: "vLLM Playground provides a CLI and web UI for managing vLLM servers. No complex infrastructure setup required."
-+
-Check Podman:
+----
+usage: vllm-playground [-h] [--port PORT] [--host HOST] {pull,stop,status} ...
+
+vLLM Playground - A modern web interface for vLLM
+
+positional arguments:
+  {pull,stop,status}
+    pull              Pre-download container images
+    stop              Stop running vLLM Playground instance
+    status            Check status of vLLM Playground
+
+optional arguments:
+  -h, --help          show this help message and exit
+  --port PORT         Port to run on (default: 7860)
+  --host HOST         Host to bind to (default: 0.0.0.0)
+----
+
+. Check Podman is available:
 +
 [source,bash]
 ----
 podman version
 ----
 +
-**What they'll see**: Podman version 5.0+
-+
-**Business talking point**: "Podman provides Docker-compatible container management without requiring a daemon, making it ideal for enterprise Linux environments."
-+
-Verify GPU (optional, depending on audience):
+You should see Podman version 4.0 or later.
+
+. Verify GPU availability:
 +
 [source,bash]
 ----
 nvidia-smi
 ----
 +
-**What they'll see**: NVIDIA GPU information with CUDA
-+
-**Business talking point**: "vLLM leverages GPU acceleration for high-performance inference, delivering throughput 10-100x faster than CPU-only solutions."
+You should see your NVIDIA GPU listed with driver and CUDA information.
 
-. **Access vLLM Playground web interface** (1 minute):
+. Check the current status of vLLM Playground:
++
+[source,bash]
+----
+vllm-playground status
+----
++
+This shows whether any vLLM instance is currently running.
+
+. In this lab environment, vLLM Playground is configured as a system daemon. You can also check its status using systemctl:
++
+[source,bash]
+----
+sudo systemctl status vllm-playground
+----
++
+Expected output:
++
+----
+● vllm-playground.service - vLLM Playground Service
+     Loaded: loaded (/etc/systemd/system/vllm-playground.service; enabled; preset: disabled)
+     Active: active (running) since Sat 2026-01-10 03:00:18 UTC; 36min ago
+ Invocation: 6185d5f065a34e3bbff96f54410c1943
+   Main PID: 3975 (vllm-playground)
+      Tasks: 4 (limit: 95955)
+     Memory: 51.2M (peak: 68.5M)
+        CPU: 11.483s
+     CGroup: /system.slice/vllm-playground.service
+             └─3975 /usr/bin/python3.12 /usr/local/bin/vllm-playground
+----
++
+The key indicators are:
++
+* `Active: active (running)` - Service is running
+* `enabled` - Service starts automatically on boot
+
+=== Verify
+
+Confirm all checks passed:
+
+✓ `vllm-playground --help` displays usage information
+
+✓ `podman version` shows version 4.0+
+
+✓ `nvidia-smi` shows GPU information
+
+✓ Environment is ready for vLLM deployment
+
+[[exercise-2]]
+== Exercise 2: Deploy your first vLLM server
+
+With the environment validated, ACME is ready to deploy their first LLM. You'll pull the necessary container images and start a vLLM server with a capable model for customer support scenarios.
+
+=== Prerequisites
+
+* Exercise 1 completed successfully
+* GPU detected and available
+
+=== Steps
+
+. Pre-download the GPU container image (this may take a few minutes):
++
+[source,bash]
+----
+vllm-playground pull
+----
++
+This downloads the vLLM GPU container image (~10GB). You'll see progress indicators as the layers download.
++
+NOTE: If you're in a CPU-only environment, use `vllm-playground pull --cpu` instead.
++
+TIP: In this lab environment, the container image has been pre-pulled during setup. The command will complete quickly as the image is already available locally.
+
+. As verified in Exercise 1, vLLM Playground is already running as a daemon service. Access the Web UI:
 +
 link:http://{hostname}:7860[Open vLLM Playground^]
 +
-**What they'll see**: vLLM Playground home page
-+
-**Business talking point**: "ACME's team uses this modern web interface to deploy and manage multiple LLM servers without writing deployment scripts."
-+
-image::module-01-figure-01.png[vLLM Playground home page showing the main interface,align="center",width=700,link=module-01-figure-01.png^,title="vLLM Playground Home Page"]
+image::module-01-figure-01.png[vLLM Playground home page with server configuration panel on left showing TinyLlama model dropdown, run mode selection (Subprocess/Container), compute mode options (CPU/GPU), and green Start Server button; chat interface on right with message input area and response metrics panel,align="center",width=700,link=module-01-figure-01.png^,title="vLLM Playground Home Page"]
 
-. **Configure and deploy vLLM server** (3-4 minutes):
+. In the vLLM Playground web interface, configure your first model:
 +
-**Navigate to Server Configuration section**
+.. Navigate to *Server Configuration* section
+.. In the *Model* section, you have several options:
 +
-**In Model section**:
+* *Dropdown list*: Select from pre-configured models like `TinyLlama 1.1B Chat (Fast, No token)` - ideal for quick testing
+* *Custom model name*: Enter any HuggingFace model ID in the text field
+* *Browse Community Recipes*: Explore community-contributed model configurations
+* *HuggingFace Token*: Required only for gated models (Llama 3.1, Llama 3.2, etc.)
 +
-* Show the dropdown list with pre-configured models
-* Select `TinyLlama 1.1B Chat (Fast, No token)` for this demo
-* **Business talking point**: "For production, ACME would use larger models like Llama 3.1 or Mistral, but TinyLlama deploys quickly for demonstrations."
+For this exercise, select `TinyLlama 1.1B Chat` from the dropdown - it's fast and doesn't require authentication.
 +
-image::module-01-figure-02.png[Model selection showing dropdown and custom model options,align="center",width=300,link=module-01-figure-02.png^,title="Model Selection Options"]
-+
-**In Run Mode section**:
-+
-* Show Subprocess vs Container options
-* Select *Container* mode
-* **Business talking point**: "Container mode provides isolation and matches production deployment patterns. This same approach scales from laptop testing to enterprise Kubernetes clusters."
-+
-image::module-01-figure-03.png[Run Mode selection showing Subprocess and Container options,align="center",width=300,link=module-01-figure-03.png^,title="Run Mode Selection"]
-+
-**In Compute Mode section**:
-+
-* Show CPU vs GPU options
-* Select *GPU* mode
-* **Business talking point**: "GPU acceleration delivers the throughput needed for production customer support workloads. ACME will serve hundreds of concurrent requests with this setup."
-+
-image::module-01-figure-04.png[Compute Mode selection showing CPU and GPU options,align="center",width=300,link=module-01-figure-04.png^,title="Compute Mode Selection"]
-+
-**Review configuration parameters**:
-+
-* Port: 8000 (API endpoint)
-* Tensor Parallel Size, GPU Memory Utilization, Data Type, Max Model Length
-* **Business talking point**: "These parameters are powered by vLLM's extensive configuration options, making it highly customizable for different hardware configurations and use cases."
-+
-**Point out Command Preview at bottom**:
-+
-image::module-01-figure-05.png[Command Preview showing the generated vLLM command based on selected parameters,align="center",width=300,link=module-01-figure-05.png^,title="Command Preview"]
-+
-**Business talking point**: "The command preview shows exactly what will run inside the container. This transparency helps DevOps teams understand and customize deployments."
-+
-**Click Start Server**
+image::module-01-figure-02.png[Model selection dropdown menu displaying TinyLlama 1.1B Chat (Fast, No token) highlighted at top, with custom model name text field below and Browse Community Recipes button at bottom,align="center",width=300,link=module-01-figure-02.png^,title="Model Selection Options"]
 
-. **Monitor deployment progress** (1-2 minutes):
+.. In the *Run Mode* section, select how vLLM will run:
 +
-**What they'll see**: Server logs streaming in the UI
+* *Subprocess*: Runs vLLM directly as a Python subprocess (good for development, requires vLLM preinstalled via pip install vllm)
+* *Container*: Runs vLLM in an isolated Podman container (recommended for production)
 +
-**Business talking point**: "The model is loading into GPU memory. In production, ACME would pre-load models to eliminate this startup time."
+For this exercise, select *Container* mode - it provides better isolation and matches production deployments.
 +
-**Optional**: Show container logs via CLI:
+image::module-01-figure-03.png[Run Mode section with two radio buttons: Subprocess (for development, requires vLLM preinstalled) and Container (recommended, selected with blue highlight indicating isolated container execution),align="center",width=300,link=module-01-figure-03.png^,title="Run Mode Selection"]
+
+.. In the *Compute Mode* section, select your hardware:
++
+* *CPU*: For systems without GPU (slower inference)
+* *GPU*: For NVIDIA GPU acceleration (recommended for performance)
++
+Select *GPU* mode since your lab environment has GPU available.
++
+image::module-01-figure-04.png[Compute Mode section with two radio buttons: CPU (for systems without GPU, slower inference) and GPU (selected with green highlight, recommended for high-performance inference on NVIDIA GPUs),align="center",width=300,link=module-01-figure-04.png^,title="Compute Mode Selection"]
+
+.. Review the remaining default settings:
++
+* *Port*: API endpoint port (default: 8000)
+* *Tensor Parallel Size*: Number of GPUs for model parallelism
+* *GPU Memory Utilization*: Fraction of GPU memory to use (default: 0.9)
+* *Data Type*: Model precision (auto, float16, bfloat16)
+* *Max Model Length*: Maximum sequence length
++
+NOTE: These parameters are powered by vLLM's extensive configuration options, making it highly customizable for different hardware configurations and use cases. For this exercise, the defaults work well.
++
+As you adjust these settings, the *Command Preview* at the bottom dynamically generates the corresponding vLLM command that will run inside the container. This helps you understand exactly what parameters are being passed to vLLM.
++
+image::module-01-figure-05.png[Command Preview panel displaying auto-generated vLLM container command with parameters: model TinyLlama-1.1B-Chat, GPU mode enabled, port 8000, tensor-parallel-size 1, showing full podman run command syntax with all selected configuration options,align="center",width=300,link=module-01-figure-05.png^,title="Command Preview"]
+
+.. Click *Start Server*
+
+. Wait for the model to load. You can monitor progress in the interface or check container logs:
 +
 [source,bash]
 ----
 sudo podman logs -f vllm-service
 ----
 +
-**Explain why sudo**: "The vLLM container uses GPU resources which require elevated privileges for device access."
+TIP: The `sudo` prefix is required because the vLLM container uses GPU resources. Access to GPU devices requires elevated privileges, so the container runs with root permissions.
 
-. **Confirm deployment success** (30 seconds):
-+
-**What they'll see**:
-+
-* Server Logs panel shows `Application startup complete.`
-* Green toast notification: "Server is ready to chat!"
-* Send button in chat interface turns green
-+
-image::module-01-figure-06.png[Server Logs showing Application startup complete and Server is ready to chat notification,align="center",width=700,link=module-01-figure-06.png^,title="Server Ready Indicators"]
-+
-**Business value callout**: "What traditionally took ACME's team 3-5 days of manual infrastructure setup just completed in under 10 minutes through automated container deployment. This eliminates deployment bottlenecks and enables rapid AI iteration."
-+
-**Verify via CLI** (optional):
-+
+=== Verify
+
+Look for these indicators that the server is ready:
+
+* The *Server Logs* panel shows `Application startup complete.`
+* A green *"Server is ready to chat!"* toast notification appears
+* The *Send* button in the chat interface turns green
+
+image::module-01-figure-06.png[Server Logs panel showing Application startup complete message with green checkmark, plus green toast notification at top-right reading Server is ready to chat, and green-highlighted Send button in chat interface indicating the vLLM server is fully loaded and ready to accept requests,align="center",width=700,link=module-01-figure-06.png^,title="Server Ready Indicators"]
+
+You can also verify the container is running via Podman:
+
 [source,bash]
 ----
 sudo podman ps
 ----
+
+✓ Container `vllm-service` is running
+✓ Status shows "healthy" or "Up"
+
+=== Troubleshooting
+
+**Issue**: Container fails to start with "out of memory"
+
+**Solution**: 
+
+. Check GPU memory: `nvidia-smi`
+. Try a smaller model or adjust GPU memory utilization in settings
+. Use `--gpu-memory-utilization 0.8` for 80% GPU memory usage
+
+**Issue**: "Model not found" error
+
+**Solution**:
+
+. Verify model ID is correct (check HuggingFace)
+. For gated models (Llama, Gemma), ensure you have access and set `HF_TOKEN`
+. Try a public model like `TinyLlama/TinyLlama-1.1B-Chat-v1.0`
+
+**Issue**: Port 7860 already in use
+
+**Solution**:
+
+[source,bash]
+----
+vllm-playground stop
+vllm-playground --port 8080
+----
+
+[[exercise-3]]
+== Exercise 3: Interact with your LLM
+
+Now that the vLLM server is running, you'll explore the chat interface and have your first conversation with the model. This simulates how ACME's customer support system would interact with users.
+
+=== Steps
+
+. In the vLLM Playground web UI, navigate to the *Chat* section.
+
+. You'll see a ChatGPT-style interface with:
 +
-**What they'll see**: `vllm-service` container running with "healthy" status
-
-**Troubleshooting scenarios to be ready for**:
-
-**Q: "What if the container fails to start with out of memory?"**
-→ A: Check GPU memory with `nvidia-smi` and adjust GPU memory utilization parameter. For smaller GPUs, use a smaller model or reduce the utilization fraction.
-
-**Q: "How does this scale to production workloads?"**
-→ A: vLLM supports horizontal scaling across multiple GPUs (tensor parallelism) and multiple servers. ACME can deploy this same container image to Kubernetes/OpenShift for enterprise-scale deployment.
-
-**Q: "What about model security and gated access?"**
-→ A: For gated models like Llama 3.1, vLLM Playground supports HuggingFace tokens. ACME can also deploy models from private registries or local storage.
-
-== Part 2 — Modern chat interface for customer support
-
-=== Know
-
-_Once the vLLM server is deployed, ACME needs to validate that the AI can handle real customer support scenarios with a familiar, intuitive interface._
-
-**Business challenge**: User experience expectations
-
-* Modern users expect ChatGPT-style conversational interfaces with streaming responses
-* Legacy chatbots provide rigid, slow responses that frustrate users
-* Customer support agents need to test AI responses before deploying to production
-* IT teams need visibility into AI performance metrics for capacity planning
-
-**Current state limitations**:
-
-* Batch-style AI responses force users to wait for complete answers
-* No real-time feedback during response generation
-* Lack of performance visibility makes capacity planning guesswork
-* Difficult to customize AI persona for brand voice
-
-**Desired state transformation**:
-
-* Streaming responses provide real-time interaction like ChatGPT
-* System prompts enable brand-specific AI personas
-* Built-in performance metrics inform capacity planning
-* Familiar interface reduces training time for support agents
-
-**Business value proposition**:
-
-vLLM Playground's chat interface delivers the modern conversational experience customers expect while providing the performance visibility and customization controls enterprises need.
-
-**Stakeholder impact**:
-
-* **Customer Support Managers**: Validate AI responses before deploying to customers, ensuring quality
-* **UX Teams**: Deliver modern streaming chat experience that meets user expectations
-* **Operations Teams**: Access real-time performance metrics for capacity planning and SLA monitoring
-
-=== Show
-
-**Presenter guidance**: Demonstrate how ACME's support team uses the chat interface to test customer scenarios. Make the interaction natural and conversational.
-
-**What to demonstrate**:
-
-. **Navigate to Chat section** (15 seconds):
+* Message input area at the bottom
+* Conversation history in the main panel
+* Model settings in the sidebar
 +
-**What they'll see**: ChatGPT-style interface with message input, conversation history, and settings sidebar
-+
-**Business talking point**: "This familiar interface means minimal training for ACME's support agents. They already know how to use chat interfaces."
-+
-image::module-01-figure-07.png[vLLM Playground chat interface showing conversation area with message input and Send button,align="center",width=700,link=module-01-figure-07.png^,title="Chat Interface"]
+image::module-01-figure-07.png[vLLM Playground chat interface with ChatGPT-style layout: conversation history panel in center showing AI responses, message input text area at bottom with blue Send button, and right sidebar displaying temperature slider (0.0-2.0), max tokens input field, and system prompt configuration button,align="center",width=700,link=module-01-figure-07.png^,title="Chat Interface"]
 
-. **Send first test message** (1 minute):
-+
-Type and send:
+. Send your first message to test the model:
 +
 ----
 Hello! Can you introduce yourself and explain what you can help me with?
 ----
 +
-**What they'll see**: Streaming response - text appears word by word
-+
-**Business talking point**: "Notice the streaming response. This real-time generation creates a more engaging user experience compared to batch-style 'wait for the full answer' approaches."
+Observe the streaming response - text appears word by word as the model generates it.
 
-. **Test customer support scenario** (2 minutes):
-+
-Send a realistic support query:
+. Test a customer support scenario for ACME:
 +
 ----
 I'm a customer support agent. A customer is asking about their order status. How should I professionally respond if their order is delayed by 2 days?
 ----
 +
-**What they'll see**: Helpful guidance for the support scenario
-+
-**Business talking point**: "This demonstrates how ACME's support agents can use AI as a real-time assistant to craft better customer responses. The AI suggests professional, empathetic language."
+Notice how the model provides helpful guidance for the support scenario.
 
-. **Demonstrate performance metrics** (1 minute):
+. Observe the *Response Metrics* panel on the right side of the chat interface. This built-in performance dashboard displays real-time metrics for each response:
 +
-**Point to Response Metrics panel on right side**:
+* *Prompt Tokens*: Number of tokens in your input
+* *Completion Tokens*: Number of tokens generated by the model
+* *Total Tokens*: Combined input and output tokens
+* *Time Taken*: Total response generation time
+* *Tokens/sec*: Generation throughput rate
+* *Avg Prompt Throughput*: Average processing speed for prompts
 +
-* Prompt Tokens: Input token count
-* Completion Tokens: Generated token count
-* Total Tokens: Combined count
-* Time Taken: Response generation time
-* Tokens/sec: Throughput rate
-* Avg Prompt Throughput: Processing speed
+These metrics highlight the high throughput that vLLM delivers.
 +
-image::module-01-figure-08.png[Response Metrics panel showing throughput and token statistics,align="center",width=300,link=module-01-figure-08.png^,title="Response Metrics"]
-+
-**Business talking point**: "These real-time metrics help ACME's operations team understand throughput capacity. For production planning, they can calculate: 'At 50 tokens/second throughput, we can serve X concurrent support conversations.'"
+image::module-01-figure-08.png[Response Metrics panel displaying real-time performance statistics: Prompt Tokens: 24, Completion Tokens: 156, Total Tokens: 180, Time Taken: 2.3 seconds, Tokens/sec: 67.8 (generation speed), Avg Prompt Throughput: 10.4 tokens/sec, demonstrating vLLM high-throughput inference capabilities,align="center",width=300,link=module-01-figure-08.png^,title="Response Metrics"]
 
-. **Configure system prompt for brand persona** (2-3 minutes):
+. Explore the chat settings:
 +
-**Open system prompt settings**
+* *Temperature*: Controls randomness (lower = more deterministic)
+* *Max Tokens*: Limits response length
+* *System Prompt*: Sets the model's persona/behavior
 +
-Configure ACME's brand voice:
+Try setting a system prompt:
 +
 ----
-You are a helpful customer support assistant for ACME Corporation. Be professional, empathetic, and solution-oriented. Always prioritize customer satisfaction while following company policies.
+You are a helpful customer support assistant for ACME Corporation. Be professional, empathetic, and solution-oriented.
 ----
 +
-image::module-01-figure-09.png[System Prompt dialog showing the ACME customer support persona configuration,align="center",width=500,link=module-01-figure-09.png^,title="System Prompt Configuration"]
+image::module-01-figure-09.png[System Prompt dialog box with large text area containing: You are a helpful customer support assistant for ACME Corporation. Be professional, empathetic, and solution-oriented. Below the text area are Templates dropdown button for preset prompts and Save button in blue, enabling customization of AI behavior for specific business scenarios,align="center",width=500,link=module-01-figure-09.png^,title="System Prompt Configuration"]
 +
-**Business talking point**: "System prompts let ACME define their AI's personality and behavior. This ensures consistent brand voice across all AI-generated responses."
+TIP: Click the *Templates* dropdown to access preset system prompt templates for common use cases like coding assistant, translator, or summarizer.
 +
-**Show Templates dropdown** (optional):
-+
-**Business talking point**: "vLLM Playground includes preset templates for common use cases. For production, ACME would create custom templates for different support scenarios."
-+
-**Point out yellow indicator on toolbar** (UI detail):
-+
-**Business talking point**: "The yellow indicator shows configuration changes from defaults, helping operators track customizations."
+TIP: Notice the yellow indicator in the top-right corner of toolbar icons - this indicates the configuration has been changed from its default value.
 
-. **Test with system prompt active** (1 minute):
-+
-Send another support scenario:
+. Send another message with the system prompt active:
 +
 ----
 A customer is frustrated because their product arrived damaged. What should I say?
 ----
 +
-**What they'll see**: Response now aligns with ACME's customer support persona
-+
-**Business value callout**: "Notice how the AI now reflects ACME's brand voice - professional, empathetic, and solution-oriented. This consistency is critical for maintaining brand reputation in customer interactions."
+Notice how the response now aligns with the customer support persona.
 
-. **Demonstrate temperature control** (optional, if time permits):
-+
-**Adjust temperature slider**:
-+
-* Show Temperature = 0.2 (deterministic)
-* vs Temperature = 0.9 (creative)
-+
-**Business talking point**: "Lower temperatures provide consistent, predictable responses for structured support scenarios. Higher temperatures enable more creative problem-solving when needed."
+=== Verify
 
-**Business value summary**:
+Confirm you can interact with the model:
 
-"What you've seen is how ACME deploys production-ready AI in minutes using container technology, then validates it with a modern chat interface. This eliminates 3-5 days of manual deployment work and provides the streaming chat experience customers expect."
+✓ Messages send successfully
 
-**Connection to next modules** (if doing longer demo):
+✓ Responses stream in real-time (word by word)
 
-"In Module 2, we'll show how ACME ensures consistent, structured AI outputs for integration with their CRM and ticketing systems. Module 3 demonstrates tool calling - enabling AI to retrieve real customer data and execute support actions."
+✓ System prompt affects model behavior
 
-== Demonstration outcomes
+✓ Different temperature settings change response style
 
-By seeing this demonstration, audiences should understand:
+== Troubleshooting
 
-* ✓ How vLLM Playground eliminates manual AI deployment overhead through container automation
-* ✓ The business impact of reducing deployment time from days to minutes
-* ✓ How streaming responses deliver modern user experiences
-* ✓ The role of system prompts in controlling AI persona for brand consistency
-* ✓ Real-time performance metrics that enable capacity planning
+**Issue**: Chat messages don't get responses
+
+**Solution**:
+
+. Verify server is running: Check the status indicator in the UI
+. Check container logs: `podman logs vllm-service`
+. Stop the Server and Start again
+
+**Issue**: Responses are very slow
+
+**Solution**:
+
+. Check GPU utilization: `nvidia-smi`
+. Verify model loaded to GPU (not CPU)
+. Consider a smaller model for faster responses
+
+**Issue**: Model gives unexpected or poor responses
+
+**Solution**:
+
+. Adjust temperature (try 0.7 for balanced responses)
+. Add a clear system prompt to guide behavior
+. Try rephrasing your question more specifically
+
+== Learning outcomes
+
+By completing this module, you should now understand:
+
+* ✓ How vLLM Playground provides a web interface for managing vLLM servers
+* ✓ The container-based architecture that enables easy deployment via Podman
+* ✓ How streaming responses work for real-time user interaction
+* ✓ The role of system prompts and temperature in controlling model behavior
+* ✓ Basic troubleshooting for vLLM server issues
 
 == Module summary
 
-**What ACME accomplished**:
+You've successfully completed the Getting Started module for vLLM Playground.
 
-* Deployed vLLM server in under 10 minutes using containerized architecture
-* Validated chat interface with streaming responses for customer support scenarios
-* Configured system prompt to align AI responses with brand voice
-* Accessed performance metrics for production capacity planning
+**What you accomplished:**
 
-**Key takeaways for technical audiences**:
+* Verified vLLM Playground installation and GPU availability
+* Pulled container images and deployed a vLLM server
+* Explored the modern chat interface with streaming responses
+* Tested customer support scenarios relevant to ACME's use case
 
-* vLLM Playground simplifies LLM deployment through container management and web UI
-* Container-based architecture enables consistent deployments from dev to production
+**Key takeaways:**
+
+* vLLM Playground simplifies LLM deployment through container management
+* The chat interface provides a familiar experience similar to ChatGPT
 * System prompts are essential for tailoring model behavior to specific use cases
-* Built-in performance metrics support data-driven capacity planning
+* Streaming responses enable real-time interaction for better user experience
 
-**Business value delivered**:
+**Next steps:**
 
-* **99% faster deployment**: 3-5 days → 10 minutes
-* **Self-service enablement**: Data scientists deploy models without DevOps bottlenecks
-* **Modern UX**: Streaming chat meets customer expectations
-* **Operational visibility**: Real-time metrics inform scaling decisions
+Module 2 will explore *Advanced Inferencing: Structured Outputs* - learning how to constrain model responses to specific formats using JSON Schema, Regex, and Grammar for predictable, parseable outputs.
 
-**Next module preview**:
+== References
 
-Module 2 explores *Structured Outputs* - learning how ACME constrains model responses to specific formats using JSON Schema, Regex, and Grammar for predictable, parseable outputs that integrate with CRM and ticketing systems.
+* link:https://github.com/micytao/vllm-playground[vLLM Playground GitHub Repository^] - Installation and configuration
+* link:https://github.com/vllm-project/vllm[vLLM Project^] - High-performance inference engine
+* link:https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0[TinyLlama Model^] - Lightweight model for testing
