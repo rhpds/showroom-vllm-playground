@@ -163,17 +163,20 @@ After presenting this demo, follow these steps:
 
 == Demonstration delivery tips
 
-**For shorter demos (15-20 min)**:
+=== For shorter demos (15-20 min)
+
 * Focus on Module 1 (deployment + chat interface)
 * Mention structured outputs and tool calling as advanced capabilities
 * Emphasize 99% deployment time reduction and modern UX
 
-**For standard demos (30-45 min)**:
+=== For standard demos (30-45 min)
+
 * Modules 1-3 (deployment, structured outputs, tool calling)
 * This covers the essential value proposition for most audiences
 * Provides enough depth for technical evaluation
 
-**For deep dives (60 min)**:
+=== For deep dives (60 min)
+
 * All 5 modules with full technical depth
 * Include MCP integration and performance testing
 * Suitable for technical teams evaluating production deployment
