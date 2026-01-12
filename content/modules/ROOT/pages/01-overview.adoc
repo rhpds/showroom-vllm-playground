@@ -104,19 +104,22 @@ If vLLM Playground proves effective for ACME's use case, here are the anticipate
 
 == Demonstration flow and timing guidance
 
-**15-20 minute executive brief** (Module 1 only):
-* Focus: Core business value and vLLM deployment demonstration
-* Highlights: Show rapid model serving with Podman, chat interface demo
-* Skip: Detailed technical features, save for longer demos
+=== 15-20 minute executive brief (Module 1 only)
 
-**30-45 minute standard technical demo** (Modules 1-3):
-* Focus: Getting Started, Structured Outputs, Tool Calling
-* Highlights: Model deployment, JSON Schema validation, custom tool definition
-* Skip or summarize: MCP integration and performance testing
+* **Focus**: Core business value and vLLM deployment demonstration
+* **Highlights**: Show rapid model serving with Podman, chat interface demo
+* **Skip**: Detailed technical features, save for longer demos
 
-**60 minute deep technical dive** (All 5 modules):
-* Focus: Complete demonstration of all capabilities
-* Highlights: Full technical depth with performance benchmarking
-* Include: All advanced features, real-world integration scenarios
+=== 30-45 minute standard technical demo (Modules 1-3)
 
-**Presenter note**: Adapt the demonstration based on audience priorities and time constraints. Each module is self-contained and can be demonstrated independently or combined based on customer interests.
+* **Focus**: Getting Started, Structured Outputs, Tool Calling
+* **Highlights**: Model deployment, JSON Schema validation, custom tool definition
+* **Skip or summarize**: MCP integration and performance testing
+
+=== 60 minute deep technical dive (All 5 modules)
+
+* **Focus**: Complete demonstration of all capabilities
+* **Highlights**: Full technical depth with performance benchmarking
+* **Include**: All advanced features, real-world integration scenarios
+
+NOTE: Adapt the demonstration based on audience priorities and time constraints. Each module is self-contained and can be demonstrated independently or combined based on customer interests.
