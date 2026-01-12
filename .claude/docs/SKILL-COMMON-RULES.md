@@ -99,7 +99,98 @@ include::partial$_attributes.adoc[]
 
 ---
 
-### 4. Image Path Conventions (REQUIRED)
+### 4. AsciiDoc List Formatting (REQUIRED)
+
+**Rule**: All lists must have proper blank lines to render correctly.
+
+**CRITICAL**: Improper list formatting causes text to run together when rendered, making content unreadable.
+
+**Required blank lines**:
+1. **Blank line BEFORE the list**
+2. **Blank line AFTER the list** (before next content)
+3. **Blank line after headings/bold text before lists**
+
+**CORRECT formatting**:
+```asciidoc
+Some introductory text.
+
+* First list item
+* Second list item
+* Third list item
+
+Next paragraph or section.
+```
+
+**CORRECT with bold heading**:
+```asciidoc
+**Heading before list:**
+
+* First item
+* Second item
+* Third item
+
+Next content.
+```
+
+**CORRECT with numbered list**:
+```asciidoc
+Follow these steps:
+
+. Step 1
+. Step 2
+. Step 3
+
+After the steps, continue with...
+```
+
+**INCORRECT formatting** (causes rendering issues):
+```asciidoc
+❌ BAD:
+Some text:* Item 1
+* Item 2
+Next paragraph
+
+❌ BAD:
+**Heading:*** Item 1
+* Item 2
+
+❌ BAD:
+* Item 1
+* Item 2
+Next paragraph (no blank line)
+```
+
+**Common scenarios that need blank lines**:
+- After colons (`:`) before lists
+- After bold text (`**Text:**`) before lists
+- Between list and next heading
+- Between list and next paragraph
+- Between different list types (unordered to ordered)
+
+**Nested lists**:
+```asciidoc
+* Parent item
+** Nested item 1
+** Nested item 2
+* Second parent item
+```
+
+**Definition lists** (also need blank lines):
+```asciidoc
+Term 1::
+Description for term 1
+
+Term 2::
+Description for term 2
+
+Next content.
+```
+
+**Why**: AsciiDoc requires blank lines for proper rendering. Without them, content runs together and becomes unreadable.
+
+---
+
+### 5. Image Path Conventions (REQUIRED)
 
 **Rule**: All images go in the assets/images directory.
 
@@ -145,7 +236,7 @@ image::create-task-screenshot.png[OpenShift console showing task creation form,l
 
 ---
 
-### 5. Navigation Update Expectations (REQUIRED for /create-lab and /create-demo)
+### 6. Navigation Update Expectations (REQUIRED for /create-lab and /create-demo)
 
 **Rule**: nav.adoc update is REQUIRED. Modules won't appear in Showroom without it.
 
@@ -173,6 +264,107 @@ image::create-task-screenshot.png[OpenShift console showing task creation form,l
 - Do NOT overwrite without confirmation
 
 **Why**: Without nav entry, module is invisible in Showroom.
+
+---
+
+### 7. Content Originality and Plagiarism Prevention (REQUIRED)
+
+**Rule**: All generated content must be original. Never copy text from external sources without proper attribution.
+
+**CRITICAL**: Plagiarism protects Red Hat from copyright issues and maintains reputation for original thought leadership.
+
+**Prohibited Practices**:
+- ❌ Copying documentation verbatim from external sources
+- ❌ Slightly rewording existing tutorials or blog posts
+- ❌ Copy/pasting from Stack Overflow, forums, or vendor docs
+- ❌ Using AI-generated content without significant review and customization
+- ❌ Presenting others' examples as original work
+
+**Required Practices**:
+- ✅ **Write original content**: Create explanations in your own words
+- ✅ **Add Red Hat context**: Focus on Red Hat product implementation
+- ✅ **Use proper attribution**: Quote and cite when referencing sources
+- ✅ **Paraphrase completely**: Don't just rearrange words from source material
+- ✅ **Add unique value**: Provide insights beyond the original source
+
+**When Using External Sources**:
+```asciidoc
+✅ CORRECT - Proper attribution:
+According to link:https://kubernetes.io/docs/...[Kubernetes documentation^],
+"Pods are the smallest deployable units of computing." In Red Hat OpenShift,
+you can create pods using...
+
+❌ WRONG - No attribution:
+Pods are the smallest deployable units of computing. In Red Hat OpenShift,
+you can create pods using...
+```
+
+**Paraphrasing Standards**:
+- Read and understand the source concept
+- Close the source document
+- Write explanation in your own words
+- Add Red Hat-specific context and examples
+- Cite the source as reference
+
+**Why This Matters**:
+- **Legal protection**: Prevents copyright infringement
+- **Brand reputation**: Maintains Red Hat's thought leadership credibility
+- **Customer trust**: Demonstrates authentic Red Hat expertise
+- **Content accuracy**: Ensures Red Hat-specific accuracy
+
+---
+
+### 8. Punctuation Standards - No Em Dashes (REQUIRED)
+
+**Rule**: Never use em dashes (—). Use commas, periods, or en dashes (–) instead.
+
+**CRITICAL**: Em dashes don't follow Red Hat style guide and create inconsistent formatting.
+
+**Em Dash Violations**:
+```asciidoc
+❌ WRONG - Em dash used:
+OpenShift—Red Hat's Kubernetes platform—simplifies deployments.
+
+✅ CORRECT - Use commas:
+OpenShift, Red Hat's Kubernetes platform, simplifies deployments.
+
+✅ CORRECT - Use parentheses:
+OpenShift (Red Hat's Kubernetes platform) simplifies deployments.
+
+❌ WRONG - Em dash as separator:
+The process is simple—just follow these 3 steps.
+
+✅ CORRECT - Use period:
+The process is simple. Just follow these 3 steps.
+
+✅ CORRECT - Use colon:
+The process is simple: just follow these 3 steps.
+```
+
+**Acceptable Dash Usage**:
+- ✅ **En dashes (–)** for ranges: "2020–2025", "pages 10–15"
+- ✅ **Hyphens (-)** for compound words: "multi-cloud", "real-time"
+- ✅ **Regular dashes** in CLI commands: `--namespace`, `--output`
+
+**Replacement Guide**:
+| Em Dash Use Case | Replacement |
+|------------------|-------------|
+| Parenthetical remark | Use commas or parentheses |
+| Break in thought | Use period (new sentence) |
+| Emphasis | Use colon or semicolon |
+| List introduction | Use colon |
+| Range | Use en dash (–) |
+
+**Common Violations to Check**:
+- "Platform—features—benefits" → "Platform: features and benefits"
+- "OpenShift—the enterprise Kubernetes" → "OpenShift, the enterprise Kubernetes"
+- "Three benefits—speed, security, scalability" → "Three benefits: speed, security, and scalability"
+
+**Why This Matters**:
+- **Style consistency**: Follows Red Hat Corporate Style Guide
+- **Readability**: Clearer punctuation improves comprehension
+- **Professional appearance**: Consistent formatting maintains quality standards
+- **Global audience**: Commas and periods translate better
 
 ---
 

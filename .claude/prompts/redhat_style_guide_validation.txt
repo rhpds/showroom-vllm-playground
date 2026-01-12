@@ -24,6 +24,11 @@
 - ✅ **Numbers**: Use numerals for ALL numbers (including under 10)
 - ✅ **Contractions**: Acceptable in marketing content, avoid in formal docs
 - ✅ **Serial Commas**: Always use Oxford commas
+- ✅ **Punctuation**:
+  - ❌ **No em dashes (—)**: Use commas, periods, or en dashes (–) instead
+  - ✅ Use commas for parenthetical remarks
+  - ✅ Use periods for complete thoughts
+  - ✅ Use en dashes (–) for ranges (2020–2025)
 - ✅ **Hyphenation**: Follow Red Hat's specific rules
   - ✅ Don't hyphenate: "open source", "hybrid cloud", "public cloud"
   - ✅ Do hyphenate: compound adjectives before nouns
@@ -50,6 +55,35 @@
 - ✅ **Time Format**: "4 PM" not "4:00 PM" or "4 p.m."
 - ✅ **Time Zones**: Specify clearly (ET, UTC)
 - ✅ **Currency**: US$1,500 for U.S. dollars
+
+### **8. CONTENT ORIGINALITY AND PLAGIARISM PREVENTION**
+- ✅ **Original Content Only**: All content must be original, not copied from other sources
+- ✅ **No Direct Copying**: Never copy/paste text from:
+  - External blogs or articles
+  - Documentation from other vendors
+  - Stack Overflow or forum posts
+  - Existing tutorials without proper attribution
+- ✅ **Proper Attribution**: When referencing external sources:
+  - Use quotation marks for direct quotes
+  - Cite the source with link
+  - Keep quotes brief (1-2 sentences max)
+  - Majority of content must be original
+- ✅ **Paraphrasing Standards**: When explaining concepts from other sources:
+  - Completely rewrite in your own words
+  - Add Red Hat-specific context and examples
+  - Focus on Red Hat product implementation
+  - Add unique value beyond the original source
+- ❌ **Prohibited Practices**:
+  - Copying documentation verbatim
+  - Slightly rewording existing tutorials
+  - Using AI-generated content without review and customization
+  - Presenting others' examples as original work
+
+**Why This Matters:**
+- Protects Red Hat from copyright issues
+- Maintains Red Hat's reputation for original thought leadership
+- Ensures content accuracy and Red Hat-specific value
+- Builds trust with customers through authentic expertise
 
 ---
 
@@ -100,6 +134,8 @@ STYLE CONSISTENCY:
 □ **No prohibited language (vague, jargon, non-inclusive)**
 □ **Numbers formatted as numerals**
 □ **Proper hyphenation applied**
+□ **No em dashes (—) used - replaced with commas, periods, or en dashes (–)**
+□ **Content is original - no plagiarism or unattributed copying**
 □ **Citations follow Red Hat standards**
 □ **Technical terms spelled correctly**
 □ **Time/currency in Red Hat format**
@@ -113,6 +149,8 @@ STYLE CONSISTENCY:
 ❌ "More secure solution" → ✅ "Security-focused solution with [specific features]"
 ❌ "Best-in-class platform" → ✅ "Leading platform by [specific metric + citation]"
 ❌ "Leverage our technology" → ✅ "Use our technology"
+❌ "OpenShift—Red Hat's platform" → ✅ "OpenShift, Red Hat's platform" or "OpenShift (Red Hat's platform)"
+❌ "The process is simple—just follow these steps" → ✅ "The process is simple. Just follow these steps"
 
 ---
 
