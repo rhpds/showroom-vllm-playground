@@ -5,7 +5,3 @@ type: showroom
 default_width: 30
 # Persist the URL state so browser refresh doesn't reset the UI
 persist_url_state: true
-
-tabs:
-  - name: vLLM Playground
-    url: 'http://${DOMAIN}:7860/'
