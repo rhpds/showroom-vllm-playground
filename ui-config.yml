@@ -8,4 +8,4 @@ persist_url_state: true
 
 tabs:
   - name: vLLM Playground
-    url: 'https://${DOMAIN}:7860/'
+    url: 'http://${DOMAIN}:7860/'
