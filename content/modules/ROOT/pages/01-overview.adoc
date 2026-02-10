@@ -1,4 +1,4 @@
-= vLLM Playground Demo Overview
+= vLLM Playground demo overview
 :toc:
 :toc-placement: preamble
 :icons: font
@@ -61,7 +61,7 @@ To deliver this demonstration effectively, presenters should have:
 
 **The opportunity**: vLLM Playground provides a unified platform for model serving with advanced features that address these challenges. ACME's AI team has been selected to evaluate its feasibility for their customer support use case.
 
-**Technical perspective**: "vLLM is the industry-leading high-performance inference engine with proven scalability. vLLM Playground provides the management interface we need to operationalize it. We need to evaluate how it handles our specific enterprise requirements for structured outputs, tool integration, and production performance."
+**Technical perspective**: "vLLM is a high-performance inference engine with proven scalability. vLLM Playground provides the management interface we need to operationalize it. We need to evaluate how it handles our specific enterprise requirements for structured outputs, tool integration, and production performance."
 
 == Transformation vision: ACME's success with vLLM
 

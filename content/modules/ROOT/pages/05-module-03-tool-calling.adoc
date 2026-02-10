@@ -1,4 +1,4 @@
-= Module 3: Advanced Inferencing: Tool Calling
+= Module 3: Advanced inferencing: tool calling
 :source-highlighter: rouge
 :toc: macro
 :toclevels: 1
@@ -10,7 +10,7 @@ Tool calling (also known as function calling) allows the AI to recognize when it
 NOTE: This module focuses on the tool calling *pattern*, how the AI generates function calls. Actual tool execution with human-in-the-loop approval is covered in Module 4 (MCP Integration).
 
 [[part-1]]
-== Part 1 - Enabling Tool Calling
+== Part 1 - Enabling tool calling
 
 === Know
 
@@ -278,7 +278,7 @@ Q: "How many tools can we define?"
 A: "There is no hard limit, but more tools means more context for the model to evaluate. Best practice is to keep tools focused and relevant to the use case, typically under 10-15 tools."
 
 [[part-2]]
-== Part 2 - Advanced Tool Patterns (Optional)
+== Part 2 - Advanced tool patterns (optional)
 
 === Know
 
@@ -577,8 +577,3 @@ NOTE: Module 4 requires restarting the vLLM Playground daemon service after inst
 
 Module 4 explores *Advanced Inferencing: MCP Integration*, connecting the AI to actual external tools with human-in-the-loop approval for safe execution.
 
-== References
-
-* link:https://github.com/micytao/vllm-playground[vLLM Playground GitHub Repository^] - Tool calling configuration and usage
-* link:https://github.com/vllm-project/vllm[vLLM Project^] - High-performance inference engine
-* link:https://docs.vllm.ai/en/latest/features/tool_calling.html[vLLM Tool Calling Documentation^] - Guided decoding and tool calling reference

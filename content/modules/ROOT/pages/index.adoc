@@ -1,4 +1,4 @@
-= Building Production-Ready AI Infrastructure with vLLM Playground
+= Building production-ready AI infrastructure with vLLM Playground
 
 Welcome to the vLLM Playground demonstration.
 
@@ -9,7 +9,7 @@ This demonstration shows how ACME Corporation is building production-ready AI in
 * Deploy vLLM servers via container management using Podman for rapid model serving
 * Use modern chat interfaces with streaming responses to deliver real-time customer experiences
 * Implement structured outputs using JSON Schema, Regex, and Grammar for reliable system integration
-* Configure tool calling with Open Source Large Language Models (Qwen, Llama, Mistral) to extend AI capabilities
+* Configure tool calling with open source large language models (Qwen, Llama, Mistral) to extend AI capabilities
 * Set up Model Context Protocol (MCP) servers for agentic workflows with human-in-the-loop approval
 * Run performance benchmarks with GuideLLM to validate production readiness
 

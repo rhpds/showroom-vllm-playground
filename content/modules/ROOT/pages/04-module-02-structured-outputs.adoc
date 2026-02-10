@@ -1,4 +1,4 @@
-= Module 2: Advanced Inferencing: Structured Outputs
+= Module 2: Advanced inferencing: structured outputs
 :source-highlighter: rouge
 :toc: macro
 :toclevels: 1
@@ -8,7 +8,7 @@ In Module 1, the presenter deployed a vLLM server and demonstrated the chat inte
 ACME's engineering team requires predictable, structured outputs that downstream systems can reliably consume. vLLM Playground's structured output capabilities, including JSON Schema, Regex, and Grammar, provide exactly this control. This module demonstrates how to constrain LLM outputs to specific formats, ensuring ACME's AI responses are system-ready and consistently parseable.
 
 [[part-1]]
-== Part 1 - JSON Schema for API Integration
+== Part 1 - JSON Schema for API integration
 
 === Know
 
@@ -165,7 +165,7 @@ Q: "Does this work with nested JSON schemas?"
 A: "Yes, vLLM supports nested objects, arrays, and complex schema compositions including allOf, anyOf, and oneOf."
 
 [[part-2]]
-== Part 2 - Choice Mode (Optional)
+== Part 2 - Choice mode (optional)
 
 === Know
 
@@ -256,7 +256,7 @@ Q: "What about multi-label classification?"
 A: "For multi-label scenarios, JSON Schema mode is more appropriate. You can define an array field that accepts multiple enum values."
 
 [[part-3]]
-== Part 3 - Regex & Grammar (Optional)
+== Part 3 - Regex and grammar (optional)
 
 === Know
 
@@ -450,7 +450,7 @@ A: "Grammar is best for non-JSON structured output, like custom report formats, 
 Q: "Is Grammar mode slower than other modes?"
 A: "Complex grammars can add overhead. For high-throughput scenarios, JSON Schema is generally faster. Use Grammar only when the output format genuinely requires it."
 
-=== Reset Structured Outputs
+=== Reset structured outputs
 
 Before moving on, disable Structured Outputs to reset the configuration:
 
@@ -461,7 +461,7 @@ Before moving on, disable Structured Outputs to reset the configuration:
 
 This section covers common issues across all structured output modes (Choice, JSON Schema, Regex, Grammar).
 
-=== JSON Schema Issues
+=== JSON Schema issues
 
 **Issue**: Output contains extra text before/after JSON
 
@@ -478,7 +478,7 @@ This section covers common issues across all structured output modes (Choice, JS
 . Verify enum arrays are properly formatted in schema
 . Ensure model supports guided decoding (check server logs)
 
-=== Grammar Syntax Issues
+=== Grammar syntax issues
 
 **Issue**: Grammar syntax errors
 
@@ -496,7 +496,7 @@ This section covers common issues across all structured output modes (Choice, JS
 . Restart server after changing grammar
 . Simplify grammar rules and test incrementally
 
-=== General Structured Output Issues
+=== General structured output issues
 
 **Issue**: Structured outputs not enforced (model ignores constraints)
 
@@ -558,9 +558,3 @@ This section covers common issues across all structured output modes (Choice, JS
 
 Module 3 explores *Advanced Inferencing: Tool Calling*, demonstrating how the AI can execute functions, retrieve data, and perform actions on behalf of users.
 
-== References
-
-* link:https://github.com/micytao/vllm-playground[vLLM Playground - Structured Outputs Documentation^]
-* link:https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html#guided-decoding[vLLM Guided Decoding^]
-* link:https://json-schema.org/understanding-json-schema/[Understanding JSON Schema^]
-* link:https://github.com/ggerganov/llama.cpp/blob/master/grammars/README.md[GBNF Grammar Reference^]

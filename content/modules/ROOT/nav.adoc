@@ -1,28 +1,28 @@
 * xref:index.adoc[Home]
 
-* xref:01-overview.adoc[Demo Overview]
+* xref:01-overview.adoc[Demo overview]
 
-* xref:02-details.adoc[Demo Details & Presenter Guidance]
+* xref:02-details.adoc[Demo details & presenter guidance]
 
-* xref:03-module-01-getting-started.adoc[Module 1: Getting Started]
-** xref:03-module-01-getting-started.adoc#part-1[Part 1: Rapid Model Deployment]
-** xref:03-module-01-getting-started.adoc#part-2[Part 2: Modern Chat Interface]
+* xref:03-module-01-getting-started.adoc[Module 1: Getting started]
+** xref:03-module-01-getting-started.adoc#part-1[Part 1: Rapid model deployment]
+** xref:03-module-01-getting-started.adoc#part-2[Part 2: Modern chat interface]
 
-* xref:04-module-02-structured-outputs.adoc[Module 2: Structured Outputs]
-** xref:04-module-02-structured-outputs.adoc#part-1[Part 1: JSON Schema for API Integration]
-** xref:04-module-02-structured-outputs.adoc#part-2[Part 2: Choice Mode (Optional)]
-** xref:04-module-02-structured-outputs.adoc#part-3[Part 3: Regex & Grammar (Optional)]
+* xref:04-module-02-structured-outputs.adoc[Module 2: Structured outputs]
+** xref:04-module-02-structured-outputs.adoc#part-1[Part 1: JSON Schema for API integration]
+** xref:04-module-02-structured-outputs.adoc#part-2[Part 2: Choice mode (optional)]
+** xref:04-module-02-structured-outputs.adoc#part-3[Part 3: Regex and grammar (optional)]
 
-* xref:05-module-03-tool-calling.adoc[Module 3: Tool Calling]
-** xref:05-module-03-tool-calling.adoc#part-1[Part 1: Enabling Tool Calling]
-** xref:05-module-03-tool-calling.adoc#part-2[Part 2: Advanced Tool Patterns (Optional)]
+* xref:05-module-03-tool-calling.adoc[Module 3: Tool calling]
+** xref:05-module-03-tool-calling.adoc#part-1[Part 1: Enabling tool calling]
+** xref:05-module-03-tool-calling.adoc#part-2[Part 2: Advanced tool patterns (optional)]
 
-* xref:06-module-04-mcp-integration.adoc[Module 4: MCP Integration (Optional)]
+* xref:06-module-04-mcp-integration.adoc[Module 4: MCP integration (optional)]
 ** xref:06-module-04-mcp-integration.adoc#part-1[Part 1: Understanding MCP]
-** xref:06-module-04-mcp-integration.adoc#part-2[Part 2: Advanced MCP Patterns (Optional)]
+** xref:06-module-04-mcp-integration.adoc#part-2[Part 2: Advanced MCP patterns (optional)]
 
-* xref:07-module-05-performance-testing.adoc[Module 5: Performance Testing (Optional)]
-** xref:07-module-05-performance-testing.adoc#part-1[Part 1: Performance Metrics]
-** xref:07-module-05-performance-testing.adoc#part-2[Part 2: Optimization (Optional)]
+* xref:07-module-05-performance-testing.adoc[Module 5: Performance testing (optional)]
+** xref:07-module-05-performance-testing.adoc#part-1[Part 1: Performance metrics]
+** xref:07-module-05-performance-testing.adoc#part-2[Part 2: Optimization (optional)]
 
-* xref:08-conclusion.adoc[Conclusion and Next Steps]
+* xref:08-conclusion.adoc[Conclusion and next steps]

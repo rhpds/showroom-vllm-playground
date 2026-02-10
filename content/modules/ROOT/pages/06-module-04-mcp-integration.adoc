@@ -1,4 +1,4 @@
-= Module 4: Advanced Inferencing: MCP Integration
+= Module 4: Advanced inferencing: MCP integration
 :source-highlighter: rouge
 :toc: macro
 :toclevels: 1
@@ -10,7 +10,7 @@ Model Context Protocol (MCP) is an open standard that enables AI models to secur
 This module covers MCP concepts, installation of the necessary components, connecting MCP servers to vLLM Playground, and true agentic AI with human-in-the-loop safety controls.
 
 [[part-1]]
-== Part 1: Understanding MCP
+== Part 1 - Understanding MCP
 
 === Know
 
@@ -30,7 +30,7 @@ MCP (Model Context Protocol) is the key to moving AI from "chat only" to actiona
 Model Context Protocol (MCP) is an open standard developed to enable AI models to:
 
 * **Access external tools**: File systems, APIs, databases
-* **Execute actions**: Run commands, fetch data, modify files
+* **Execute actions**: Run commands, fetch data, and modify files
 * **Maintain safety**: Human-in-the-loop approval for sensitive operations
 
 ==== MCP architecture
@@ -96,15 +96,15 @@ Model Context Protocol (MCP) is an open standard developed to enable AI models t
 * **Data sovereignty**: Customer documents never leave your infrastructure (meets enterprise compliance requirements that cloud-only solutions can't address)
 * **Cost control**: 60% lower integration costs vs proprietary AI platforms with per-token pricing
 * **Deployment flexibility**: Run on-premises or private cloud, unlike cloud-only competitors
-* **Community innovation**: Leverage open-source MCP ecosystem without licensing fees
+* **Community innovation**: Use the open source MCP ecosystem without licensing fees
 
 ==== Installing MCP and connecting the Time server
 
-*What I say:*
+**What I say:**
 
 "Let me walk through getting MCP installed and connecting our first MCP server. We will start with the Time server since it requires no configuration and clearly demonstrates the core MCP workflow."
 
-*What I do:*
+**What I do:**
 
 . Connect to the lab environment:
 +
@@ -220,11 +220,11 @@ image::module-04-figure-01.png[MCP Server Configuration panel showing MCP Availa
 |Get current time and timezone information
 |===
 
-*What I say:*
+**What I say:**
 
 "Now that MCP is installed, let me connect the Time server. This is the simplest MCP server. It requires no configuration and demonstrates the core MCP workflow perfectly."
 
-*What I do:*
+**What I do:**
 
 [start=11]
 . Start a vLLM server with tool calling enabled. In the vLLM Playground web UI, configure the following settings:
@@ -243,7 +243,7 @@ image::module-04-figure-01.png[MCP Server Configuration panel showing MCP Availa
 |GPU
 
 |Enable Tool Calling
-|Checked ✓
+|Checked
 
 |Tool Call Parser
 |`hermes`
@@ -329,13 +329,13 @@ What's the time difference between Tokyo and London right now?
 If it's 3pm in New York, what time is it in Sydney?
 ----
 
-*What they should notice:*
+**What they should notice:**
 
 * The MCP panel shows available servers and their connection status.
 * When the AI needs real-time data, it generates a tool call and waits for human approval before executing.
 * After approval, the AI receives actual current time data and incorporates it into its response. This is real tool execution, not simulated.
 
-*If asked:*
+**If asked:**
 
 * "Why do we need human approval?" - Human-in-the-loop ensures safety. In production, you can configure auto-approval for low-risk tools while requiring manual approval for sensitive operations.
 * "Can this work with other time zones?" - Yes, the Time MCP server supports all standard IANA time zones.
@@ -380,7 +380,7 @@ User: "What time is it in New York?"
 ----
 
 [[part-2]]
-== Part 2: Advanced MCP Patterns (Optional)
+== Part 2 - Advanced MCP patterns (optional)
 
 === Know
 
@@ -394,11 +394,11 @@ This section extends the MCP demo with filesystem access and multi-tool agentic 
 
 ==== Filesystem access with MCP
 
-*What I say:*
+**What I say:**
 
 "Now let me show how MCP enables secure file system access. ACME's support team needs the AI to analyze customer documents, and the Filesystem MCP server makes this possible while maintaining security controls."
 
-*What I do:*
+**What I do:**
 
 . First, create the documents directory that the Filesystem server will access:
 +
@@ -514,13 +514,13 @@ Observe the AI reading the file and analyzing the content.
 +
 image::module-04-figure-12.png[Document analysis response,align="center",width=600,link=module-04-figure-12.png^,title="Document Analysis Response"]
 
-*What they should notice:*
+**What they should notice:**
 
 * The Filesystem MCP server only allows access to explicitly configured directories.
 * Every file read or directory listing requires explicit human approval.
 * The AI can read, analyze, and summarize document contents after receiving approval.
 
-*If asked:*
+**If asked:**
 
 * "Can the AI write files too?" - Yes, the Filesystem server supports write operations, but they also require explicit approval. In production, you would typically restrict write access.
 * "What about sensitive files?" - The allowed directories configuration ensures the AI cannot access files outside of the specified paths.
@@ -549,11 +549,11 @@ NOTE: Different models may have varying quality when calling the right tools fro
 
 ==== Agentic workflow with human-in-the-loop
 
-*What I say:*
+**What I say:**
 
-"Now let me combine everything into a complete agentic workflow. This is where it gets powerful. The AI handles complex customer inquiries that require multiple tool calls, file lookups, and real-time data, all with appropriate human oversight."
+"Now let me combine everything into a complete agentic workflow. This is where the full capability becomes clear. The AI handles complex customer inquiries that require multiple tool calls, file lookups, and real-time data, all with appropriate human oversight."
 
-*What I do:*
+**What I do:**
 
 . Ensure both Time and Filesystem MCP servers are connected.
 
@@ -615,7 +615,7 @@ When an approval dialog appears, click *Skip* instead of *Execute*.
 +
 Observe how the AI handles the denial. It should acknowledge it could not complete the action and offer alternatives.
 
-*What they should notice:*
+**What they should notice:**
 
 * The AI plans multi-step approaches for complex queries, identifying which tools to call and in what order.
 * Each tool call triggers a separate approval dialog, giving full visibility into what the AI is doing.
@@ -623,7 +623,7 @@ Observe how the AI handles the denial. It should acknowledge it could not comple
 * Denied requests are handled gracefully. The AI does not break or error out.
 * Unauthorized access attempts (e.g., /etc/passwd) are blocked by the directory access controls.
 
-*If asked:*
+**If asked:**
 
 * "Is there a way to auto-approve certain tools?" - Future versions may support pre-approved tool patterns for low-risk operations. The current design prioritizes safety.
 * "How many tools can the AI chain together?" - There is no hard limit. The AI will plan and call as many tools as needed. More capable models handle complex multi-tool chains better.
@@ -721,11 +721,11 @@ NOTE: Module 5 focuses on performance testing with GuideLLM, which requires a cl
 * Complex queries handled with multiple data sources
 * Safe, auditable AI operations with full transparency
 
-**Next steps:**
+**Next module:**
 
 Module 5 will explore *Performance Testing* - using GuideLLM to benchmark your vLLM server and optimize for production workloads.
 
-== Business Value Summary
+== Business value summary
 
 By implementing agentic AI capabilities in this module, ACME Corporation achieves measurable business outcomes:
 
@@ -854,10 +854,3 @@ This agentic AI implementation positions ACME to scale support operations withou
 . Simplify queries to fewer tools at once
 . Use clearer system prompts
 . Try more capable models for complex reasoning
-
-== References
-
-* link:https://github.com/micytao/vllm-playground[vLLM Playground - MCP Documentation^]
-* link:https://modelcontextprotocol.io[Model Context Protocol Specification^]
-* link:https://github.com/modelcontextprotocol/servers[Official MCP Servers Repository^]
-* link:https://www.anthropic.com/news/model-context-protocol[Anthropic MCP Announcement^]

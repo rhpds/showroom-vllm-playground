@@ -1,4 +1,4 @@
-= Module 5: Performance Testing
+= Module 5: Performance testing
 :source-highlighter: rouge
 :toc: macro
 :toclevels: 1
@@ -10,7 +10,7 @@ Before launching their AI-powered customer support system, ACME needs to validat
 In this module, the presenter benchmarks the vLLM server and demonstrates how to optimize configuration for production workloads.
 
 [[part-1]]
-== Part 1 - Performance Metrics
+== Part 1 - Performance metrics
 
 === Know
 
@@ -217,7 +217,7 @@ NOTE: The *GuideLLM (Advanced)* option is only available after GuideLLM is insta
 |Prompt Tokens
 |`100`
 
-|output Tokens
+|Output Tokens
 |`100`
 
 |===
@@ -366,7 +366,7 @@ Q: "Are these numbers representative of production performance?"
 A: "These are baseline numbers under controlled conditions. Production performance depends on model size, concurrent users, prompt complexity, and hardware. Use these as a starting point and run benchmarks under realistic conditions."
 
 [[part-2]]
-== Part 2 - Optimization (Optional)
+== Part 2 - Optimization (optional)
 
 === Know
 
@@ -475,7 +475,7 @@ A: "INT8 and INT4 quantization can dramatically reduce memory usage and improve 
 
 . Ensure `sudo pip install` completed successfully
 . Check if installed in a virtual environment
-. Try: `python -m guidellm --help`
+. Try: `python3 -m guidellm --help`
 
 **Issue**: "Connection refused" on /v1/models
 
@@ -483,13 +483,13 @@ A: "INT8 and INT4 quantization can dramatically reduce memory usage and improve 
 
 . Verify vLLM server is running: `vllm-playground status`
 . Check the correct port (default: 8000 for API, 7860 for UI)
-. Review server logs: `podman logs vllm-service`
+. Review server logs: `sudo podman logs vllm-service`
 
 **Issue**: Benchmark requests failing
 
 **Solution**:
 
-. Check server logs: `podman logs vllm-service`
+. Check server logs: `sudo podman logs vllm-service`
 . Verify model is fully loaded
 . Reduce request rate and retry
 
@@ -558,9 +558,3 @@ A: "INT8 and INT4 quantization can dramatically reduce memory usage and improve 
 * Identified optimal configuration for customer support use case
 * Established baseline metrics for ongoing monitoring
 * Confident production deployment with known performance characteristics
-
-== References
-
-* link:https://github.com/micytao/vllm-playground[vLLM Playground - Benchmarking Documentation^]
-* link:https://developers.redhat.com/articles/2025/06/20/guidellm-evaluate-llm-deployments-real-world-inference#[GuideLLM Developer Blog^]
-* link:https://github.com/neuralmagic/guidellm[GuideLLM GitHub Repository^]

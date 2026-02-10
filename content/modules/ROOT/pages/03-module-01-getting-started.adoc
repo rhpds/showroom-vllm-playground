@@ -1,4 +1,4 @@
-= Module 1: Getting Started with vLLM Playground
+= Module 1: Getting started with vLLM Playground
 :source-highlighter: rouge
 :toc: macro
 :toclevels: 1
@@ -8,7 +8,7 @@ ACME Corporation is kicking off their AI customer support initiative, and the te
 In this module, the presenter verifies the environment, deploys the first vLLM server using Podman, and demonstrates the chat interface. By the end, the audience will understand how vLLM's PagedAttention algorithm and efficient memory management enable ACME to handle 5x more concurrent customer conversations on the same hardware budget.
 
 [[part-1]]
-== Part 1 - Rapid Model Deployment
+== Part 1 - Rapid model deployment
 
 === Know
 
@@ -234,7 +234,7 @@ Q: "What about gated models like Llama?"
 A: "For gated models, you need a HuggingFace token with access. Enter it in the HF_TOKEN field. Public models like TinyLlama and Qwen work without authentication."
 
 [[part-2]]
-== Part 2 - Modern Chat Interface
+== Part 2 - Modern chat interface
 
 === Know
 
@@ -355,7 +355,7 @@ A: "Models like Qwen2.5-3B-Instruct or Llama 3.1-8B provide good instruction-fol
 **Solution**:
 
 . Verify server is running: Check the status indicator in the UI
-. Check container logs: `podman logs vllm-service`
+. Check container logs: `sudo podman logs vllm-service`
 . Stop the Server and Start again
 
 **Issue**: Responses are very slow
@@ -402,9 +402,3 @@ A: "Models like Qwen2.5-3B-Instruct or Llama 3.1-8B provide good instruction-fol
 **Next module:**
 
 Module 2 explores *Advanced Inferencing: Structured Outputs*, showing how to constrain model responses to specific formats using JSON Schema, Regex, and Grammar for predictable, parseable outputs.
-
-== References
-
-* link:https://github.com/micytao/vllm-playground[vLLM Playground GitHub Repository^] - Installation and configuration
-* link:https://github.com/vllm-project/vllm[vLLM Project^] - High-performance inference engine
-* link:https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0[TinyLlama Model^] - Lightweight model for testing

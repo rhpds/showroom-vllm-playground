@@ -140,9 +140,9 @@ guidellm --help
 
 === During demo support
 
-* Check the vLLM Playground logs: `podman logs vllm-service`
+* Check the vLLM Playground logs: `sudo podman logs vllm-service`
 * Verify server status: `vllm-playground status`
-* Restart if needed: `vllm-playground stop && vllm-playground`
+* Restart if needed: `sudo systemctl restart vllm-playground`
 
 == Follow-up resources
 

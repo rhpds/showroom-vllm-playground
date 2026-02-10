@@ -1,6 +1,6 @@
 ---
 site:
-  title: vLLM Playground Workshop
+  title: vLLM Playground Demo
   url: https://github.com/rhpds/showroom-vllm-playground
   start_page: modules::index.adoc
 
