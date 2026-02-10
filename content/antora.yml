@@ -6,16 +6,4 @@ nav:
 
 asciidoc:
   attributes:
-    lab_name: "vLLM Playground Demo"
-    release-version: master
     page-pagination: true
-    guid: my-guid
-    targethost: "vllm.example.opentlc.com"
-    hostname: "vllm.example.opentlc.com"
-    ssh_command: "ssh lab-user@vllm.example.opentlc.com"
-    ssh_password: "changeme"
-    ssh_username: "lab-user"
-    vllm_playground_url: "http://vllm.example.opentlc.com:7860"
-    page-links:
-    - url: https://redhat.com
-      text: Red Hat
