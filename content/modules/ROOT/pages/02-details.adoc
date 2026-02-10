@@ -1,22 +1,27 @@
-= Workshop details
+= Demo details and presenter guidance
 :toc:
 :toc-placement: preamble
 :icons: font
 
 == Timing and schedule
 
-=== Full workshop (90 minutes)
+=== Full demonstration (60 minutes)
 
-* **Module 1**: Getting Started with vLLM Playground (18 minutes)
-* **Module 2**: Advanced Inferencing: Structured Outputs (18 minutes)
-* **Module 3**: Advanced Inferencing: Tool Calling (18 minutes)
-* **Module 4**: Advanced Inferencing: MCP Integration (18 minutes)
-* **Module 5**: Performance Testing (18 minutes)
+* **Module 1**: Getting Started with vLLM Playground (12 minutes)
+* **Module 2**: Advanced Inferencing: Structured Outputs (12 minutes)
+* **Module 3**: Advanced Inferencing: Tool Calling (12 minutes)
+* **Module 4**: Advanced Inferencing: MCP Integration (12 minutes)
+* **Module 5**: Performance Testing (12 minutes)
 
-=== Quick start workshop (36 minutes)
+=== Standard demo (30-45 minutes)
 
 * **Module 1**: Getting Started with vLLM Playground (15 minutes)
-* **Module 5**: Performance Testing (18 minutes)
+* **Module 2**: Advanced Inferencing: Structured Outputs (15 minutes)
+* **Module 3**: Advanced Inferencing: Tool Calling (15 minutes)
+
+=== Executive brief (15-20 minutes)
+
+* **Module 1**: Getting Started with vLLM Playground (15-20 minutes)
 
 == Technical requirements
 
@@ -31,7 +36,7 @@
 
 === Environment access
 
-Participants have access to:
+The demo environment provides:
 
 * GPU-enabled lab host: {targethost}
 * SSH access: `{ssh_command}`
@@ -46,28 +51,28 @@ Participants have access to:
 
 == Environment setup
 
-=== Pre-configured for you
+=== Pre-configured environment
 
-Your lab environment comes with:
+The demo environment comes with:
 
 [cols="1,2"]
 |===
 |Component |Status
 
 |vLLM Playground v0.1.1
-|✓ Pre-installed via pip
+|Pre-installed via pip
 
 |Podman
-|✓ Pre-installed and configured
+|Pre-installed and configured
 
 |NVIDIA GPU drivers
-|✓ Pre-configured with CUDA
+|Pre-configured with CUDA
 
 |Python 3.10+
-|✓ Available for MCP support
+|Available for MCP support
 
 |vLLM Container images
-|✓ Pre-pulled and verified
+|Pre-pulled and verified
 |===
 
 === Optional packages
@@ -87,11 +92,11 @@ The following packages can be installed for additional functionality:
 |Required for Module 5: Performance Testing
 |===
 
-NOTE: These packages may already be pre-installed in your lab environment. The modules will guide you through verification and installation if needed.
+NOTE: These packages may already be pre-installed in the demo environment. The modules guide through verification and installation if needed.
 
 === Setup validation
 
-Run these commands to verify your environment:
+Run these commands to verify the environment:
 
 [source,bash]
 ----
@@ -119,21 +124,21 @@ guidellm --help
 === Common setup issues
 
 **Problem**: "vllm-playground: command not found"
-→ **Solution**: Verify the installation path is in your PATH, or run with full path
+-> **Solution**: Verify the installation path is in your PATH, or run with full path
 
 **Problem**: "Permission denied" when running Podman commands
-→ **Solution**: Ensure you're using rootless Podman or have appropriate permissions
+-> **Solution**: Ensure you are using rootless Podman or have appropriate permissions
 
 **Problem**: "NVIDIA driver not found" or GPU not detected
-→ **Solution**: Verify NVIDIA drivers are installed with `nvidia-smi`
+-> **Solution**: Verify NVIDIA drivers are installed with `nvidia-smi`
 
 **Problem**: "Container image pull fails"
-→ **Solution**: Check network connectivity and ensure you have access to container registries
+-> **Solution**: Check network connectivity and ensure you have access to container registries
 
 **Problem**: "Port 7860 already in use"
-→ **Solution**: Run `vllm-playground stop` to stop any existing instance, or use `--port` to specify a different port
+-> **Solution**: Run `vllm-playground stop` to stop any existing instance, or use `--port` to specify a different port
 
-=== During workshop support
+=== During demo support
 
 * Check the vLLM Playground logs: `podman logs vllm-service`
 * Verify server status: `vllm-playground status`
@@ -141,7 +146,7 @@ guidellm --help
 
 == Follow-up resources
 
-=== Next steps after the workshop
+=== Next steps after the demo
 
 * link:https://github.com/micytao/vllm-playground[vLLM Playground GitHub Repository^] - Source code and documentation
 * link:https://github.com/vllm-project/vllm[vLLM Project^] - The underlying high-performance inference engine
@@ -152,15 +157,15 @@ guidellm --help
 
 * **Intermediate**: Explore different model architectures and their tool calling capabilities
 * **Advanced**: Deploy vLLM Playground on OpenShift/Kubernetes for enterprise scale
-* **Production**: Implement custom MCP servers for your specific use cases
+* **Production**: Implement custom MCP servers for specific use cases
 
 == Authors and contributors
 
-**Primary Author**: Michael Yang 
-**Last Updated**: January 2026 
-**Workshop Version**: 1.0
+**Primary Author**: Michael Yang
+**Last Updated**: January 2026
+**Demo Version**: 1.0
 
 **Feedback and Questions**:
 
-* Workshop issues: Submit via the lab feedback mechanism
+* Demo issues: Submit via the lab feedback mechanism
 * vLLM Playground issues: link:https://github.com/micytao/vllm-playground/issues[GitHub Issues^]

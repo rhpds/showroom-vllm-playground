@@ -1,23 +1,53 @@
 = Conclusion and Next Steps
 
-Congratulations! You've completed the *vLLM Playground Workshop*! 🎉
+Thank you for joining this demonstration of the *vLLM Playground*. Let us recap what we covered and discuss where to go from here.
 
-== What You've Learned
+== What This Demo Covered
 
-Throughout this workshop, you've gained hands-on experience with:
+Throughout this demonstration, we walked through a complete AI inference workflow:
 
-* ✅ Deploying and managing vLLM servers using Podman containers
-* ✅ Interacting with LLMs through a modern chat interface with streaming responses
-* ✅ Constraining AI outputs using structured output modes (JSON Schema, Regex, Grammar)
-* ✅ Configuring tool calling to enable AI-driven function invocation
-* ✅ Connecting MCP servers for agentic AI with human-in-the-loop approval
-* ✅ Benchmarking and optimizing vLLM performance with GuideLLM
+* Deploying and managing vLLM servers using Podman containers
+* Interacting with LLMs through a modern chat interface with streaming responses
+* Constraining AI outputs using structured output modes (JSON Schema, Regex, Grammar)
+* Configuring tool calling to enable AI-driven function invocation
+* Connecting MCP servers for agentic AI with human-in-the-loop approval
+* Benchmarking and optimizing vLLM performance with GuideLLM
 
-You now have the skills to build and deploy production-ready AI inference infrastructure using vLLM / RHAIIS.
+=== Know: Business Impact and ROI
 
-== Your Journey with ACME Corporation
+The ACME Corporation scenario illustrated the real-world value of each capability:
 
-You helped ACME Corporation transform their customer support operations:
+* *Reduced integration costs.* Structured outputs eliminate brittle post-processing code and reduce API retry rates, translating directly to lower development and compute spend.
+* *Faster time to production.* vLLM's container-based deployment means teams can go from evaluation to running inference in hours, not weeks.
+* *Controlled automation.* Tool calling and MCP with human-in-the-loop approval let organizations automate confidently, without sacrificing governance or safety.
+* *Data-driven capacity planning.* GuideLLM benchmarking removes guesswork from hardware and scaling decisions, preventing both over-provisioning and under-provisioning.
+* *Enterprise-ready foundation.* Everything demonstrated today maps directly to Red Hat AI Inference Server, giving a clear path from proof-of-concept to production.
+
+=== Show: Technical Capabilities Demonstrated
+
+[cols="1,2"]
+|===
+|Capability |What We Showed
+
+|*GPU-accelerated inference*
+|Deployed a vLLM server with TinyLlama, observed real-time token generation
+
+|*Structured outputs*
+|JSON Schema, Regex, and GBNF Grammar modes producing deterministic, parseable responses
+
+|*Tool calling*
+|AI-generated function calls dispatched to external tools for weather, calculations, and more
+
+|*MCP integration*
+|Connected MCP servers with approval workflows for safe agentic behavior
+
+|*Performance benchmarking*
+|GuideLLM sweep across concurrency levels, measuring throughput, latency, and TTFT
+|===
+
+== The ACME Corporation Journey
+
+Throughout this demo, we followed ACME Corporation as they transformed their customer support operations:
 
 [cols="1,2,2"]
 |===
@@ -46,69 +76,130 @@ You helped ACME Corporation transform their customer support operations:
 
 == Key Takeaways
 
-The most important concepts to remember:
+These are the points worth reinforcing with your audience:
 
-. **vLLM is the industry-leading inference engine**: High-performance, production-ready LLM serving with continuous batching and efficient memory management.
+. *vLLM is the industry-leading inference engine.* High-performance, production-ready LLM serving with continuous batching and efficient memory management. This is the same technology that powers Red Hat AI Inference Server.
 
-. **Structured outputs enable reliable AI integration**: JSON Schema, Regex, and Grammar modes transform unpredictable AI text into system-ready data.
+. *Structured outputs enable reliable AI integration.* JSON Schema, Regex, and Grammar modes transform unpredictable AI text into system-ready data. This is what makes AI usable in real backend workflows.
 
-. **Tool calling bridges AI and actions**: The AI generates function calls; your systems handle execution—a powerful pattern for automation.
+. *Tool calling bridges AI and actions.* The AI generates function calls, and your systems handle execution. This pattern is the foundation for meaningful automation.
 
-. **MCP provides safe agentic capabilities**: Human-in-the-loop approval ensures you maintain control while enabling AI to access external tools.
+. *MCP provides safe agentic capabilities.* Human-in-the-loop approval ensures organizations maintain control while enabling AI to access external tools and data sources.
 
-. **Performance testing is essential**: Benchmark before production to validate throughput, latency, and capacity requirements.
+. *Performance testing is essential.* Benchmark before production to validate throughput, latency, and capacity requirements. GuideLLM makes this straightforward and repeatable.
 
-== Next Steps
-
-Ready to continue your journey? Here are some recommended next steps:
-
-=== Red Hat AI Inference Server
+== Red Hat AI Inference Server
 
 image::conclusion-rhaiis.png[Red Hat AI Inference Server,align="center",width=700,link=conclusion-rhaiis.png^,title="Red Hat AI Inference Server"]
 
-Ready to take your vLLM skills to enterprise production? **Red Hat AI Inference Server** optimizes inference across the hybrid cloud for faster, cost-effective model deployments.
+Ready to take these capabilities to enterprise production? *Red Hat AI Inference Server* optimizes inference across the hybrid cloud for faster, cost-effective model deployments.
 
 As one of the largest commercial contributors to vLLM, Red Hat provides:
 
-* **Powered by vLLM**: Enterprise-grade support for the same high-performance inference engine you learned in this workshop
-* **LLM Compressor**: Compress models to reduce compute utilization and costs while maintaining accuracy
-* **Hybrid cloud flexibility**: Run models on-premise, in the cloud, or at the edge
-* **Red Hat AI repository**: Validated and optimized models ready for inference deployment
+* *Powered by vLLM*: Enterprise-grade support for the same high-performance inference engine shown in this demo
+* *LLM Compressor*: Compress models to reduce compute utilization and costs while maintaining accuracy
+* *Hybrid cloud flexibility*: Run models on-premise, in the cloud, or at the edge
+* *Red Hat AI repository*: Validated and optimized models ready for inference deployment
 
 Red Hat AI Inference Server is available as a standalone product or as part of Red Hat Enterprise Linux AI and Red Hat OpenShift AI.
 
 link:https://www.redhat.com/en/products/ai/inference-server[Learn more about Red Hat AI Inference Server^]
 
-=== Documentation and Resources
+== Presenter Action Items
 
-Deepen your knowledge with these resources:
+After delivering this demo, consider the following follow-up steps:
+
+* *Share the recording or slides* with attendees who want to revisit specific modules.
+* *Offer a hands-on session.* Point interested teams to the vLLM Playground repository so they can run through the exercises themselves.
+* *Connect with Red Hat account teams.* For prospects interested in production deployment, loop in the account team to discuss Red Hat AI Inference Server licensing and architecture reviews.
+* *Identify pilot use cases.* Work with the audience to identify one or two structured output or tool calling use cases they could prototype in their own environment.
+* *Schedule a deep-dive.* If the audience showed strong interest in a particular module (for example, MCP or benchmarking), offer a focused follow-up session on that topic.
+
+== Call to Action
+
+=== For Technical Teams
+
+* Clone the link:https://github.com/micytao/vllm-playground[vLLM Playground repository^] and run the demo in your own environment.
+* Experiment with your own models and structured output schemas against real workloads.
+* Use GuideLLM to benchmark inference performance on your target hardware before making procurement decisions.
+* Explore link:https://modelcontextprotocol.io[MCP^] for building agentic workflows that connect AI to your internal systems.
+
+=== For Decision Makers
+
+* Evaluate link:https://www.redhat.com/en/products/ai/inference-server[Red Hat AI Inference Server^] as your enterprise inference platform, backed by the same vLLM technology shown today.
+* Consider the operational cost savings demonstrated: structured outputs reduce integration overhead, tool calling automates manual processes, and benchmarking prevents over-provisioning.
+* Request a production architecture review with your Red Hat account team to map these capabilities to your specific infrastructure and compliance requirements.
+
+== Questions and Discussion
+
+Here are common questions that come up after this demo:
+
+*Q: Can vLLM run without a GPU?*
+
+A: vLLM is designed for GPU-accelerated inference and performs best on NVIDIA GPUs with CUDA support. CPU-only mode exists but is significantly slower and not recommended for production workloads.
+
+*Q: How does TinyLlama compare to production-grade models?*
+
+A: TinyLlama (1.1B parameters) is used in this demo for fast iteration and low resource requirements. In production, organizations typically deploy larger models (7B to 70B+ parameters) that offer substantially better quality. The vLLM serving patterns remain the same regardless of model size.
+
+*Q: What is the difference between vLLM and Red Hat AI Inference Server?*
+
+A: Red Hat AI Inference Server is built on vLLM and adds enterprise support, model compression (LLM Compressor), validated model repositories, and integration with the Red Hat ecosystem (OpenShift AI, RHEL AI). It is the supported, productized version of vLLM for enterprise customers.
+
+*Q: Can structured outputs work with any model?*
+
+A: Structured output support (guided decoding) is a vLLM server-side feature that works with any model served through vLLM. The model does not need special fine-tuning. vLLM constrains the token generation process to guarantee valid output according to your schema, regex, or grammar.
+
+*Q: How does MCP compare to direct tool calling?*
+
+A: Tool calling defines functions inline with each API request. MCP is a protocol that lets you connect to external tool servers, enabling dynamic tool discovery, reusable tool definitions across applications, and human-in-the-loop approval workflows. MCP is particularly valuable when you need governance controls or when tools are managed by separate teams.
+
+== References
+
+All resources referenced throughout this demo, consolidated for easy access:
+
+=== Demo Resources
 
 * link:https://github.com/micytao/vllm-playground[vLLM Playground GitHub Repository^] - Source code, documentation, and updates
-* link:https://docs.vllm.ai[vLLM Official Documentation^] - Comprehensive vLLM reference
 
+=== vLLM and Inference
 
-== Share Your Feedback
+* link:https://github.com/vllm-project/vllm[vLLM Project^] - High-performance LLM inference engine
+* link:https://docs.vllm.ai[vLLM Documentation^] - Comprehensive vLLM reference
+* link:https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html#guided-decoding[vLLM Guided Decoding^] - Structured output documentation
 
-Help us improve this workshop:
+=== Models
 
-* What did you find most valuable?
-* What could be improved?
-* What topics would you like to see covered in future workshops?
+* link:https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0[TinyLlama Model^] - The model used in this demo
 
-Submit feedback through the lab interface or the GitHub repository.
+=== Structured Outputs
 
-== Thank You!
+* link:https://json-schema.org/understanding-json-schema/[JSON Schema Reference^] - Understanding JSON Schema for structured outputs
+* link:https://github.com/ggerganov/llama.cpp/blob/master/grammars/README.md[GBNF Grammar Reference^] - Grammar-based constrained generation
 
-Thank you for participating in this workshop. We hope you found it valuable and gained practical skills you can apply immediately.
+=== MCP (Model Context Protocol)
 
-You've taken a significant step in understanding modern AI inference infrastructure. The combination of vLLM's high-performance serving, structured outputs for reliability, tool calling for automation, and MCP for agentic capabilities represents the cutting edge of AI application development.
+* link:https://modelcontextprotocol.io[MCP Specification^] - Official Model Context Protocol documentation
+* link:https://github.com/modelcontextprotocol/servers[MCP Servers Repository^] - Community and reference MCP server implementations
+* link:https://www.anthropic.com/news/model-context-protocol[Anthropic MCP Announcement^] - Background on the Model Context Protocol
 
-Keep building, keep learning! 🚀
+=== Benchmarking
+
+* link:https://developers.redhat.com/articles/2025/06/20/guidellm-evaluate-llm-deployments-real-world-inference#[GuideLLM Blog^] - Evaluate LLM deployments with real-world inference patterns
+* link:https://github.com/neuralmagic/guidellm[GuideLLM GitHub^] - Performance benchmarking tool for LLM inference
+
+=== Red Hat
+
+* link:https://www.redhat.com/en/products/ai/inference-server[Red Hat AI Inference Server^] - Enterprise inference platform powered by vLLM
+
+== Thank You
+
+Thank you for your time today. The combination of vLLM's high-performance serving, structured outputs for reliability, tool calling for automation, and MCP for agentic capabilities represents a practical, production-ready approach to AI inference infrastructure.
+
+We look forward to continuing the conversation.
 
 ---
 
-**Workshop**: vLLM Playground Workshop +
-**Completed**: {localdate} +
-**Platform**: Red Hat Showroom +
-**Duration**: ~90 minutes +
-**Modules Completed**: 5
+*Demo*: vLLM Playground Demo +
+*Date*: {localdate} +
+*Platform*: Red Hat Showroom

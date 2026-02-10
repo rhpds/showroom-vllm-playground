@@ -3,41 +3,83 @@
 :toc: macro
 :toclevels: 1
 
-In Module 2, you learned to constrain AI outputs to specific formats. Now ACME Corporation wants to take their AI customer support to the next level: enabling the AI to not just respond, but to take actions—looking up order status, checking inventory, or scheduling callbacks. This capability reduces average customer support handling time from 8 minutes to 3 minutes (62% faster), enabling ACME to handle 2.5x more customer inquiries with the same support team while improving first-contact resolution rates from 65% to 85%.
+In Module 2, structured outputs constrained AI responses to specific formats. Now ACME Corporation wants to take their AI customer support to the next level: enabling the AI to not just respond, but to take actions, such as looking up order status, checking inventory, or scheduling callbacks. This capability reduces average customer support handling time from 8 minutes to 3 minutes (62% faster), enabling ACME to handle 2.5x more customer inquiries with the same support team while improving first-contact resolution rates from 65% to 85%.
 
-Tool calling (also known as function calling) allows the AI to recognize when it needs external data or actions, and generate structured function calls that your systems can execute. In this module, you'll configure tool calling and define custom tools for ACME's customer support scenarios. By implementing tool calling, ACME achieves $400,000 annual savings through improved agent productivity and reduced escalation rates.
+Tool calling (also known as function calling) allows the AI to recognize when it needs external data or actions, and generate structured function calls that systems can execute. This module demonstrates how to configure tool calling and define custom tools for ACME's customer support scenarios. By implementing tool calling, ACME achieves $400,000 annual savings through improved agent productivity and reduced escalation rates.
 
-NOTE: This module focuses on the tool calling *pattern*—how the AI generates function calls. Actual tool execution with human-in-the-loop approval is covered in Module 4 (MCP Integration).
+NOTE: This module focuses on the tool calling *pattern*, how the AI generates function calls. Actual tool execution with human-in-the-loop approval is covered in Module 4 (MCP Integration).
 
-== Learning objectives
+[[part-1]]
+== Part 1 - Enabling Tool Calling
 
-By the end of this module, you'll be able to:
+=== Know
 
-* Enable tool calling in vLLM Playground server configuration
-* Understand tool calling parsers for different model families
-* Define custom tools with proper function schemas
-* Interpret AI-generated function calls and arguments
-* Choose the appropriate model and parser for tool calling use cases
+_Customer challenge: ACME's engineering team needs to move AI from passive responses to active assistance. Today the AI can only answer questions. It cannot look up data, trigger actions, or integrate with backend systems, forcing support agents to manually handle every request._
 
-[[exercise-1]]
-== Exercise 1: Enable tool calling
+**Business Impact:**
 
-ACME's engineering team needs to configure the vLLM server to support tool calling. This requires enabling the feature and selecting the appropriate parser for the model being used.
+* Support agents spend 62% of their time on manual data lookups that AI could automate
+* Customers must repeat information across multiple channels because AI cannot access backend systems
+* First-contact resolution sits at 65% because AI cannot take action on customer requests
+* ACME loses $400,000 annually in unnecessary escalations and agent overhead
 
-You'll restart the server with tool calling enabled and understand the different parser options.
+**Value Proposition:**
 
-=== Prerequisites
+Tool calling enables the AI to recognize when it needs external data, then generate structured function calls that backend systems can execute. Combined with proper tool definitions, this transforms AI from a conversational responder into an actionable assistant that integrates with ACME's existing order management, CRM, and scheduling systems.
 
-* Module 1 completed (familiar with vLLM Playground)
-* Access to vLLM Playground web UI
+=== Show
 
-=== Understanding tool calling
+**What I say:**
 
-Tool calling enables AI models to recognize when they need external data or capabilities, and generate structured requests (function calls) that your application can interpret and execute.
+"Now that we have structured outputs working, let me show you how tool calling takes things further. Instead of just formatting responses, the AI can now recognize when it needs real data and generate the right function call to get it."
 
-NOTE: **Tool calling does NOT mean LLM executes tools.** When tool calling is enabled, the AI model generates a JSON-formatted function call with arguments — but LLM itself does not execute any code or call external APIs. Your application (vLLM Playground in this case) is responsible for parsing the tool call, executing the actual function, and returning results to the model. This design ensures security and gives you full control over what actions are taken.
+**What I do:**
 
-=== Understanding tool calling parsers
+. Open the vLLM Playground web UI:
++
+link:http://{hostname}:7860[Open vLLM Playground^]
+
+. If a server is running, stop it first:
++
+* Click *Stop Server* in the Server Configuration panel
+
+. In the *Server Configuration* panel, configure tool calling:
++
+.. Check *Enable Tool Calling*
+.. Select a tool calling parser (or leave as "Auto-detect")
+image::module-03-figure-01.png[vLLM Playground Server Configuration panel showing Enable Tool Calling checkbox checked in blue, Tool Call Parser dropdown menu set to Hermes parser, and Model dropdown displaying Qwen/Qwen2.5-3B-Instruct selected. The Start Server button is visible below the configuration options ready to launch the tool-calling enabled server,align="center",width=500,link=module-03-figure-01.png^,title="Enable Tool Calling"]
++
+.. Choose a model that supports tool calling
+
+. For this configuration, use:
++
+[cols="1,2"]
+|===
+|Setting |Value
+
+|Model
+|`Qwen/Qwen2.5-3B-Instruct` (or similar Qwen model)
+
+|Enable Tool Calling
+|Checked
+
+|Tool Call Parser
+|`hermes` (or Auto-detect)
+|===
++
+NOTE: Qwen models are open and don't require HuggingFace authentication. If using gated models like Llama, ensure HuggingFace access is configured.
+
+. Click *Start Server* and wait for the model to load.
+
+. Monitor the server logs in the *Server Logs* panel for tool calling confirmation. Look for messages indicating tool calling is enabled and the model has loaded successfully.
+
+**What they should notice:**
+
+* The "Enable Tool Calling" checkbox activates parser configuration options
+* Different parser options correspond to different model families (Llama, Mistral, Hermes)
+* Server logs confirm tool calling parser loaded successfully
+
+**Understanding tool calling parsers:**
 
 Different model families use different formats for tool calling. vLLM supports several parsers:
 
@@ -62,96 +104,19 @@ Different model families use different formats for tool calling. vLLM supports s
 |Attempts to detect model type
 |===
 
-=== Steps
+NOTE: **Tool calling does NOT mean LLM executes tools.** When tool calling is enabled, the AI model generates a JSON-formatted function call with arguments, but the LLM itself does not execute any code or call external APIs. The application (vLLM Playground in this case) is responsible for parsing the tool call, executing the actual function, and returning results to the model. This design ensures security and gives full control over what actions are taken.
 
-. Open the vLLM Playground web UI:
+**What I say:**
+
+"With the server configured, let me define the tools that the AI can invoke. Each tool has a name, description, and parameter schema that tells the AI when and how to use it."
+
+**What I do:**
+
+. In vLLM Playground, navigate to the *Tools* panel (wrench icon in the toolbar).
 +
-link:http://{hostname}:7860[Open vLLM Playground^]
+image::module-03-figure-02.png[vLLM Playground Tools panel with wrench icon in the toolbar. The panel displays a JSON editor area for defining function calling tools with syntax highlighting, Add Tool button at top-left, Save button at bottom-right, and placeholder text for entering tool definitions in OpenAI-compatible function format,align="center",width=600,link=module-03-figure-02.png^,title="Tools Panel"]
 
-. If a server is running, stop it first:
-+
-* Click *Stop Server* in the Server Configuration panel
-
-. In the *Server Configuration* panel, configure tool calling:
-+
-.. Check *Enable Tool Calling*
-.. Select a tool calling parser (or leave as "Auto-detect")
-image::module-03-figure-01.png[vLLM Playground Server Configuration panel showing Enable Tool Calling checkbox checked in blue, Tool Call Parser dropdown menu set to Hermes parser, and Model dropdown displaying Qwen/Qwen2.5-3B-Instruct selected. The Start Server button is visible below the configuration options ready to launch the tool-calling enabled server,align="center",width=500,link=module-03-figure-01.png^,title="Enable Tool Calling"]
-+
-.. Choose a model that supports tool calling
-
-. For this exercise, configure:
-+
-[cols="1,2"]
-|===
-|Setting |Value
-
-|Model
-|`Qwen/Qwen2.5-3B-Instruct` (or similar Qwen model)
-
-|Enable Tool Calling
-|✓ Checked
-
-|Tool Call Parser
-|`hermes` (or Auto-detect)
-|===
-+
-NOTE: Qwen models are open and don't require HuggingFace authentication. If using gated models like Llama, ensure you have HuggingFace access configured.
-
-. Click *Start Server* and wait for the model to load.
-
-. Monitor the server logs in the *Server Logs* panel for tool calling confirmation. Look for messages indicating tool calling is enabled and the model has loaded successfully.
-
-=== Verify
-
-Confirm tool calling is enabled:
-
-✓ Server started without errors
-
-✓ "Enable Tool Calling" shows as active in the UI
-
-✓ Server logs confirm tool calling parser loaded
-
-=== Troubleshooting
-
-**Issue**: "Tool calling not supported for this model"
-
-**Solution**:
-
-. Use a model that supports function calling (Llama 3.x, Mistral, Qwen)
-. Check the model's documentation for tool calling support
-. Try a different parser setting
-
-**Issue**: Server fails to start with tool calling enabled
-
-**Solution**:
-
-. Check GPU memory—tool calling may require additional resources
-. Try a smaller model
-. Review server logs for specific errors
-
-[[exercise-2]]
-== Exercise 2: Define custom tools
-
-With tool calling enabled, ACME needs to define the tools (functions) that the AI can invoke. Each tool has a name, description, and parameter schema that tells the AI when and how to use it.
-
-You'll create customer support tools that the AI can call to assist customers.
-
-=== Understanding tool definitions
-
-A tool definition includes:
-
-* **name**: Function identifier (e.g., `get_order_status`)
-* **description**: When to use this tool (helps AI decide)
-* **parameters**: JSON Schema defining expected arguments
-
-=== Steps
-
-. In vLLM Playground, navigate to the *Tools* panel (🔧 icon in the toolbar).
-+
-image::module-03-figure-02.png[vLLM Playground Tools panel with wrench icon (🔧) in the toolbar. The panel displays a JSON editor area for defining function calling tools with syntax highlighting, Add Tool button at top-left, Save button at bottom-right, and placeholder text for entering tool definitions in OpenAI-compatible function format,align="center",width=600,link=module-03-figure-02.png^,title="Tools Panel"]
-
-. Click *Add Tool* to define your first customer support function.
+. Click *Add Tool* to define the first customer support function.
 
 . Create an order status lookup tool:
 +
@@ -268,21 +233,18 @@ image::module-03-figure-03.png[JSON tool definition in the Tools panel showing g
 }
 ----
 
-. Your tools panel should now show 4 defined tools:
+. The tools panel should now show 4 defined tools:
 +
 image::module-03-figure-04.png[Tools panel displaying four customer support tools defined: get_order_status, get_customer_info, schedule_callback, and search_products. Each tool shows its function name, description, and parameter schema. The list view shows all tools are successfully saved and ready for the AI model to invoke during customer support conversations,align="center",width=600,link=module-03-figure-04.png^,title="Defined Tools"]
 
-=== Verify
+**What they should notice:**
 
-Confirm tools are properly defined:
+* Each tool has a clear name, description, and parameter schema
+* Descriptions guide the AI on *when* to use each tool
+* Parameters define *what* information the AI needs to extract from the conversation
+* Required vs optional parameters give the AI flexibility
 
-✓ All 4 tools appear in the Tools panel
-
-✓ Each tool has name, description, and parameters
-
-✓ No JSON syntax errors (panel accepts the definitions)
-
-=== Best practices for tool definitions
+**Best practices for tool definitions:**
 
 [cols="1,2"]
 |===
@@ -304,14 +266,44 @@ Confirm tools are properly defined:
 |Provides sensible fallbacks
 |===
 
-[[exercise-3]]
-== Exercise 3: Test tool calling workflow
+**If asked:**
 
-Now you'll see tool calling in action. The AI will analyze customer messages and generate appropriate function calls based on the tools you defined. Remember: in this module, we're observing the *pattern*—the AI generates the calls, but we don't execute them.
+Q: "Why use Hermes parser instead of Auto-detect?"
+A: "Auto-detect works for most cases, but explicitly setting the parser avoids misidentification. Qwen models work best with the Hermes parser."
 
-=== Steps
+Q: "Can we define tools dynamically at runtime?"
+A: "Yes. Tools are passed via the API request body, so they can be changed per conversation. In production, different support tiers could have different tool sets."
 
-. Ensure your tools from Exercise 2 are loaded and the server is running with tool calling enabled.
+Q: "How many tools can we define?"
+A: "There is no hard limit, but more tools means more context for the model to evaluate. Best practice is to keep tools focused and relevant to the use case, typically under 10-15 tools."
+
+[[part-2]]
+== Part 2 - Advanced Tool Patterns (Optional)
+
+=== Know
+
+_Customer challenge: ACME needs confidence that tool calling works reliably across diverse customer interactions. Support conversations range from simple order lookups to complex multi-step requests, and the AI must handle all of them correctly._
+
+**Business Impact:**
+
+* Incorrect tool calls waste backend resources and return wrong data to customers
+* Failure to invoke tools when needed forces fallback to manual support
+* Multi-step requests (check order AND search products) require the AI to handle multiple tools in a single turn
+* Conversational messages that do not need tools must still receive natural responses
+
+**Value Proposition:**
+
+Testing the tool calling workflow across multiple scenarios validates that the AI correctly identifies when to use tools, extracts the right arguments, and responds naturally when tools are not needed. This builds confidence before connecting to live backend systems in Module 4.
+
+=== Show
+
+**What I say:**
+
+"Let me walk through several real customer scenarios to show how the AI decides when and which tools to call. Watch how it extracts the right information from natural language."
+
+**What I do:**
+
+. Ensure the tools from Part 1 are loaded and the server is running with tool calling enabled.
 
 . In the *Chat* panel, set a system prompt for customer support:
 +
@@ -329,7 +321,7 @@ This setting allows the AI to automatically decide when to use tools based on th
 Hi, I placed an order last week and haven't received any updates. My order number is ORD-78432. Can you check the status?
 ----
 +
-Expected AI behavior—generates a tool call:
+Expected AI behavior, generates a tool call:
 +
 [source,json]
 ----
@@ -345,7 +337,7 @@ image::module-03-figure-05.png[Chat interface showing AI response generating a J
 +
 NOTE: Streaming is disabled for tool calling due to a bug in vLLM v0.11.0. This issue has been resolved in later versions of vLLM.
 
-. Observe the response format:
+. Point out the response format:
 * The AI recognizes the need for external data
 * Instead of making up information, it generates a function call
 * The arguments are extracted from the customer's message
@@ -414,13 +406,13 @@ Expected tool call:
 +
 image::module-03-figure-08.png[Chat interface showing AI response generating a JSON tool call for search_products function with query (wireless headphones), category (electronics), and max_results (5) arguments extracted from customer inquiry about headphones under $100,align="center",width=700,link=module-03-figure-08.png^,title="Product Search Tool Call"]
 
-. Test a message that doesn't need tools:
+. Test a message that does not need tools:
 +
 ----
 Thanks for your help today!
 ----
 +
-Expected: Normal text response (no tool call) — the AI should respond conversationally without invoking a tool.
+Expected: Normal text response (no tool call). The AI should respond conversationally without invoking a tool.
 
 . Test multiple potential tools:
 +
@@ -432,47 +424,86 @@ Observe: The AI may generate multiple tool calls or prioritize one. Different mo
 +
 image::module-03-figure-09.png[Chat interface showing AI response generating multiple JSON tool calls in a single reply: get_order_status for checking order ORD-99001 and search_products for finding new laptop model. Demonstrates AI ability to handle complex queries requiring multiple external data lookups simultaneously,align="center",width=700,link=module-03-figure-09.png^,title="Multiple Tool Calls"]
 
-=== Verify
+**What they should notice:**
 
-Confirm tool calling workflow works:
+* AI generates tool calls for appropriate requests and responds normally when tools are not needed
+* Arguments are correctly extracted from natural language customer messages
+* Tool names match the defined functions
+* JSON format is valid and parseable
+* The AI does not fabricate data. It asks the backend for real information
 
-✓ AI generates tool calls for appropriate requests
-
-✓ Arguments are correctly extracted from customer messages
-
-✓ Tool names match the defined functions
-
-✓ AI responds normally when tools aren't needed
-
-✓ JSON format is valid and parseable
-
-=== Understanding the workflow
+**Understanding the workflow:**
 
 [source,text]
 ----
-┌─────────────────────────────────────────────────────────────┐
-│                    Tool Calling Workflow                    │
-│                                                             │
-│  1. Customer Message                                        │
-│     "Check order ORD-12345"                                 │
-│              ↓                                              │
-│  2. AI Analysis                                             │
-│     Recognizes need for get_order_status tool               │
-│              ↓                                              │
-│  3. Tool Call Generated                                     │
-│     {"name": "get_order_status", "arguments": {...}}        │
-│              ↓                                              │
-│  4. [Module 4] Tool Execution    (MCP Server)               │
-│     Actual function runs, returns data                      │
-│              ↓                                              │
-│  5. [Module 4] AI Response                                  │
-│     AI incorporates result into customer response           │
-└─────────────────────────────────────────────────────────────┘
++---------------------------------------------------------+
+|                    Tool Calling Workflow                 |
+|                                                         |
+|  1. Customer Message                                    |
+|     "Check order ORD-12345"                             |
+|              |                                          |
+|  2. AI Analysis                                         |
+|     Recognizes need for get_order_status tool           |
+|              |                                          |
+|  3. Tool Call Generated                                 |
+|     {"name": "get_order_status", "arguments": {...}}    |
+|              |                                          |
+|  4. [Module 4] Tool Execution    (MCP Server)           |
+|     Actual function runs, returns data                  |
+|              |                                          |
+|  5. [Module 4] AI Response                              |
+|     AI incorporates result into customer response       |
++---------------------------------------------------------+
 ----
 
-In this module, we completed steps 1-3. Module 4 (MCP Integration) covers steps 4-5 with actual tool execution.
+In this module, steps 1-3 were demonstrated. Module 4 (MCP Integration) covers steps 4-5 with actual tool execution.
 
-=== Troubleshooting
+**If asked:**
+
+Q: "What happens if the AI calls the wrong tool?"
+A: "Good tool descriptions minimize this. In production, you would add validation logic before executing any tool call. The AI's tool call is just a suggestion that your application decides whether to execute."
+
+Q: "Can the AI chain multiple tool calls together?"
+A: "Yes, some models support parallel tool calling. The AI can generate multiple tool calls in a single response, and the application can execute them and return all results for the AI to synthesize."
+
+Q: "How does this compare to LangChain or other agent frameworks?"
+A: "This is the same underlying mechanism. LangChain, CrewAI, and other frameworks use OpenAI-compatible tool calling under the hood. vLLM provides the native inference support that those frameworks build on."
+
+== Clean up
+
+Before proceeding to Module 4, stop the current vLLM server to prepare for MCP integration:
+
+. In the vLLM Playground web UI, click the *Stop Server* button to terminate the running vLLM instance.
+
+. Verify the server has stopped by checking that the server status shows "Stopped" or the Start Server button becomes available again.
+
+NOTE: Module 4 requires restarting the vLLM Playground daemon service after installing MCP dependencies. Stopping the server now ensures a clean transition.
+
+== Troubleshooting
+
+**Issue**: "Tool calling not supported for this model"
+
+**Solution**:
+
+. Use a model that supports function calling (Llama 3.x, Mistral, Qwen)
+. Check the model's documentation for tool calling support
+. Try a different parser setting
+
+**Issue**: Server fails to start with tool calling enabled
+
+**Solution**:
+
+. Check GPU memory. Tool calling may require additional resources
+. Try a smaller model
+. Review server logs for specific errors
+
+**Issue**: Tool calls not appearing in response
+
+**Solution**:
+
+. Verify "Enable Tool Calling" is checked
+. Restart server after enabling
+. Check server logs for tool-related errors
 
 **Issue**: AI responds with text instead of tool calls
 
@@ -500,26 +531,6 @@ In this module, we completed steps 1-3. Module 4 (MCP Integration) covers steps 
 . Try "Auto-detect" parser setting
 . Some models may need specific prompt formatting
 
-== Clean up
-
-Before proceeding to Module 4, stop the current vLLM server to prepare for MCP integration:
-
-. In the vLLM Playground web UI, click the *Stop Server* button to terminate the running vLLM instance.
-
-. Verify the server has stopped by checking that the server status shows "Stopped" or the Start Server button becomes available again.
-
-NOTE: Module 4 requires restarting the vLLM Playground daemon service after installing MCP dependencies. Stopping the server now ensures a clean transition.
-
-== Troubleshooting
-
-**Issue**: Tool calls not appearing in response
-
-**Solution**:
-
-. Verify "Enable Tool Calling" is checked
-. Restart server after enabling
-. Check server logs for tool-related errors
-
 **Issue**: Model ignores defined tools
 
 **Solution**:
@@ -536,34 +547,22 @@ NOTE: Module 4 requires restarting the vLLM Playground daemon service after inst
 . Reduce number of tools if possible
 . Use concise tool descriptions
 
-== Learning outcomes
-
-By completing this module, you should now understand:
-
-* ✓ How tool calling enables AI to request external data and actions
-* ✓ The role of tool parsers for different model families
-* ✓ How to define tools with proper schemas and descriptions
-* ✓ The workflow from customer message to generated function call
-* ✓ Best practices for tool definitions that guide AI behavior
-* ✓ The difference between tool call generation and tool execution
-
 == Module summary
 
-You've successfully completed the Advanced Inferencing: Tool Calling module.
-
-**What you accomplished:**
+**What was demonstrated:**
 
 * Enabled tool calling in vLLM Playground server configuration
-* Understood tool calling parsers for Llama, Mistral, and Hermes models
+* Covered tool calling parsers for Llama, Mistral, and Hermes models
 * Defined 4 customer support tools with proper schemas
 * Tested tool calling workflow with various customer scenarios
 * Observed AI-generated function calls with extracted arguments
+* Showed the difference between tool call generation and tool execution
 
 **Key takeaways:**
 
 * Tool calling transforms AI from passive responder to active assistant
 * Good tool descriptions are critical for AI decision-making
-* The AI generates structured calls; your systems handle execution
+* The AI generates structured calls; backend systems handle execution
 * Different models have different tool calling capabilities
 * Tool calling is the foundation for agentic AI workflows
 
@@ -574,6 +573,12 @@ You've successfully completed the Advanced Inferencing: Tool Calling module.
 * Reduces need for customers to provide information multiple ways
 * Foundation for automated support workflows
 
-**Next steps:**
+**Next module:**
 
-Module 4 will explore *Advanced Inferencing: MCP Integration* - connecting the AI to actual external tools with human-in-the-loop approval for safe execution.
+Module 4 explores *Advanced Inferencing: MCP Integration*, connecting the AI to actual external tools with human-in-the-loop approval for safe execution.
+
+== References
+
+* link:https://github.com/micytao/vllm-playground[vLLM Playground GitHub Repository^] - Tool calling configuration and usage
+* link:https://github.com/vllm-project/vllm[vLLM Project^] - High-performance inference engine
+* link:https://docs.vllm.ai/en/latest/features/tool_calling.html[vLLM Tool Calling Documentation^] - Guided decoding and tool calling reference

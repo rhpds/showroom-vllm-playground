@@ -1,13 +1,13 @@
-= vLLM Playground demonstration overview
+= vLLM Playground Demo Overview
 :toc:
 :toc-placement: preamble
 :icons: font
 
 == Customer scenario: ACME Corporation
 
-You're seeing how a senior AI engineer at ACME Corporation evaluates and implements an AI inference system that serves multiple Large Language Models (LLMs) efficiently for their customer support modernization initiative.
+ACME Corporation is evaluating AI inference solutions to modernize their customer support infrastructure. A senior AI engineer at ACME has been tasked with assessing vLLM / Red Hat AI Inference Server (RHAIIS) as the foundation for their AI inference service.
 
-ACME needs to transform their customer support infrastructure to handle increasing demand while maintaining response quality. Their VP of Engineering has explained: "We need a flexible AI inference platform that can serve multiple models, integrate with external tools, and scale to meet our enterprise requirements."
+ACME needs to transform their customer support to handle increasing demand while maintaining response quality. Their VP of Engineering has explained: "We need a flexible AI inference platform that can serve multiple models, integrate with external tools, and scale to meet our enterprise requirements."
 
 **The evaluation**: Assess vLLM / Red Hat AI Inference Server (RHAIIS) as the foundation for ACME's AI inference service, demonstrating capabilities for model serving, tool calling, and agentic workflows.
 
@@ -15,20 +15,20 @@ ACME needs to transform their customer support infrastructure to handle increasi
 
 == Business outcomes this demo delivers
 
-By the end of this demonstration, you'll understand how ACME addresses their customer support challenges through practical AI inference capabilities:
+This demonstration shows how ACME addresses their customer support challenges through practical AI inference capabilities:
 
-* **Deploy and manage vLLM servers using Podman containers** → Establish reliable model serving infrastructure that eliminates manual deployment overhead
-* **Interact with LLMs through modern chat interfaces** → Demonstrate real-time customer interaction capabilities with streaming responses
-* **Configure structured outputs for consistent AI responses** → Ensure predictable, parseable data for downstream system integration
-* **Implement tool calling for dynamic functionality** → Enable AI to execute actions and retrieve information from external systems
-* **Set up MCP servers for agentic capabilities** → Extend AI with external tool access and human-in-the-loop approval workflows
-* **Run performance benchmarks to validate throughput** → Prove the system can handle production workloads with quantified metrics
+* **Deploy and manage vLLM servers using Podman containers** - Establish reliable model serving infrastructure that eliminates manual deployment overhead
+* **Interact with LLMs through modern chat interfaces** - Demonstrate real-time customer interaction capabilities with streaming responses
+* **Configure structured outputs for consistent AI responses** - Ensure predictable, parseable data for downstream system integration
+* **Implement tool calling for dynamic functionality** - Enable AI to execute actions and retrieve information from external systems
+* **Set up MCP servers for agentic capabilities** - Extend AI with external tool access and human-in-the-loop approval workflows
+* **Run performance benchmarks to validate throughput** - Prove the system can handle production workloads with quantified metrics
 
-**Technical outcome**: Hands-on experience with vLLM / RHAIIS that directly applies to enterprise AI infrastructure requirements.
+**Technical outcome**: Demonstrated experience with vLLM / RHAIIS that directly applies to enterprise AI infrastructure requirements.
 
 **Business benefit**: A proven AI inference platform that enables intelligent customer support with enterprise-grade reliability and scalability.
 
-== Target audience for this demonstration
+== Target audience
 
 This demonstration addresses the needs of:
 
@@ -37,14 +37,14 @@ This demonstration addresses the needs of:
 * **Platform Engineers** evaluating AI serving solutions for enterprise deployment
 * **Architects** designing enterprise AI systems and technology stacks
 
-== Prerequisites for understanding this demo
+== Presenter preparation
 
-To get the most value from this demonstration, you should have:
+To deliver this demonstration effectively, presenters should have:
 
-* Basic Red Hat Enterprise Linux (RHEL) experience - familiarity with Linux terminal operations
-* Understanding of containers and Podman - knowledge of how containers work
-* Basic AI/ML concepts - understanding of what LLMs and inference mean
-* Interest in production AI infrastructure - evaluating solutions for enterprise deployment
+* Basic Red Hat Enterprise Linux (RHEL) experience, including familiarity with Linux terminal operations
+* Understanding of containers and Podman, including how container-based deployments work
+* Basic AI/ML concepts, including understanding of what LLMs and inference mean
+* Familiarity with customer support use cases for AI deployment
 
 == ACME Corporation's AI infrastructure challenges
 
@@ -54,10 +54,10 @@ To get the most value from this demonstration, you should have:
 
 **Current operational challenges**:
 
-* **Inconsistent AI responses**: Different models produce varying output formats → Complicates integration with existing CRM and ticketing systems
-* **Limited tool integration**: Current AI solutions can't execute actions or access external data → Reduces automation potential and requires manual intervention
-* **Manual model management**: Deploying and updating models requires significant manual effort → Slows down iteration cycles and delays feature deployment
-* **Scalability uncertainty**: Unclear if current approach can handle production traffic → Risks poor customer experience during peak periods
+* **Inconsistent AI responses**: Different models produce varying output formats, which complicates integration with existing CRM and ticketing systems
+* **Limited tool integration**: Current AI solutions cannot execute actions or access external data, which reduces automation potential and requires manual intervention
+* **Manual model management**: Deploying and updating models requires significant manual effort, which slows down iteration cycles and delays feature deployment
+* **Scalability uncertainty**: Unclear if current approach can handle production traffic, which risks poor customer experience during peak periods
 
 **The opportunity**: vLLM Playground provides a unified platform for model serving with advanced features that address these challenges. ACME's AI team has been selected to evaluate its feasibility for their customer support use case.
 
@@ -69,38 +69,38 @@ If vLLM Playground proves effective for ACME's use case, here are the anticipate
 
 **Immediate improvements** (short-term wins):
 
-* **Faster model deployment**: Deploy new models in minutes via containers → Accelerate experimentation and iteration from days to minutes
-* **Consistent AI outputs**: Structured outputs ensure predictable response formats → Simplify integration with downstream CRM and ticketing systems
-* **Reduced integration complexity**: Standard APIs and consistent formats → Eliminate custom parsing logic and reduce maintenance overhead
+* **Faster model deployment**: Deploy new models in minutes via containers, accelerating experimentation and iteration from days to minutes
+* **Consistent AI outputs**: Structured outputs ensure predictable response formats, simplifying integration with downstream CRM and ticketing systems
+* **Reduced integration complexity**: Standard APIs and consistent formats eliminate custom parsing logic and reduce maintenance overhead
 
 **Strategic benefits** (long-term value):
 
-* **Agentic capabilities**: MCP integration enables AI to use external tools → Expand automation possibilities for ticket routing, knowledge base search, and customer data retrieval
-* **Human-in-the-loop approval**: Safe tool execution with manual approval gates → Maintain control over AI actions while enabling advanced workflows
-* **Performance visibility**: Built-in benchmarking validates throughput and latency → Enable confident capacity planning and SLA commitments
-* **Enterprise scalability**: Proven high-performance inference engine → Support growing customer support volume without degradation
+* **Agentic capabilities**: MCP integration enables AI to use external tools, expanding automation possibilities for ticket routing, knowledge base search, and customer data retrieval
+* **Human-in-the-loop approval**: Safe tool execution with manual approval gates, maintaining control over AI actions while enabling advanced workflows
+* **Performance visibility**: Built-in benchmarking validates throughput and latency, enabling confident capacity planning and SLA commitments
+* **Enterprise scalability**: Proven high-performance inference engine, supporting growing customer support volume without degradation
 
 **Success metric**: A demonstrable AI inference platform that serves multiple models with tool calling, structured outputs, and agentic capabilities suitable for ACME's customer support requirements at enterprise scale.
 
 == Common questions presenters should address
 
 **"Can we use different models for different use cases?"**
-→ Yes. vLLM Playground supports various models including Llama, Mistral, Qwen, and others with model-specific optimizations. You can deploy multiple vLLM servers simultaneously for different purposes.
+-> Yes. vLLM Playground supports various models including Llama, Mistral, Qwen, and others with model-specific optimizations. You can deploy multiple vLLM servers simultaneously for different purposes.
 
 **"How do we control AI outputs for integration with our existing systems?"**
-→ Module 2 demonstrates structured outputs using JSON Schema, Regex, and Grammar to constrain responses. This ensures consistent formats for downstream system integration.
+-> Module 2 demonstrates structured outputs using JSON Schema, Regex, and Grammar to constrain responses. This ensures consistent formats for downstream system integration.
 
 **"How does tool calling work with our customer support scenarios?"**
-→ Module 3 shows defining custom tools that AI can invoke to retrieve customer data from CRMs, search knowledge bases, or execute support actions like ticket creation and routing.
+-> Module 3 shows defining custom tools that AI can invoke to retrieve customer data from CRMs, search knowledge bases, or execute support actions like ticket creation and routing.
 
 **"Can we extend AI with access to our internal systems safely?"**
-→ Module 4 demonstrates MCP integration for connecting AI to external tools with human-in-the-loop approval. This enables safe access to internal systems while maintaining control.
+-> Module 4 demonstrates MCP integration for connecting AI to external tools with human-in-the-loop approval. This enables safe access to internal systems while maintaining control.
 
 **"How do we validate the system can handle production workloads?"**
-→ Module 5 covers performance benchmarking with GuideLLM to measure throughput, latency, and resource utilization. This provides quantified data for capacity planning and SLA commitments.
+-> Module 5 covers performance benchmarking with GuideLLM to measure throughput, latency, and resource utilization. This provides quantified data for capacity planning and SLA commitments.
 
 **"What about ongoing operational costs and resource requirements?"**
-→ vLLM's memory-efficient architecture and GPU optimization reduce infrastructure costs. The demo shows resource monitoring and optimization techniques for cost-effective operation.
+-> vLLM's memory-efficient architecture and GPU optimization reduce infrastructure costs. The demo shows resource monitoring and optimization techniques for cost-effective operation.
 
 == Demonstration flow and timing guidance
 

@@ -1,10 +1,10 @@
 = Building Production-Ready AI Infrastructure with vLLM Playground
 
-Welcome to the vLLM Playground demonstration!
+Welcome to the vLLM Playground demonstration.
 
-== What you'll see in this demo
+== What this demo covers
 
-In this demonstration, we'll show you how ACME Corporation is building production-ready AI infrastructure with vLLM Playground:
+This demonstration shows how ACME Corporation is building production-ready AI infrastructure with vLLM Playground:
 
 * Deploy vLLM servers via container management using Podman for rapid model serving
 * Use modern chat interfaces with streaming responses to deliver real-time customer experiences
@@ -26,17 +26,17 @@ This demonstration is designed for:
 
 == Demo formats
 
-This demonstration is modular and can be tailored to your time constraints:
+This demonstration is modular and can be tailored to time constraints:
 
 * **15-20 minutes (Executive Brief)**: Core business value + vLLM deployment demonstration
 * **30-45 minutes (Standard Technical Demo)**: Getting Started, Structured Outputs, and Tool Calling capabilities
 * **60 minutes (Deep Technical Dive)**: Complete demonstration of all 5 advanced features with performance benchmarking
 
-Your presenter will adapt the content based on your interests and available time.
+The presenter will adapt the content based on audience interests and available time.
 
 == ACME Corporation scenario
 
-Throughout this demo, we'll follow **ACME Corporation's journey** to modernize their customer support infrastructure:
+Throughout this demo, we follow **ACME Corporation's journey** to modernize their customer support infrastructure:
 
 * **Business Challenge**: Build AI-powered customer support that handles increasing demand while maintaining response quality
 * **Technical Requirements**: Flexible AI inference platform serving multiple models with tool integration and enterprise scalability
@@ -44,7 +44,7 @@ Throughout this demo, we'll follow **ACME Corporation's journey** to modernize t
 
 == Demo environment
 
-For this demonstration, we're using a pre-configured environment with:
+For this demonstration, the environment is pre-configured with:
 
 * GPU-enabled inference host: {targethost}
 * vLLM Playground v0.1.1 pre-installed
@@ -59,8 +59,8 @@ NOTE: All environment details and credentials are available for hands-on explora
 * **Standard demo**: 30-45 minutes (modules 1-3)
 * **Executive brief**: 15-20 minutes (module 1 + highlights)
 
-Your presenter will customize the flow based on your priorities.
+The presenter will customize the flow based on audience priorities.
 
-== Let's get started!
+== Get started
 
 Click on **Demo Overview** in the navigation to understand ACME's business challenge and how vLLM Playground addresses their AI infrastructure requirements.

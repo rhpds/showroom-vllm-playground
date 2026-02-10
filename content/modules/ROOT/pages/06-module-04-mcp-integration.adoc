@@ -3,29 +3,29 @@
 :toc: macro
 :toclevels: 1
 
-In Module 3, you configured tool calling and saw how the AI generates function calls. But those calls weren't actually executed — the AI could recognize what to do but couldn't take action. Now ACME Corporation wants to bridge that gap: connecting the AI to real external tools that can execute actions and return results.
+In Module 3, we configured tool calling and saw how the AI generates function calls. But those calls were not actually executed, the AI could recognize what to do but could not take action. In this module, we bridge that gap for ACME Corporation by connecting the AI to real external tools that can execute actions and return results.
 
-Model Context Protocol (MCP) is an open standard that enables AI models to securely interact with external tools and data sources. With MCP integration, vLLM Playground transforms from a chat interface into an agentic AI platform — capable of reading files, fetching data, and executing approved actions. **Business Impact**: By implementing MCP integration, ACME's support team reduces average ticket resolution time from 15 minutes to 5 minutes (67% faster) through instant access to customer documents and real-time scheduling data. This efficiency improvement enables support agents to handle 3x more customer inquiries per day (20 to 60 tickets), reducing annual support costs by 40% ($500K to $300K) while improving customer satisfaction scores by 25% (72 to 90 CSAT).
+Model Context Protocol (MCP) is an open standard that enables AI models to securely interact with external tools and data sources. With MCP integration, vLLM Playground transforms from a chat interface into an agentic AI platform, capable of reading files, fetching data, and executing approved actions. **Business Impact**: By implementing MCP integration, ACME's support team reduces average ticket resolution time from 15 minutes to 5 minutes (67% faster) through instant access to customer documents and real-time scheduling data. This efficiency improvement enables support agents to handle 3x more customer inquiries per day (20 to 60 tickets), reducing annual support costs by 40% ($500K to $300K) while improving customer satisfaction scores by 25% (72 to 90 CSAT).
 
-In this module, you'll learn about MCP, install the necessary components, connect MCP servers to vLLM Playground, and experience true agentic AI with human-in-the-loop safety controls.
+This module covers MCP concepts, installation of the necessary components, connecting MCP servers to vLLM Playground, and true agentic AI with human-in-the-loop safety controls.
 
-== Learning objectives
+[[part-1]]
+== Part 1: Understanding MCP
 
-By the end of this module, you'll be able to:
+=== Know
 
-* Understand the Model Context Protocol (MCP) and its role in agentic AI
-* Install and configure MCP components for vLLM Playground
-* Connect and use MCP servers for external tool access
-* Configure file system access for AI-powered document analysis
-* Execute tool calls with human-in-the-loop approval
-* Build agentic workflows that combine AI reasoning with real tool execution
+MCP (Model Context Protocol) is the key to moving AI from "chat only" to actionable agent. Here is the business context for this demo:
 
-[[exercise-1]]
-== Exercise 1: Understand MCP and install MCP
+* Without MCP, AI can only generate text responses. Support agents still manually look up every customer document (8 minutes average per ticket).
+* With MCP, AI accesses real customer documents instantly (zero manual lookup time), retrieves current time for scheduling (eliminates timezone calculation errors), and executes approved support actions securely through human-in-the-loop control.
+* MCP is an open standard, not vendor lock-in. ACME can integrate with 50+ community MCP servers vs 10-15 proprietary integrations from competitors.
+* Data sovereignty is maintained. Customer documents never leave ACME's infrastructure, meeting enterprise compliance requirements that cloud-only solutions cannot address.
+* Cost control: 60% lower integration costs vs proprietary AI platforms with per-token pricing.
+* Deployment flexibility: Run on-premises or private cloud, unlike cloud-only competitors.
 
-Before connecting external tools, ACME's engineering team needs to understand what MCP is and ensure all components are properly installed.
+=== Show
 
-=== What is MCP?
+==== What is MCP?
 
 Model Context Protocol (MCP) is an open standard developed to enable AI models to:
 
@@ -33,7 +33,7 @@ Model Context Protocol (MCP) is an open standard developed to enable AI models t
 * **Execute actions**: Run commands, fetch data, modify files
 * **Maintain safety**: Human-in-the-loop approval for sensitive operations
 
-=== MCP architecture
+==== MCP architecture
 
 [source,text]
 ----
@@ -52,7 +52,7 @@ Model Context Protocol (MCP) is an open standard developed to enable AI models t
 └─────────────────────────────────────────────────────────────┘
 ----
 
-=== Key MCP concepts
+==== Key MCP concepts
 
 [cols="1,2"]
 |===
@@ -74,7 +74,7 @@ Model Context Protocol (MCP) is an open standard developed to enable AI models t
 |Communication protocol between client and server (stdio, HTTP)
 |===
 
-=== Why MCP matters for ACME
+==== Why MCP matters for ACME
 
 **Without MCP**:
 
@@ -98,15 +98,15 @@ Model Context Protocol (MCP) is an open standard developed to enable AI models t
 * **Deployment flexibility**: Run on-premises or private cloud, unlike cloud-only competitors
 * **Community innovation**: Leverage open-source MCP ecosystem without licensing fees
 
-=== Prerequisites
+==== Installing MCP and connecting the Time server
 
-* Module 3 completed (tool calling concepts understood)
-* Access to vLLM Playground web UI
-* SSH access to lab environment
+*What I say:*
 
-=== Steps
+"Let me walk through getting MCP installed and connecting our first MCP server. We will start with the Time server since it requires no configuration and clearly demonstrates the core MCP workflow."
 
-. Connect to your lab environment:
+*What I do:*
+
+. Connect to the lab environment:
 +
 [source,bash,subs="attributes"]
 ----
@@ -131,7 +131,7 @@ IMPORTANT: MCP requires Python 3.10+. If your version is older, MCP features wil
 vllm-playground status
 ----
 +
-Or checking daemon service 
+Or check the daemon service:
 +
 [source,bash]
 ----
@@ -201,7 +201,7 @@ link:http://{hostname}:7860[Open vLLM Playground^]
 +
 image::module-04-figure-01.png[MCP Server Configuration panel showing MCP Available status,align="center",width=700,link=module-04-figure-01.png^,title="MCP Server Configuration"]
 
-. You should see preset MCP server options:
+. The preset MCP server options should be visible:
 +
 [cols="1,2"]
 |===
@@ -220,54 +220,14 @@ image::module-04-figure-01.png[MCP Server Configuration panel showing MCP Availa
 |Get current time and timezone information
 |===
 
-=== Verify
+*What I say:*
 
-Confirm MCP is ready:
+"Now that MCP is installed, let me connect the Time server. This is the simplest MCP server. It requires no configuration and demonstrates the core MCP workflow perfectly."
 
-✓ Python 3.10+ is installed
+*What I do:*
 
-✓ MCP library is installed (`import mcp` works)
-
-✓ vLLM Playground shows MCP Servers panel
-
-✓ Preset servers are visible in the panel
-
-=== Troubleshooting
-
-**Issue**: "MCP requires Python 3.10+"
-
-**Solution**:
-
-. Check Python version: `python3 --version`
-. If older, install Python 3.10+ or use pyenv
-. Ensure vLLM Playground uses the correct Python
-
-**Issue**: "ModuleNotFoundError: No module named 'mcp'"
-
-**Solution**:
-
-. Install MCP: `sudo pip install mcp`
-. If using virtual environment, ensure it's activated
-. Try: `sudo pip3 install mcp`
-
-**Issue**: MCP Servers panel not visible
-
-**Solution**:
-
-. Verify vLLM Playground version supports MCP
-. Restart vLLM Playground
-. Check browser console for errors
-
-[[exercise-2]]
-== Exercise 2: Use first MCP server - Connect Time server
-
-Now that MCP is installed, you'll connect your first MCP server. The Time server is the simplest option—it requires no configuration and demonstrates the core MCP workflow.
-
-ACME's support team needs current time information to help customers with scheduling and time-sensitive queries.
-
-=== Steps
-
-. First, start a vLLM server with tool calling enabled. In the vLLM Playground web UI, configure the following settings:
+[start=11]
+. Start a vLLM server with tool calling enabled. In the vLLM Playground web UI, configure the following settings:
 +
 [cols="1,2"]
 |===
@@ -299,7 +259,7 @@ Monitor the *Server Logs* panel until you see the server is ready to accept conn
 
 . In the *Quick Start with Presets* section, click the *Time* preset.
 +
-The Time server configuration dialog appears. No additional settings are needed — the defaults work out of the box.
+The Time server configuration dialog appears. No additional settings are needed, the defaults work out of the box.
 +
 image::module-04-figure-02.png[Time server configuration dialog,align="center",width=500,link=module-04-figure-02.png^,title="Time Server Configuration"]
 
@@ -309,7 +269,7 @@ NOTE: Different MCP servers require different transport dependencies. The Time s
 
 . Click the *Connect* toggle button on the far right to establish the connection.
 
-. Wait for the connection to establish. You should see:
+. Wait for the connection to establish. The following should be visible:
 +
 * Status indicator turns green
 * Available tools from the server are listed
@@ -369,7 +329,19 @@ What's the time difference between Tokyo and London right now?
 If it's 3pm in New York, what time is it in Sydney?
 ----
 
-=== Understanding the MCP workflow
+*What they should notice:*
+
+* The MCP panel shows available servers and their connection status.
+* When the AI needs real-time data, it generates a tool call and waits for human approval before executing.
+* After approval, the AI receives actual current time data and incorporates it into its response. This is real tool execution, not simulated.
+
+*If asked:*
+
+* "Why do we need human approval?" - Human-in-the-loop ensures safety. In production, you can configure auto-approval for low-risk tools while requiring manual approval for sensitive operations.
+* "Can this work with other time zones?" - Yes, the Time MCP server supports all standard IANA time zones.
+* "What happens if I deny the tool call?" - The AI will acknowledge it could not complete the action and offer alternatives or respond with whatever information it has.
+
+==== Understanding the MCP workflow
 
 [source,text]
 ----
@@ -407,54 +379,26 @@ User: "What time is it in New York?"
 └─────────────────────────────┘
 ----
 
-=== Verify
+[[part-2]]
+== Part 2: Advanced MCP Patterns (Optional)
 
-Confirm Time server works:
+=== Know
 
-✓ Time server shows "Connected" status
+This section extends the MCP demo with filesystem access and multi-tool agentic workflows. Here is the business context:
 
-✓ Tool calls trigger approval dialog
+* ACME's support team needs the AI to analyze customer documents, read configuration files, and access knowledge base articles. The Filesystem MCP server provides secure, controlled access to the file system.
+* Agentic workflows combine multiple MCP tools, allowing the AI to plan, execute across data sources, reason over results, and synthesize a response. All with human-in-the-loop oversight.
+* Security is maintained through directory-level access controls and per-action approval. The AI can only access directories explicitly granted, and every operation requires explicit approval.
 
-✓ After approval, actual time is returned
+=== Show
 
-✓ AI response includes real-time data
+==== Filesystem access with MCP
 
-✓ Time zone queries work correctly
+*What I say:*
 
-=== Troubleshooting
+"Now let me show how MCP enables secure file system access. ACME's support team needs the AI to analyze customer documents, and the Filesystem MCP server makes this possible while maintaining security controls."
 
-**Issue**: Server fails to connect
-
-**Solution**:
-
-. Check network connectivity
-. Review server logs in the MCP panel
-. Try disconnecting and reconnecting
-
-**Issue**: Tool call doesn't trigger approval
-
-**Solution**:
-
-. Verify MCP tools are enabled in chat settings
-. Check that the server is connected (green status)
-. Restart the conversation
-
-**Issue**: AI responds without using tools
-
-**Solution**:
-
-. Make your query more explicit about needing current/real-time data
-. Check system prompt mentions available tools
-. Verify the server connection is active
-
-[[exercise-3]]
-== Exercise 3: File system access with MCP
-
-ACME's support team needs the AI to analyze customer documents, read configuration files, and access knowledge base articles. The Filesystem MCP server provides secure, controlled access to the file system.
-
-You'll connect the Filesystem server and enable AI-powered document analysis.
-
-=== Steps
+*What I do:*
 
 . First, create the documents directory that the Filesystem server will access:
 +
@@ -526,7 +470,7 @@ Home:
 EOF
 ----
 
-. In the Chat panel, Start a new conversation, ensure Filesystem tools are enabled.
+. In the Chat panel, start a new conversation and ensure Filesystem tools are enabled.
 
 . Test file reading:
 +
@@ -570,23 +514,21 @@ Observe the AI reading the file and analyzing the content.
 +
 image::module-04-figure-12.png[Document analysis response,align="center",width=600,link=module-04-figure-12.png^,title="Document Analysis Response"]
 
-=== Verify
+*What they should notice:*
 
-Confirm Filesystem MCP works:
+* The Filesystem MCP server only allows access to explicitly configured directories.
+* Every file read or directory listing requires explicit human approval.
+* The AI can read, analyze, and summarize document contents after receiving approval.
 
-✓ Filesystem server connected successfully
+*If asked:*
 
-✓ AI can list directory contents (with approval)
-
-✓ AI can read file contents (with approval)
-
-✓ AI correctly analyzes and summarizes documents
-
-✓ All operations require explicit approval
+* "Can the AI write files too?" - Yes, the Filesystem server supports write operations, but they also require explicit approval. In production, you would typically restrict write access.
+* "What about sensitive files?" - The allowed directories configuration ensures the AI cannot access files outside of the specified paths.
+* "How does this compare to RAG?" - MCP provides direct file access with human approval, while RAG pre-indexes documents into a vector store. MCP is more flexible for ad-hoc queries; RAG is better for large-scale search.
 
 NOTE: Different models may have varying quality when calling the right tools from MCP servers. Some models are better at understanding tool descriptions and selecting appropriate tools, while others may require more explicit prompts. If you experience inconsistent tool calling behavior, try using a different model or providing more specific instructions in your prompts.
 
-=== Security considerations
+==== Security considerations
 
 [cols="1,2"]
 |===
@@ -605,47 +547,13 @@ NOTE: Different models may have varying quality when calling the right tools fro
 |Track what the AI accesses
 |===
 
-=== Troubleshooting
+==== Agentic workflow with human-in-the-loop
 
-**Issue**: "Permission denied" when reading files
+*What I say:*
 
-**Solution**:
+"Now let me combine everything into a complete agentic workflow. This is where it gets powerful. The AI handles complex customer inquiries that require multiple tool calls, file lookups, and real-time data, all with appropriate human oversight."
 
-. Check file permissions: `ls -la ~/documents/`
-. Ensure the allowed directory path is correct
-. Verify the MCP server has access to the path
-
-**Issue**: AI can't find files
-
-**Solution**:
-
-. Verify files exist: `ls ~/documents/`
-. Check the allowed directories configuration
-. Use absolute paths in queries if needed
-
-[[exercise-4]]
-== Exercise 4: Agentic workflow with human-in-the-loop
-
-Now you'll combine everything into a complete agentic workflow. ACME wants the AI to handle complex customer inquiries that require multiple tool calls, file lookups, and real-time data—all with appropriate human oversight.
-
-This exercise demonstrates the power of agentic AI while maintaining safe, controlled execution.
-
-=== Understanding agentic workflows
-
-An agentic AI can:
-
-* **Plan**: Break complex requests into steps
-* **Execute**: Call tools to gather information
-* **Reason**: Analyze results and determine next actions
-* **Respond**: Synthesize findings into helpful answers
-
-Human-in-the-loop ensures:
-
-* **Safety**: Sensitive operations require approval
-* **Control**: You can deny inappropriate requests
-* **Visibility**: Full transparency into AI actions
-
-=== Steps
+*What I do:*
 
 . Ensure both Time and Filesystem MCP servers are connected.
 
@@ -678,7 +586,7 @@ Watch the AI:
 .. Request approval for each tool call
 .. Synthesize all information into one response
 
-. For each tool call, you'll see an approval prompt:
+. For each tool call, an approval prompt appears:
 +
 * *Time query*: Get current time in LA to calculate support hours
 * *FAQ read*: Get support hours and return policy
@@ -705,23 +613,38 @@ image::module-04-figure-14.png[Safety controls preventing unauthorized file acce
 +
 When an approval dialog appears, click *Skip* instead of *Execute*.
 +
-Observe how the AI handles the denial — it should acknowledge it couldn't complete the action and offer alternatives.
+Observe how the AI handles the denial. It should acknowledge it could not complete the action and offer alternatives.
 
-=== Verify
+*What they should notice:*
 
-Confirm agentic workflow works:
+* The AI plans multi-step approaches for complex queries, identifying which tools to call and in what order.
+* Each tool call triggers a separate approval dialog, giving full visibility into what the AI is doing.
+* The AI synthesizes results from multiple tools into a single coherent response.
+* Denied requests are handled gracefully. The AI does not break or error out.
+* Unauthorized access attempts (e.g., /etc/passwd) are blocked by the directory access controls.
 
-✓ AI plans multi-step approaches for complex queries
+*If asked:*
 
-✓ Each tool call triggers separate approval
+* "Is there a way to auto-approve certain tools?" - Future versions may support pre-approved tool patterns for low-risk operations. The current design prioritizes safety.
+* "How many tools can the AI chain together?" - There is no hard limit. The AI will plan and call as many tools as needed. More capable models handle complex multi-tool chains better.
+* "What about production use?" - In production, you would configure auto-approval for safe operations (time lookups), require approval for sensitive ones (file writes), and integrate with audit logging systems.
 
-✓ AI synthesizes results from multiple tools
+==== Understanding agentic workflows
 
-✓ Denied requests are handled gracefully
+An agentic AI can:
 
-✓ Unauthorized access attempts are blocked
+* **Plan**: Break complex requests into steps
+* **Execute**: Call tools to gather information
+* **Reason**: Analyze results and determine next actions
+* **Respond**: Synthesize findings into helpful answers
 
-=== The complete agentic flow (example)
+Human-in-the-loop ensures:
+
+* **Safety**: Sensitive operations require approval
+* **Control**: You can deny inappropriate requests
+* **Visibility**: Full transparency into AI actions
+
+==== The complete agentic flow (example)
 
 [source,text]
 ----
@@ -761,32 +684,6 @@ Customer Query: "What time do you close and what's your return policy?"
 └─────────────────────────────────────────────────────────────┘
 ----
 
-=== Troubleshooting
-
-**Issue**: AI doesn't use tools for queries it should
-
-**Solution**:
-
-. Verify MCP servers are connected and tools enabled
-. Check system prompt mentions available tools
-. Be more explicit in your query about needing real data
-
-**Issue**: Too many approval prompts for simple tasks
-
-**Solution**:
-
-. This is by design for safety
-. Future versions may support pre-approved tool patterns
-. Consider which tools truly need approval for your use case
-
-**Issue**: AI gets confused with multiple tool results
-
-**Solution**:
-
-. Simplify queries to fewer tools at once
-. Use clearer system prompts
-. Try more capable models for complex reasoning
-
 == Clean up
 
 Before proceeding to Module 5, clean up the MCP environment:
@@ -799,29 +696,15 @@ Before proceeding to Module 5, clean up the MCP environment:
 
 NOTE: Module 5 focuses on performance testing with GuideLLM, which requires a clean server configuration without MCP overhead for accurate benchmarking results.
 
-== Learning outcomes
-
-By completing this module, you should now understand:
-
-* ✓ What MCP is and its role in enabling agentic AI
-* ✓ How to install and verify MCP components
-* ✓ How to connect and configure MCP servers in vLLM Playground
-* ✓ The MCP workflow from tool call to execution to response
-* ✓ The importance of human-in-the-loop approval for safe AI operations
-* ✓ How agentic workflows combine planning, tool use, and reasoning
-* ✓ Security best practices for granting AI access to resources
-
 == Module summary
 
-You've successfully completed the Advanced Inferencing: MCP Integration module.
+**What was demonstrated:**
 
-**What you accomplished:**
-
-* Learned MCP concepts and installed MCP components
-* Connected Time MCP server for real-time data access
-* Configured Filesystem server for document analysis
-* Experienced human-in-the-loop approval for tool execution
-* Built agentic workflows combining multiple tools and reasoning
+* MCP concepts and installation of MCP components
+* Connecting the Time MCP server for real-time data access
+* Configuring the Filesystem server for document analysis
+* Human-in-the-loop approval for tool execution
+* Agentic workflows combining multiple tools and reasoning
 
 **Key takeaways:**
 
@@ -844,7 +727,7 @@ Module 5 will explore *Performance Testing* - using GuideLLM to benchmark your v
 
 == Business Value Summary
 
-By completing this module, ACME Corporation has implemented agentic AI capabilities that deliver measurable business outcomes:
+By implementing agentic AI capabilities in this module, ACME Corporation achieves measurable business outcomes:
 
 **Operational Efficiency Gains**:
 
@@ -881,6 +764,96 @@ By completing this module, ACME Corporation has implemented agentic AI capabilit
 * Access to 50+ MCP community servers vs 10-15 proprietary integrations from competitors
 
 This agentic AI implementation positions ACME to scale support operations without proportional staffing increases, delivering superior customer experience while reducing operational costs.
+
+== Troubleshooting
+
+**Issue**: "MCP requires Python 3.10+"
+
+**Solution**:
+
+. Check Python version: `python3 --version`
+. If older, install Python 3.10+ or use pyenv
+. Ensure vLLM Playground uses the correct Python
+
+**Issue**: "ModuleNotFoundError: No module named 'mcp'"
+
+**Solution**:
+
+. Install MCP: `sudo pip install mcp`
+. If using virtual environment, ensure it's activated
+. Try: `sudo pip3 install mcp`
+
+**Issue**: MCP Servers panel not visible
+
+**Solution**:
+
+. Verify vLLM Playground version supports MCP
+. Restart vLLM Playground
+. Check browser console for errors
+
+**Issue**: Server fails to connect
+
+**Solution**:
+
+. Check network connectivity
+. Review server logs in the MCP panel
+. Try disconnecting and reconnecting
+
+**Issue**: Tool call doesn't trigger approval
+
+**Solution**:
+
+. Verify MCP tools are enabled in chat settings
+. Check that the server is connected (green status)
+. Restart the conversation
+
+**Issue**: AI responds without using tools
+
+**Solution**:
+
+. Make your query more explicit about needing current/real-time data
+. Check system prompt mentions available tools
+. Verify the server connection is active
+
+**Issue**: "Permission denied" when reading files
+
+**Solution**:
+
+. Check file permissions: `ls -la ~/documents/`
+. Ensure the allowed directory path is correct
+. Verify the MCP server has access to the path
+
+**Issue**: AI can't find files
+
+**Solution**:
+
+. Verify files exist: `ls ~/documents/`
+. Check the allowed directories configuration
+. Use absolute paths in queries if needed
+
+**Issue**: AI doesn't use tools for queries it should
+
+**Solution**:
+
+. Verify MCP servers are connected and tools enabled
+. Check system prompt mentions available tools
+. Be more explicit in your query about needing real data
+
+**Issue**: Too many approval prompts for simple tasks
+
+**Solution**:
+
+. This is by design for safety
+. Future versions may support pre-approved tool patterns
+. Consider which tools truly need approval for your use case
+
+**Issue**: AI gets confused with multiple tool results
+
+**Solution**:
+
+. Simplify queries to fewer tools at once
+. Use clearer system prompts
+. Try more capable models for complex reasoning
 
 == References
 
