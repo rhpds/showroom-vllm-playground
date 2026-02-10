@@ -40,7 +40,7 @@ The demo environment provides:
 
 * GPU-enabled lab host: {targethost}
 * SSH access: `{ssh_command}`
-* vLLM Playground web UI: link:http://{hostname}:7860[Open vLLM Playground^]
+* vLLM Playground web UI: link:{vllm_playground_url}[Open vLLM Playground^]
 * Pre-installed vLLM Playground CLI
 
 === Network requirements

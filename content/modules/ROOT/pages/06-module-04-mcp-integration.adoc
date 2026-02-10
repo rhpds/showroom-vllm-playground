@@ -195,7 +195,7 @@ NOTE: The vLLM Playground service needs to be restarted after installing MCP to 
 
 . Open the vLLM Playground web UI:
 +
-link:http://{hostname}:7860[Open vLLM Playground^]
+link:{vllm_playground_url}[Open vLLM Playground^]
 
 . Navigate to the *MCP Servers* section in the sidebar to verify MCP support is available.
 +
@@ -480,7 +480,7 @@ Can you read the customer FAQ file in directory /home/lab-user/documents and sum
 +
 The AI should:
 +
-.. Generate a tool call to read `/home/{username}/documents/customer_faq.txt`
+.. Generate a tool call to read `/home/{ssh_username}/documents/customer_faq.txt`
 .. Wait for your approval
 .. After approval, read and summarize the file contents
 

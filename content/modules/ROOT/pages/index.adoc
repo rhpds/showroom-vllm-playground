@@ -49,7 +49,7 @@ For this demonstration, the environment is pre-configured with:
 * GPU-enabled inference host: {targethost}
 * vLLM Playground v0.1.1 pre-installed
 * SSH access available: `{ssh_command}`
-* Web UI: link:http://{hostname}:7860[Open vLLM Playground^]
+* Web UI: link:{vllm_playground_url}[Open vLLM Playground^]
 
 NOTE: All environment details and credentials are available for hands-on exploration after the demo.
 

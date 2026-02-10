@@ -143,7 +143,7 @@ TIP: In this demo environment, the container image has been pre-pulled during se
 
 . As verified earlier, vLLM Playground is already running as a daemon service. Open the Web UI:
 +
-link:http://{hostname}:7860[Open vLLM Playground^]
+link:{vllm_playground_url}[Open vLLM Playground^]
 +
 image::module-01-figure-01.png[vLLM Playground home page with server configuration panel on left showing TinyLlama model dropdown, run mode selection (Subprocess/Container), compute mode options (CPU/GPU), and green Start Server button; chat interface on right with message input area and response metrics panel,align="center",width=700,link=module-01-figure-01.png^,title="vLLM Playground Home Page"]
 
