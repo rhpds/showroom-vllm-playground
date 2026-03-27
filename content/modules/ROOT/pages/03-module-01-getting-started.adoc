@@ -187,7 +187,9 @@ image::module-01-figure-04.png[Compute Mode section with two radio buttons: CPU 
 * *Tensor Parallel Size*: Number of GPUs for model parallelism
 * *GPU Memory Utilization*: Fraction of GPU memory to use (default: 0.9)
 * *Data Type*: Model precision (auto, float16, bfloat16)
-* *Max Model Length*: Maximum sequence length
+* *Max Model Length*: Maximum context length (input prompt + output tokens)
++
+NOTE: TinyLlama supports up to 2048 tokens. If you are using GPU mode, enter `2048` in this field -- the default value of 8096 will cause the server to fail to start.
 +
 NOTE: These parameters are powered by vLLM's extensive configuration options, making it highly customizable for different hardware configurations and use cases. For this demo, the defaults work well.
 +
