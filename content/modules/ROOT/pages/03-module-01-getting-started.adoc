@@ -41,6 +41,7 @@ vllm-playground --help
 +
 Expected output:
 +
+[source,text]
 ----
 usage: vllm-playground [-h] [--port PORT] [--host HOST] {pull,stop,status} ...
 
@@ -94,6 +95,7 @@ sudo systemctl status vllm-playground
 +
 Expected output:
 +
+[source,text]
 ----
 ● vllm-playground.service - vLLM Playground Service
      Loaded: loaded (/etc/systemd/system/vllm-playground.service; enabled; preset: disabled)
@@ -193,7 +195,9 @@ image::module-01-figure-04.png[Compute Mode section with two radio buttons: CPU 
 * *Tensor Parallel Size*: Number of GPUs for model parallelism
 * *GPU Memory Utilization*: Fraction of GPU memory to use (default: 0.9)
 * *Data Type*: Model precision (auto, float16, bfloat16)
-* *Max Model Length*: Maximum sequence length
+* *Max Model Length*: Maximum context length (input prompt + output tokens)
++
+NOTE: TinyLlama supports up to 2048 tokens. If you are using GPU mode, enter `2048` in this field -- the default value of 8096 will cause the server to fail to start.
 +
 NOTE: These parameters are powered by vLLM's extensive configuration options, making it highly customizable for different hardware configurations and use cases. For this exercise, the defaults work well.
 +
@@ -279,6 +283,7 @@ image::module-01-figure-07.png[vLLM Playground chat interface with ChatGPT-style
 
 . Send your first message to test the model:
 +
+[source,text]
 ----
 Hello! Can you introduce yourself and explain what you can help me with?
 ----
@@ -287,6 +292,7 @@ Observe the streaming response - text appears word by word as the model generate
 
 . Test a customer support scenario for ACME:
 +
+[source,text]
 ----
 I'm a customer support agent. A customer is asking about their order status. How should I professionally respond if their order is delayed by 2 days?
 ----
@@ -314,6 +320,7 @@ image::module-01-figure-08.png[Response Metrics panel displaying real-time perfo
 +
 Try setting a system prompt:
 +
+[source,text]
 ----
 You are a helpful customer support assistant for ACME Corporation. Be professional, empathetic, and solution-oriented.
 ----
@@ -326,6 +333,7 @@ TIP: Notice the yellow indicator in the top-right corner of toolbar icons - this
 
 . Send another message with the system prompt active:
 +
+[source,text]
 ----
 A customer is frustrated because their product arrived damaged. What should I say?
 ----

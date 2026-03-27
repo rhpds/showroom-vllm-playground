@@ -3,7 +3,7 @@
 :toc: macro
 :toclevels: 1
 
-Throughout this workshop, you've deployed vLLM servers, configured advanced inferencing features, and built agentic workflows. Now ACME Corporation faces the final question before production deployment: *Can this infrastructure handle real-world load?*
+Throughout this lab, you've deployed vLLM servers, configured advanced inferencing features, and built agentic workflows. Now ACME Corporation faces the final question before production deployment: *Can this infrastructure handle real-world load?*
 
 Before launching their AI-powered customer support system, ACME needs to validate that their vLLM deployment can handle expected traffic volumes with acceptable latency. GuideLLM is a performance benchmarking tool designed specifically for LLM inference servers, providing insights into throughput, latency, and resource utilization.
 
@@ -103,6 +103,7 @@ guidellm --help
 +
 Expected output:
 +
+[source,text]
 ----
 Usage: guidellm [OPTIONS] COMMAND [ARGS]...
 
@@ -169,7 +170,7 @@ NOTE: For performance benchmarking, we use a simple configuration without tool c
 curl http://localhost:8000/v1/models
 ----
 +
-This confirms the OpenAI-compatible API is accessible. Note the model name returned—you'll need it for benchmarking.
+This confirms the OpenAI-compatible API is accessible. Note the model name returned -- you'll need it for benchmarking.
 +
 image::module-05-figure-01.png[vLLM models API response,align="center",width=600,link=module-05-figure-01.png^,title="vLLM Models Endpoint"]
 
@@ -525,7 +526,7 @@ TIP: Keep notes on what changes you made and how they affected performance. This
 
 **Solution**:
 
-. GPU thermal throttling—allow cooling between benchmarks
+. GPU thermal throttling -- allow cooling between benchmarks
 . Other processes competing for resources
 . Run longer benchmarks for statistical stability
 
@@ -551,7 +552,7 @@ By completing this module, you should now understand:
 
 == Module summary
 
-You've successfully completed the Performance Testing module and the entire vLLM Playground workshop!
+You've successfully completed the Performance Testing module and the entire vLLM Playground lab!
 
 **What you accomplished:**
 

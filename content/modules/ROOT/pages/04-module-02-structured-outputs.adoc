@@ -5,7 +5,7 @@
 
 In Module 1, you deployed a vLLM server and experienced the chat interface. Now ACME Corporation faces a new challenge: their customer support system needs to integrate AI responses with existing backend systems. Free-form text responses are difficult to parse and process programmatically.
 
-ACME's engineering team requires predictable, structured outputs that downstream systems can reliably consume. vLLM Playground's structured output capabilities — JSON Schema, Regex, and Grammar — provide exactly this control.
+ACME's engineering team requires predictable, structured outputs that downstream systems can reliably consume. vLLM Playground's structured output capabilities -- JSON Schema, Regex, and Grammar -- provide exactly this control.
 
 In this module, you'll learn to constrain LLM outputs to specific formats, ensuring ACME's AI responses are system-ready and consistently parseable.
 
@@ -66,12 +66,14 @@ This constrains the model to output ONLY one of these three values.
 
 . Set a system prompt for sentiment analysis:
 +
+[source,text]
 ----
 You are a sentiment classifier. Analyze the customer feedback and respond with exactly one word: positive, negative, or neutral. No other output.
 ----
 
 . Test with sample customer feedback:
 +
+[source,text]
 ----
 Feedback: "I absolutely love your product! It exceeded all my expectations and the customer service was fantastic."
 ----
@@ -82,6 +84,7 @@ image::module-02-figure-02.png[Chat interface showing sentiment analysis with Ch
 
 . Test with negative feedback:
 +
+[source,text]
 ----
 Feedback: "Terrible experience. The product arrived broken and nobody responded to my support ticket for a week."
 ----
@@ -90,6 +93,7 @@ Expected output: `negative`
 
 . Test with neutral feedback:
 +
+[source,text]
 ----
 Feedback: "The product works as described. Delivery was on time. Nothing special but nothing wrong either."
 ----
@@ -166,12 +170,14 @@ image::module-02-figure-04.png[JSON Schema configuration in structured outputs p
 
 . Set a system prompt for ticket extraction:
 +
+[source,text]
 ----
 You are a customer support ticket classifier. Extract structured information from customer messages and output a JSON object with ticket_type, priority, summary, customer_sentiment, and requires_escalation fields.
 ----
 
 . Test with a sample customer message:
 +
+[source,text]
 ----
 Customer message: "I've been charged twice for my subscription this month! This is unacceptable and I want a refund immediately. I've been a loyal customer for 3 years and this is how you treat me?"
 ----
@@ -193,6 +199,7 @@ image::module-02-figure-05.png[JSON Schema output showing structured ticket extr
 
 . Test with a different scenario:
 +
+[source,text]
 ----
 Customer message: "Hey, just wondering if you have any plans to add dark mode to the mobile app? Would be really nice to have. Thanks!"
 ----
@@ -267,12 +274,14 @@ image::module-02-figure-07.png[Regex pattern configuration in structured outputs
 +
 . Set a system prompt:
 +
+[source,text]
 ----
 Generate a unique ticket ID for the customer support system. Output only the ticket ID, nothing else.
 ----
 
 . Test the Regex constraint:
 +
+[source,text]
 ----
 Generate a ticket ID for a new billing inquiry.
 ----
@@ -298,6 +307,7 @@ This enforces US phone format: `(XXX) XXX-XXXX`
 
 . Test with prompt:
 +
+[source,text]
 ----
 Format this phone number: 5551234567
 ----
@@ -366,18 +376,21 @@ This grammar enforces:
 
 . Set a system prompt:
 +
+[source,text]
 ----
 Generate a brief customer support summary report. Follow the exact format structure provided.
 ----
 
 . Test with a prompt:
 +
+[source,text]
 ----
 Summarize today's customer support metrics: 150 tickets resolved, 23 escalated, average response time 4.2 minutes, customer satisfaction 94%.
 ----
 +
 Expected output format:
 +
+[source,text]
 ----
 ## REPORT START ##
 ### Daily Metrics ###
@@ -421,7 +434,7 @@ Confirm Grammar constraints work:
 |Grammar
 |===
 
-=== Reset Structured Outputs
+=== Reset structured outputs
 
 Before moving on, disable Structured Outputs to reset the configuration:
 
@@ -434,7 +447,7 @@ NOTE: In this module, we explored each structured output mode individually for l
 
 This section covers common issues across all structured output modes (Choice, JSON Schema, Regex, Grammar).
 
-=== JSON Schema Issues
+=== JSON Schema issues
 
 **Issue**: Output contains extra text before/after JSON
 
@@ -451,7 +464,7 @@ This section covers common issues across all structured output modes (Choice, JS
 . Verify enum arrays are properly formatted in schema
 . Ensure model supports guided decoding (check server logs)
 
-=== Grammar Syntax Issues
+=== Grammar syntax issues
 
 **Issue**: Grammar syntax errors
 
@@ -469,7 +482,7 @@ This section covers common issues across all structured output modes (Choice, JS
 . Restart server after changing grammar
 . Simplify grammar rules and test incrementally
 
-=== General Structured Output Issues
+=== General structured output issues
 
 **Issue**: Structured outputs not enforced (model ignores constraints)
 

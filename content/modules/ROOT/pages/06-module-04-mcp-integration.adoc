@@ -3,9 +3,9 @@
 :toc: macro
 :toclevels: 1
 
-In Module 3, you configured tool calling and saw how the AI generates function calls. But those calls weren't actually executed — the AI could recognize what to do but couldn't take action. Now ACME Corporation wants to bridge that gap: connecting the AI to real external tools that can execute actions and return results.
+In Module 3, you configured tool calling and saw how the AI generates function calls. But those calls weren't actually executed -- the AI could recognize what to do but couldn't take action. Now ACME Corporation wants to bridge that gap: connecting the AI to real external tools that can execute actions and return results.
 
-Model Context Protocol (MCP) is an open standard that enables AI models to securely interact with external tools and data sources. With MCP integration, vLLM Playground transforms from a chat interface into an agentic AI platform — capable of reading files, fetching data, and executing approved actions. **Business Impact**: By implementing MCP integration, ACME's support team reduces average ticket resolution time from 15 minutes to 5 minutes (67% faster) through instant access to customer documents and real-time scheduling data. This efficiency improvement enables support agents to handle 3x more customer inquiries per day (20 to 60 tickets), reducing annual support costs by 40% ($500K to $300K) while improving customer satisfaction scores by 25% (72 to 90 CSAT).
+Model Context Protocol (MCP) is an open standard that enables AI models to securely interact with external tools and data sources. With MCP integration, vLLM Playground transforms from a chat interface into an agentic AI platform -- capable of reading files, fetching data, and executing approved actions. **Business Impact**: By implementing MCP integration, ACME's support team reduces average ticket resolution time from 15 minutes to 5 minutes (67% faster) through instant access to customer documents and real-time scheduling data. This efficiency improvement enables support agents to handle 3x more customer inquiries per day (20 to 60 tickets), reducing annual support costs by 40% ($500K to $300K) while improving customer satisfaction scores by 25% (72 to 90 CSAT).
 
 In this module, you'll learn about MCP, install the necessary components, connect MCP servers to vLLM Playground, and experience true agentic AI with human-in-the-loop safety controls.
 
@@ -96,7 +96,7 @@ Model Context Protocol (MCP) is an open standard developed to enable AI models t
 * **Data sovereignty**: Customer documents never leave your infrastructure (meets enterprise compliance requirements that cloud-only solutions can't address)
 * **Cost control**: 60% lower integration costs vs proprietary AI platforms with per-token pricing
 * **Deployment flexibility**: Run on-premises or private cloud, unlike cloud-only competitors
-* **Community innovation**: Leverage open-source MCP ecosystem without licensing fees
+* **Community innovation**: Use the open-source MCP ecosystem without licensing fees
 
 === Prerequisites
 
@@ -261,7 +261,7 @@ Confirm MCP is ready:
 [[exercise-2]]
 == Exercise 2: Use first MCP server - Connect Time server
 
-Now that MCP is installed, you'll connect your first MCP server. The Time server is the simplest option—it requires no configuration and demonstrates the core MCP workflow.
+Now that MCP is installed, you'll connect your first MCP server. The Time server is the simplest option -- it requires no configuration and demonstrates the core MCP workflow.
 
 ACME's support team needs current time information to help customers with scheduling and time-sensitive queries.
 
@@ -299,7 +299,7 @@ Monitor the *Server Logs* panel until you see the server is ready to accept conn
 
 . In the *Quick Start with Presets* section, click the *Time* preset.
 +
-The Time server configuration dialog appears. No additional settings are needed — the defaults work out of the box.
+The Time server configuration dialog appears. No additional settings are needed -- the defaults work out of the box.
 +
 image::module-04-figure-02.png[Time server configuration dialog,align="center",width=500,link=module-04-figure-02.png^,title="Time Server Configuration"]
 
@@ -330,6 +330,7 @@ image::module-04-figure-04.png[Enable MCP tools in Chat panel,align="center",wid
 
 . Test the Time server with a prompt:
 +
+[source,text]
 ----
 What time is it right now in New York?
 ----
@@ -361,10 +362,12 @@ image::module-04-figure-07.png[AI response with time information,align="center",
 
 . Test additional time queries:
 +
+[source,text]
 ----
 What's the time difference between Tokyo and London right now?
 ----
 +
+[source,text]
 ----
 If it's 3pm in New York, what time is it in Sydney?
 ----
@@ -530,6 +533,7 @@ EOF
 
 . Test file reading:
 +
+[source,text]
 ----
 Can you read the customer FAQ file in directory /home/lab-user/documents and summarize the key points?
 ----
@@ -552,6 +556,7 @@ image::module-04-figure-10.png[AI response after file read approval,align="cente
 
 . Test directory listing:
 +
+[source,text]
 ----
 What files are available in the /home/lab-user/documents folder?
 ----
@@ -562,6 +567,7 @@ image::module-04-figure-11.png[Directory listing response,align="center",width=6
 
 . Test document analysis:
 +
+[source,text]
 ----
 Based on the file /home/lab-user/documents/products.txt, what's the most expensive item and what's the cheapest?
 ----
@@ -626,7 +632,7 @@ NOTE: Different models may have varying quality when calling the right tools fro
 [[exercise-4]]
 == Exercise 4: Agentic workflow with human-in-the-loop
 
-Now you'll combine everything into a complete agentic workflow. ACME wants the AI to handle complex customer inquiries that require multiple tool calls, file lookups, and real-time data—all with appropriate human oversight.
+Now you'll combine everything into a complete agentic workflow. ACME wants the AI to handle complex customer inquiries that require multiple tool calls, file lookups, and real-time data -- all with appropriate human oversight.
 
 This exercise demonstrates the power of agentic AI while maintaining safe, controlled execution.
 
@@ -651,6 +657,7 @@ Human-in-the-loop ensures:
 
 . Set a comprehensive system prompt:
 +
+[source,text]
 ----
 You are an AI assistant for ACME Corporation's customer support team. You have access to:
 - Current time information (for scheduling and time-sensitive queries)
@@ -667,6 +674,7 @@ Always be professional and customer-focused.
 
 . Test a complex customer scenario:
 +
+[source,text]
 ----
 A customer in Los Angeles is asking: "What time does your support close today, and can you tell me about your return policy? I'm also interested in your wireless earbuds."
 ----
@@ -686,10 +694,11 @@ Watch the AI:
 +
 image::module-04-figure-13.png[Multiple tool calls in an agentic workflow,align="center",width=700,link=module-04-figure-13.png^,title="Agentic Workflow with Multiple Tools"]
 +
-NOTE: The directories and files referenced in these examples may not exist in your environment. This is for demonstration purposes only.
+NOTE: The directories and files referenced in these examples may not exist in your environment. This is for illustration purposes only.
 
 . Test the safety controls by attempting an inappropriate request:
 +
+[source,text]
 ----
 Can you read the /etc/passwd file?
 ----
@@ -705,7 +714,7 @@ image::module-04-figure-14.png[Safety controls preventing unauthorized file acce
 +
 When an approval dialog appears, click *Skip* instead of *Execute*.
 +
-Observe how the AI handles the denial — it should acknowledge it couldn't complete the action and offer alternatives.
+Observe how the AI handles the denial -- it should acknowledge it couldn't complete the action and offer alternatives.
 
 === Verify
 
@@ -842,7 +851,7 @@ You've successfully completed the Advanced Inferencing: MCP Integration module.
 
 Module 5 will explore *Performance Testing* - using GuideLLM to benchmark your vLLM server and optimize for production workloads.
 
-== Business Value Summary
+== Business value summary
 
 By completing this module, ACME Corporation has implemented agentic AI capabilities that deliver measurable business outcomes:
 

@@ -3,11 +3,11 @@
 :toc: macro
 :toclevels: 1
 
-In Module 2, you learned to constrain AI outputs to specific formats. Now ACME Corporation wants to take their AI customer support to the next level: enabling the AI to not just respond, but to take actions—looking up order status, checking inventory, or scheduling callbacks. This capability reduces average customer support handling time from 8 minutes to 3 minutes (62% faster), enabling ACME to handle 2.5x more customer inquiries with the same support team while improving first-contact resolution rates from 65% to 85%.
+In Module 2, you learned to constrain AI outputs to specific formats. Now ACME Corporation wants to take their AI customer support to the next level: enabling the AI to not just respond, but to take actions -- looking up order status, checking inventory, or scheduling callbacks. This capability reduces average customer support handling time from 8 minutes to 3 minutes (62% faster), enabling ACME to handle 2.5x more customer inquiries with the same support team while improving first-contact resolution rates from 65% to 85%.
 
 Tool calling (also known as function calling) allows the AI to recognize when it needs external data or actions, and generate structured function calls that your systems can execute. In this module, you'll configure tool calling and define custom tools for ACME's customer support scenarios. By implementing tool calling, ACME achieves $400,000 annual savings through improved agent productivity and reduced escalation rates.
 
-NOTE: This module focuses on the tool calling *pattern*—how the AI generates function calls. Actual tool execution with human-in-the-loop approval is covered in Module 4 (MCP Integration).
+NOTE: This module focuses on the tool calling *pattern* -- how the AI generates function calls. Actual tool execution with human-in-the-loop approval is covered in Module 4 (MCP Integration).
 
 == Learning objectives
 
@@ -35,7 +35,7 @@ You'll restart the server with tool calling enabled and understand the different
 
 Tool calling enables AI models to recognize when they need external data or capabilities, and generate structured requests (function calls) that your application can interpret and execute.
 
-NOTE: **Tool calling does NOT mean LLM executes tools.** When tool calling is enabled, the AI model generates a JSON-formatted function call with arguments — but LLM itself does not execute any code or call external APIs. Your application (vLLM Playground in this case) is responsible for parsing the tool call, executing the actual function, and returning results to the model. This design ensures security and gives you full control over what actions are taken.
+NOTE: **Tool calling does NOT mean LLM executes tools.** When tool calling is enabled, the AI model generates a JSON-formatted function call with arguments -- but LLM itself does not execute any code or call external APIs. Your application (vLLM Playground in this case) is responsible for parsing the tool call, executing the actual function, and returning results to the model. This design ensures security and gives you full control over what actions are taken.
 
 === Understanding tool calling parsers
 
@@ -126,7 +126,7 @@ Confirm tool calling is enabled:
 
 **Solution**:
 
-. Check GPU memory—tool calling may require additional resources
+. Check GPU memory -- tool calling may require additional resources
 . Try a smaller model
 . Review server logs for specific errors
 
@@ -307,7 +307,7 @@ Confirm tools are properly defined:
 [[exercise-3]]
 == Exercise 3: Test tool calling workflow
 
-Now you'll see tool calling in action. The AI will analyze customer messages and generate appropriate function calls based on the tools you defined. Remember: in this module, we're observing the *pattern*—the AI generates the calls, but we don't execute them.
+Now you'll see tool calling in action. The AI will analyze customer messages and generate appropriate function calls based on the tools you defined. Remember: in this module, we're observing the *pattern* -- the AI generates the calls, but we don't execute them.
 
 === Steps
 
@@ -315,6 +315,7 @@ Now you'll see tool calling in action. The AI will analyze customer messages and
 
 . In the *Chat* panel, set a system prompt for customer support:
 +
+[source,text]
 ----
 You are a helpful customer support assistant for ACME Corporation. You have access to tools to help customers with their orders, account information, scheduling callbacks, and product searches. Use the appropriate tool when a customer needs specific information or actions.
 ----
@@ -325,11 +326,12 @@ This setting allows the AI to automatically decide when to use tools based on th
 
 . Test order status inquiry:
 +
+[source,text]
 ----
 Hi, I placed an order last week and haven't received any updates. My order number is ORD-78432. Can you check the status?
 ----
 +
-Expected AI behavior—generates a tool call:
+Expected AI behavior -- generates a tool call:
 +
 [source,json]
 ----
@@ -352,6 +354,7 @@ NOTE: Streaming is disabled for tool calling due to a bug in vLLM v0.11.0. This 
 
 . Test customer lookup:
 +
+[source,text]
 ----
 I need to update my shipping address. My email is john.smith@email.com
 ----
@@ -372,6 +375,7 @@ image::module-03-figure-06.png[Chat interface showing AI response generating a J
 
 . Test callback scheduling:
 +
+[source,text]
 ----
 This is frustrating! I've been trying to resolve this billing issue for days. Can someone call me back? My number is 555-123-4567, preferably in the afternoon.
 ----
@@ -394,6 +398,7 @@ image::module-03-figure-07.png[Chat interface showing AI response generating a J
 
 . Test product search:
 +
+[source,text]
 ----
 Do you have any wireless headphones under $100?
 ----
@@ -416,14 +421,16 @@ image::module-03-figure-08.png[Chat interface showing AI response generating a J
 
 . Test a message that doesn't need tools:
 +
+[source,text]
 ----
 Thanks for your help today!
 ----
 +
-Expected: Normal text response (no tool call) — the AI should respond conversationally without invoking a tool.
+Expected: Normal text response (no tool call) -- the AI should respond conversationally without invoking a tool.
 
 . Test multiple potential tools:
 +
+[source,text]
 ----
 I want to check on order ORD-99001 and also see if you have the new laptop model in stock.
 ----
