@@ -307,6 +307,7 @@ Testing the tool calling workflow across multiple scenarios validates that the A
 
 . In the *Chat* panel, set a system prompt for customer support:
 +
+[source,text]
 ----
 You are a helpful customer support assistant for ACME Corporation. You have access to tools to help customers with their orders, account information, scheduling callbacks, and product searches. Use the appropriate tool when a customer needs specific information or actions.
 ----
@@ -317,6 +318,7 @@ This setting allows the AI to automatically decide when to use tools based on th
 
 . Test order status inquiry:
 +
+[source,text]
 ----
 Hi, I placed an order last week and haven't received any updates. My order number is ORD-78432. Can you check the status?
 ----
@@ -344,6 +346,7 @@ NOTE: Streaming is disabled for tool calling due to a bug in vLLM v0.11.0. This 
 
 . Test customer lookup:
 +
+[source,text]
 ----
 I need to update my shipping address. My email is john.smith@email.com
 ----
@@ -364,6 +367,7 @@ image::module-03-figure-06.png[Chat interface showing AI response generating a J
 
 . Test callback scheduling:
 +
+[source,text]
 ----
 This is frustrating! I've been trying to resolve this billing issue for days. Can someone call me back? My number is 555-123-4567, preferably in the afternoon.
 ----
@@ -386,6 +390,7 @@ image::module-03-figure-07.png[Chat interface showing AI response generating a J
 
 . Test product search:
 +
+[source,text]
 ----
 Do you have any wireless headphones under $100?
 ----
@@ -408,6 +413,7 @@ image::module-03-figure-08.png[Chat interface showing AI response generating a J
 
 . Test a message that does not need tools:
 +
+[source,text]
 ----
 Thanks for your help today!
 ----
@@ -416,6 +422,7 @@ Expected: Normal text response (no tool call). The AI should respond conversatio
 
 . Test multiple potential tools:
 +
+[source,text]
 ----
 I want to check on order ORD-99001 and also see if you have the new laptop model in stock.
 ----

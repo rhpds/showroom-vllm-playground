@@ -290,6 +290,7 @@ image::module-04-figure-04.png[Enable MCP tools in Chat panel,align="center",wid
 
 . Test the Time server with a prompt:
 +
+[source,text]
 ----
 What time is it right now in New York?
 ----
@@ -321,10 +322,12 @@ image::module-04-figure-07.png[AI response with time information,align="center",
 
 . Test additional time queries:
 +
+[source,text]
 ----
 What's the time difference between Tokyo and London right now?
 ----
 +
+[source,text]
 ----
 If it's 3pm in New York, what time is it in Sydney?
 ----
@@ -474,6 +477,7 @@ EOF
 
 . Test file reading:
 +
+[source,text]
 ----
 Can you read the customer FAQ file in directory /home/lab-user/documents and summarize the key points?
 ----
@@ -496,6 +500,7 @@ image::module-04-figure-10.png[AI response after file read approval,align="cente
 
 . Test directory listing:
 +
+[source,text]
 ----
 What files are available in the /home/lab-user/documents folder?
 ----
@@ -506,6 +511,7 @@ image::module-04-figure-11.png[Directory listing response,align="center",width=6
 
 . Test document analysis:
 +
+[source,text]
 ----
 Based on the file /home/lab-user/documents/products.txt, what's the most expensive item and what's the cheapest?
 ----
@@ -559,6 +565,7 @@ NOTE: Different models may have varying quality when calling the right tools fro
 
 . Set a comprehensive system prompt:
 +
+[source,text]
 ----
 You are an AI assistant for ACME Corporation's customer support team. You have access to:
 - Current time information (for scheduling and time-sensitive queries)
@@ -575,6 +582,7 @@ Always be professional and customer-focused.
 
 . Test a complex customer scenario:
 +
+[source,text]
 ----
 A customer in Los Angeles is asking: "What time does your support close today, and can you tell me about your return policy? I'm also interested in your wireless earbuds."
 ----
@@ -598,6 +606,7 @@ NOTE: The directories and files referenced in these examples may not exist in yo
 
 . Test the safety controls by attempting an inappropriate request:
 +
+[source,text]
 ----
 Can you read the /etc/passwd file?
 ----

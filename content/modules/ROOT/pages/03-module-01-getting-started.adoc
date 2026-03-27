@@ -51,6 +51,7 @@ vllm-playground --help
 +
 Expected output:
 +
+[source,text]
 ----
 usage: vllm-playground [-h] [--port PORT] [--host HOST] {pull,stop,status} ...
 
@@ -104,6 +105,7 @@ sudo systemctl status vllm-playground
 +
 Expected output:
 +
+[source,text]
 ----
 ● vllm-playground.service - vLLM Playground Service
      Loaded: loaded (/etc/systemd/system/vllm-playground.service; enabled; preset: disabled)
@@ -271,6 +273,7 @@ image::module-01-figure-07.png[vLLM Playground chat interface with ChatGPT-style
 
 . Send the first message to test the model:
 +
+[source,text]
 ----
 Hello! Can you introduce yourself and explain what you can help me with?
 ----
@@ -279,6 +282,7 @@ Point out the streaming response: text appears word by word as the model generat
 
 . Test a customer support scenario for ACME:
 +
+[source,text]
 ----
 I'm a customer support agent. A customer is asking about their order status. How should I professionally respond if their order is delayed by 2 days?
 ----
@@ -312,6 +316,7 @@ image::module-01-figure-08.png[Response Metrics panel displaying real-time perfo
 +
 Set a system prompt:
 +
+[source,text]
 ----
 You are a helpful customer support assistant for ACME Corporation. Be professional, empathetic, and solution-oriented.
 ----
@@ -324,6 +329,7 @@ TIP: Notice the yellow indicator in the top-right corner of toolbar icons. This 
 
 . Send another message with the system prompt active:
 +
+[source,text]
 ----
 A customer is frustrated because their product arrived damaged. What should I say?
 ----

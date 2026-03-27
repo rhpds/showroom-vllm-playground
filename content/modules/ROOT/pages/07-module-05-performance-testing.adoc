@@ -96,6 +96,7 @@ guidellm --help
 +
 Expected output:
 +
+[source,text]
 ----
 Usage: guidellm [OPTIONS] COMMAND [ARGS]...
 
