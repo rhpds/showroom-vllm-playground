@@ -47,7 +47,7 @@ Throughout this demo, we follow **ACME Corporation's journey** to modernize thei
 For this demonstration, the environment is pre-configured with:
 
 * GPU-enabled inference host: {targethost}
-* vLLM Playground v0.1.1 pre-installed
+* vLLM Playground v0.1.8 pre-installed (*The latest version of vllm-playground will be pulled at privisoning time)
 * SSH access available: `{ssh_command}`
 * Web UI: link:{vllm_playground_url}[Open vLLM Playground^]
 
