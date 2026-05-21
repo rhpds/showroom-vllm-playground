@@ -369,7 +369,8 @@ A customer is frustrated because their product arrived damaged. What should I sa
 Notice how the response now aligns with the customer support persona.
 +
 TIP: `TinyLlama` is a very small model and response quality may not be ideal. For real use cases, use a more capable model such as `Qwen2.5-3B-Instruct` or `Llama-3.1-8B-Instruct` for better results.
-
++
+--
 **What they should notice:**
 
 * Messages send successfully and responses stream in real-time
@@ -387,6 +388,13 @@ A: "Check GPU utilization with `nvidia-smi`. Verify the model loaded to GPU, not
 
 Q: "What models work best for customer support?"
 A: "Models like Qwen2.5-3B-Instruct or Llama 3.1-8B provide good instruction-following for support scenarios. We will use Qwen in the next modules."
+--
+
+. Before moving on, stop the vLLM server by scrolling down to the bottom of the *Server Configuration* panel and clicking *Stop Server*.
++
+image::module-01-figure-10.png[Server control buttons showing Save Instance button and Start Server and Stop Server buttons,align="center",width=300,link=module-01-figure-10.png^,title="Stop Server"]
++
+TIP: Use *Save Instance* to save the current server configuration for fast loading next time. Saved instances can be managed from the *Instances* page in the left navigation bar.
 
 == Troubleshooting
 
