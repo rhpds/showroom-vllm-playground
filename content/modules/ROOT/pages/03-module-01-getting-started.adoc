@@ -123,12 +123,14 @@ The key indicators are:
 +
 * `Active: active (running)` - Service is running
 * `enabled` - Service starts automatically on boot
-
++
+--
 **What they should notice:**
 
 * Environment validation completes in seconds
 * vLLM Playground is already running as a managed service
 * GPU hardware is detected and ready
+--
 
 . Pre-download the GPU container image (this may take a few minutes):
 +
@@ -147,35 +149,43 @@ TIP: In this demo environment, the container image has been pre-pulled during se
 +
 link:{vllm_playground_url}[Open vLLM Playground^]
 +
-image::module-01-figure-01.png[vLLM Playground home page with server configuration panel on left showing TinyLlama model dropdown, run mode selection (Subprocess/Container), compute mode options (CPU/GPU), and green Start Server button; chat interface on right with message input area and response metrics panel,align="center",width=700,link=module-01-figure-01.png^,title="vLLM Playground Home Page"]
+image::module-01-figure-01.png[vLLM Playground home page ,align="center",width=700,link=module-01-figure-01.png^,title="vLLM Playground Home Page"]
++
+--
+Observe the Web UI of vllm-playground:
+
+* *Left sidebar* -- Navigation across vLLM projects, management, monitoring, and integrations.
+* *Top bar* -- Server status, Podman indicator, dark-mode toggle, and language selector.
+* *Server Configuration panel* (left-center) -- Run mode selection and Server Configuration for the vLLM server.
+* *Chat Interface panel* (center) -- ChatGPT-style conversation area with message input, token counter, and toolbar.
+* *Server Health panel* (right) -- Real-time metrics for KV cache, throughput, and prefix cache.
+* *Server Logs panel* (bottom) -- Live log viewer streaming server events.
+--
 
 . In the vLLM Playground web interface, configure the first model:
 +
 .. Navigate to *Server Configuration* section
+.. Switch the *Run Mode* to `Container` by clicking on *Container*
 .. In the *Model* section, there are several options:
 +
 * *Dropdown list*: Select from pre-configured models like `TinyLlama 1.1B Chat (Fast, No token)`, ideal for quick testing
-* *Custom model name*: Enter any HuggingFace model ID in the text field
-* *Browse Community Recipes*: Explore community-contributed model configurations
-* *HuggingFace Token*: Required only for gated models (Llama 3.1, Llama 3.2, etc.)
+* *Custom model name*: (Optional) Enter any HuggingFace model ID. Leave blank to use the dropdown selection above.
+* *Browse Community Recipes*: (Optional) Explore community-contributed model configurations.
+* *HuggingFace Token*: Required only for gated models (Llama 3.1, Llama 3.2, etc.). Leave blank as default.
 +
 For this demo, select `TinyLlama 1.1B Chat` from the dropdown. It is fast and does not require authentication.
 +
 image::module-01-figure-02.png[Model selection dropdown menu displaying TinyLlama 1.1B Chat (Fast, No token) highlighted at top, with custom model name text field below and Browse Community Recipes button at bottom,align="center",width=300,link=module-01-figure-02.png^,title="Model Selection Options"]
 
-.. In the *Run Mode* section, select how vLLM will run:
+.. Double check the *Run Mode* (at the top of *Server Configuration* section), and make sure *Container* mode is selected from previous steps.
 +
-* *Subprocess*: Runs vLLM directly as a Python subprocess (good for development, requires vLLM preinstalled via pip install vllm)
-* *Container*: Runs vLLM in an isolated Podman container (recommended for production)
-+
-Select *Container* mode. It provides better isolation and matches production deployments.
-+
-image::module-01-figure-03.png[Run Mode section with two radio buttons: Subprocess (for development, requires vLLM preinstalled) and Container (recommended, selected with blue highlight indicating isolated container execution),align="center",width=300,link=module-01-figure-03.png^,title="Run Mode Selection"]
+image::module-01-figure-03.png[Run Mode section with Container mode selected,align="center",width=300,link=module-01-figure-03.png^,title="Run Mode Selection"]
 
 .. In the *Compute Mode* section, select the hardware:
 +
 * *CPU*: For systems without GPU (slower inference)
 * *GPU*: For NVIDIA GPU acceleration (recommended for performance)
+* *Metal*: For Mac with M-series chipsets (great for laptop demo)
 +
 Select *GPU* mode since the demo environment has GPU available.
 +
@@ -183,11 +193,13 @@ image::module-01-figure-04.png[Compute Mode section with two radio buttons: CPU 
 
 .. Review the remaining default settings:
 +
+* *Host*: vLLM Server Host (deafult: 0.0.0.0)
 * *Port*: API endpoint port (default: 8000)
-* *Tensor Parallel Size*: Number of GPUs for model parallelism
-* *GPU Memory Utilization*: Fraction of GPU memory to use (default: 0.9)
-* *Data Type*: Model precision (auto, float16, bfloat16)
-* *Max Model Length*: Maximum context length (input prompt + output tokens)
+* *Tensor Parallel Size*: Number of GPUs for model parallelism (default: 1)
+* *GPU Memory (%)*: Fraction of GPU memory to use (default: 90)
+* *GPU Status*: A graphic display of accelerator status (read from tool output like `nvidia-smi`)
+* *Data Type*: Model precision (auto, float16, bfloat16, float32), leave it as default "Auto".
+* *Max Model Length*: Maximum context length (input prompt + output tokens), *set `2048` for TinyLlama model*, optional for other models.
 +
 NOTE: TinyLlama supports up to 2048 tokens. If you are using GPU mode, enter `2048` in this field -- the default value of 8096 will cause the server to fail to start.
 +
@@ -197,7 +209,7 @@ As settings are adjusted, the *Command Preview* at the bottom dynamically genera
 +
 image::module-01-figure-05.png[Command Preview panel displaying auto-generated vLLM container command with parameters: model TinyLlama-1.1B-Chat, GPU mode enabled, port 8000, tensor-parallel-size 1, showing full podman run command syntax with all selected configuration options,align="center",width=300,link=module-01-figure-05.png^,title="Command Preview"]
 
-.. Click *Start Server*
+.. Scroll down, and Click *Start Server*
 
 . Wait for the model to load. Monitor progress in the interface or check container logs:
 +
