@@ -27,8 +27,8 @@
 
 === Software versions
 
-* vLLM Playground v0.1.1
-* vLLM v0.10.0
+* vLLM Playground v0.1.8
+* vLLM v0.12.0
 * Podman 4.0 or later
 * Python 3.10 or later (required for MCP)
 * NVIDIA GPU with CUDA support
@@ -59,8 +59,8 @@ The demo environment comes with:
 |===
 |Component |Status
 
-|vLLM Playground v0.1.1
-|Pre-installed via pip
+|vLLM Playground v0.1.8
+|Pre-installed via pip, pulling the latest version during provisioning time
 
 |Podman
 |Pre-installed and configured
@@ -162,7 +162,7 @@ guidellm --help
 == Authors and contributors
 
 **Primary Author**: Michael Yang
-**Last Updated**: January 2026
+**Last Updated**: May 2026
 **Demo Version**: 1.0
 
 **Feedback and Questions**:
