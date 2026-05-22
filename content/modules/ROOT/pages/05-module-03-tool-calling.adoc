@@ -47,9 +47,9 @@ link:{vllm_playground_url}[Open vLLM Playground^]
 +
 .. Check *Enable Tool Calling*
 .. Select a tool calling parser (or leave as "Auto-detect")
-image::module-03-figure-01.png[vLLM Playground Server Configuration panel showing Enable Tool Calling checkbox checked in blue, Tool Call Parser dropdown menu set to Hermes parser, and Model dropdown displaying Qwen/Qwen2.5-3B-Instruct selected. The Start Server button is visible below the configuration options ready to launch the tool-calling enabled server,align="center",width=500,link=module-03-figure-01.png^,title="Enable Tool Calling"]
+.. Choose a model that supports tool calling (e.g. `Qwen2.5-3B-Instruct`)
 +
-.. Choose a model that supports tool calling
+image::module-03-figure-01.png[vLLM Playground Server Configuration panel showing Enable Tool Calling checkbox checked in blue, Tool Call Parser dropdown menu set to Hermes parser, and Model dropdown displaying Qwen/Qwen2.5-3B-Instruct selected. The Start Server button is visible below the configuration options ready to launch the tool-calling enabled server,align="center",width=500,link=module-03-figure-01.png^,title="Enable Tool Calling"]
 
 . For this configuration, use:
 +
@@ -72,7 +72,8 @@ NOTE: Qwen models are open and don't require HuggingFace authentication. If usin
 . Click *Start Server* and wait for the model to load.
 
 . Monitor the server logs in the *Server Logs* panel for tool calling confirmation. Look for messages indicating tool calling is enabled and the model has loaded successfully.
-
++
+--
 **What they should notice:**
 
 * The "Enable Tool Calling" checkbox activates parser configuration options
@@ -111,14 +112,15 @@ NOTE: **Tool calling does NOT mean LLM executes tools.** When tool calling is en
 "With the server configured, let me define the tools that the AI can invoke. Each tool has a name, description, and parameter schema that tells the AI when and how to use it."
 
 **What I do:**
+--
 
-. In vLLM Playground, navigate to the *Tools* panel (wrench icon in the toolbar).
+. In vLLM Playground in-chat sidebar, navigate to the *Tools* panel (wrench icon in the toolbar).
 +
 image::module-03-figure-02.png[vLLM Playground Tools panel with wrench icon in the toolbar. The panel displays a JSON editor area for defining function calling tools with syntax highlighting, Add Tool button at top-left, Save button at bottom-right, and placeholder text for entering tool definitions in OpenAI-compatible function format,align="center",width=600,link=module-03-figure-02.png^,title="Tools Panel"]
 
 . Click *Add Tool* to define the first customer support function.
 
-. Create an order status lookup tool:
+. Create an order status lookup tool (You would need pick up the right info from the definition below (JSON format) to fill into the tools definition form):
 +
 [source,json]
 ----
@@ -227,7 +229,7 @@ image::module-03-figure-03.png[JSON tool definition in the Tools panel showing g
           "description": "Maximum number of results to return"
         }
       },
-      "required": ["query"]
+      "required": ["query", "category"]
     }
   }
 }
@@ -305,7 +307,7 @@ Testing the tool calling workflow across multiple scenarios validates that the A
 
 . Ensure the tools from Part 1 are loaded and the server is running with tool calling enabled.
 
-. In the *Chat* panel, set a system prompt for customer support:
+. In the *Chat* panel, set a *System Prompt* for customer support:
 +
 [source,text]
 ----
@@ -340,6 +342,7 @@ image::module-03-figure-05.png[Chat interface showing AI response generating a J
 NOTE: Streaming is disabled for tool calling due to a bug in vLLM v0.11.0. This issue has been resolved in later versions of vLLM.
 
 . Point out the response format:
++
 * The AI recognizes the need for external data
 * Instead of making up information, it generates a function call
 * The arguments are extracted from the customer's message
@@ -380,8 +383,8 @@ Expected tool call:
   "name": "schedule_callback",
   "arguments": {
     "customer_phone": "555-123-4567",
-    "issue_summary": "Billing issue",
-    "preferred_time": "afternoon"
+    "preferred_time": "afternoon",
+    "issue_summary": "Billing issue"
   }
 }
 ----
@@ -444,7 +447,7 @@ image::module-03-figure-09.png[Chat interface showing AI response generating mul
 [source,text]
 ----
 +---------------------------------------------------------+
-|                    Tool Calling Workflow                 |
+|                    Tool Calling Workflow                |
 |                                                         |
 |  1. Customer Message                                    |
 |     "Check order ORD-12345"                             |
@@ -463,7 +466,7 @@ image::module-03-figure-09.png[Chat interface showing AI response generating mul
 +---------------------------------------------------------+
 ----
 
-In this module, steps 1-3 were demonstrated. Module 4 (MCP Integration) covers steps 4-5 with actual tool execution.
+TIP: In this module, steps 1-3 were demonstrated. Module 4 (MCP Integration) covers steps 4-5 with actual tool execution.
 
 **If asked:**
 
