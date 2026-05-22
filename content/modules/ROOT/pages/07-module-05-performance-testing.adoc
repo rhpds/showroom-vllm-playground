@@ -117,7 +117,7 @@ Commands:
 +
 [source,bash]
 ----
-sudo systemctl restart vllm-playground
+sudo systemctl restart vllm-playground.service
 ----
 +
 NOTE: The vLLM Playground service needs to be restarted after installing GuideLLM to detect the new benchmarking tools.
@@ -156,11 +156,11 @@ Click *Start Server* and wait for the server to be ready. Monitor the *Server Lo
 +
 NOTE: For performance benchmarking, a simple configuration without tool calling or MCP is used to get accurate baseline metrics.
 
-. Check the vLLM server endpoint:
+. Check the vLLM server endpoint from CLI:
 +
 [source,bash]
 ----
-curl http://localhost:8000/v1/models
+curl http://localhost:8000/v1/models | jq .
 ----
 +
 This confirms the OpenAI-compatible API is accessible. Note the model name returned, as it is needed for benchmarking.
@@ -195,7 +195,7 @@ image::module-05-figure-01.png[vLLM models API response,align="center",width=600
 |Path to save results
 |===
 
-. In the vLLM Playground web UI, navigate to the *GuideLLM* panel in the sidebar.
+. In the vLLM Playground web UI, navigate to the *GuideLLM* panel in the left Navigation Panel.
 +
 image::module-05-figure-02.png[GuideLLM panel in vLLM Playground,align="center",width=700,link=module-05-figure-02.png^,title="GuideLLM Panel"]
 
