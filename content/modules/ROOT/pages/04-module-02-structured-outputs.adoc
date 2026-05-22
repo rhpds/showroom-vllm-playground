@@ -5,7 +5,7 @@
 
 In Module 1, the presenter deployed a vLLM server and demonstrated the chat interface. Now ACME Corporation faces a new challenge: their customer support system needs to integrate AI responses with existing backend systems. Free-form text responses are difficult to parse and process programmatically.
 
-ACME's engineering team requires predictable, structured outputs that downstream systems can reliably consume. vLLM Playground's structured output capabilities, including JSON Schema, Regex, and Grammar, provide exactly this control. This module demonstrates how to constrain LLM outputs to specific formats, ensuring ACME's AI responses are system-ready and consistently parseable.
+ACME's engineering team requires predictable, structured outputs that downstream systems can reliably consume. vLLM Server's structured output capabilities, including JSON Schema, Regex, and Grammar, provide exactly this control. This module demonstrates how to constrain LLM outputs to specific formats, ensuring ACME's AI responses are system-ready and consistently parseable.
 
 [[part-1]]
 == Part 1 - JSON Schema for API integration
@@ -38,6 +38,8 @@ vLLM's JSON Schema mode constrains model output to a defined schema at the decod
 .. Click *Stop Server* if a server is currently running
 .. In the *Model* section, select or enter: `Qwen/Qwen2.5-3B-Instruct`
 .. Ensure *Container* mode and *GPU* mode are selected
+.. Update *Max Model Length* to `8192` (remove the previous `2048` value set for TinyLlama)
+.. Click *Clear* in the Chat Interface to clear previous chat history
 .. Click *Start Server*
 +
 NOTE: Qwen2.5-3B-Instruct is a 3 billion parameter model that provides better instruction-following capabilities for structured output tasks while still being fast on GPU.
@@ -125,11 +127,11 @@ Expected output (formatted):
 [source,json]
 ----
 {
-  "ticket_type": "feature_request",
-  "priority": "low",
-  "summary": "Request for dark mode in mobile app",
-  "customer_sentiment": "positive",
-  "requires_escalation": false
+ "ticket_type": "feature_request",
+ "priority": "low",
+ "summary": "Request for Dark Mode feature in Mobile App",
+ "customer_sentiment": "neutral",
+ "requires_escalation": false
 }
 ----
 
@@ -201,7 +203,7 @@ vLLM's Choice mode constrains the model to output exactly one value from a prede
 +
 [source,json]
 ----
-["positive", "negative", "neutral"]
+positive, negative, neutral
 ----
 +
 This constrains the model to output ONLY one of these three values.
@@ -299,11 +301,14 @@ vLLM provides two additional constraint modes for specialized formatting needs. 
 ACME-[A-Z]{4}-[0-9]{4}
 ----
 +
+--
 This pattern enforces:
+
 * Literal prefix `ACME-`
 * Exactly 4 uppercase letters
 * A hyphen `-`
 * Exactly 4 digits
+--
 +
 image::module-02-figure-07.png[Regex pattern configuration in structured outputs panel,align="center",width=600,link=module-02-figure-07.png^,title="Regex Mode"]
 
@@ -321,11 +326,12 @@ Generate a unique ticket ID for the customer support system. Output only the tic
 Generate a ticket ID for a new billing inquiry.
 ----
 +
-Expected output format: `ACME-BXYZ-1234` (exact letters/numbers will vary)
+Expected output format: `ACME-BILL-0001` (exact letters/numbers will vary)
 +
 image::module-02-figure-08.png[Regex output showing ACME ticket ID format,align="center",width=600,link=module-02-figure-08.png^,title="Regex Constrained Output"]
 
 . Verify the format matches:
++
 * Starts with `ACME-`
 * Followed by 4 uppercase letters
 * Then a hyphen
@@ -350,13 +356,14 @@ Format this phone number: 5551234567
 Expected output: `(555) 123-4567`
 +
 image::module-02-figure-09.png[Regex output showing formatted phone number,align="center",width=600,link=module-02-figure-09.png^,title="Phone Number Formatting with Regex"]
-
++
 [source,bash]
 ----
 # Validate ticket ID format with grep
 echo "ACME-WXYZ-1234" | grep -E "^ACME-[A-Z]{4}-[0-9]{4}$"
 ----
-
++
+--
 **What they should notice:**
 
 * Output matches the exact Regex pattern every time
@@ -368,6 +375,7 @@ echo "ACME-WXYZ-1234" | grep -E "^ACME-[A-Z]{4}-[0-9]{4}$"
 "Now let me show Grammar mode for more complex output structures, like custom report formats."
 
 **What I do:**
+--
 
 . Click the *Clear* button in the Chat Interface to start a new conversation.
 
@@ -388,10 +396,13 @@ bullet ::= "- " [A-Za-z0-9 ,.]+ "\n"
 footer ::= "## REPORT END ##"
 ----
 +
+--
 This grammar enforces:
+
 * Report wrapped in START/END markers
 * One or more sections with titles
 * Bullet lists within each section
+--
 
 . Set a system prompt:
 +
@@ -426,7 +437,6 @@ image::module-02-figure-10.png[Grammar output showing structured report format w
 **What they should notice:**
 
 * Output follows the defined structure exactly
-* Required delimiters (##, ###, -) are present
 * No content outside the grammar rules
 
 **When to use each method:**
