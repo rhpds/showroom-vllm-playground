@@ -20,10 +20,8 @@ MCP (Model Context Protocol) is the key to moving AI from "chat only" to actiona
 
 * Without MCP, AI can only generate text responses. Support agents still manually look up every customer document (8 minutes average per ticket).
 * With MCP, AI accesses real customer documents instantly (zero manual lookup time), retrieves current time for scheduling (eliminates timezone calculation errors), and executes approved support actions securely through human-in-the-loop control.
-* MCP is an open standard, not vendor lock-in. ACME can integrate with 50+ community MCP servers vs 10-15 proprietary integrations from competitors.
+* MCP is an open standard, not vendor lock-in. 
 * Data sovereignty is maintained. Customer documents never leave ACME's infrastructure, meeting enterprise compliance requirements that cloud-only solutions cannot address.
-* Cost control: 60% lower integration costs vs proprietary AI platforms with per-token pricing.
-* Deployment flexibility: Run on-premises or private cloud, unlike cloud-only competitors.
 
 === Show
 
@@ -76,7 +74,7 @@ Model Context Protocol (MCP) is an open standard developed to enable AI models t
 |Communication protocol between client and server (stdio, HTTP)
 |===
 
-==== Why MCP matters for ACME
+==== *Why MCP matters for ACME*
 
 **Without MCP**:
 
@@ -92,15 +90,8 @@ Model Context Protocol (MCP) is an open standard developed to enable AI models t
 * Executes approved support actions securely (human-in-the-loop control)
 * Integrates with existing systems (Salesforce, knowledge base, scheduling tools)
 
-**Competitive advantages of vLLM Playground's MCP integration**:
 
-* **Open standard vs vendor lock-in**: Integrate with 50+ community MCP servers vs 10-15 proprietary integrations from competitors
-* **Data sovereignty**: Customer documents never leave your infrastructure (meets enterprise compliance requirements that cloud-only solutions can't address)
-* **Cost control**: 60% lower integration costs vs proprietary AI platforms with per-token pricing
-* **Deployment flexibility**: Run on-premises or private cloud, unlike cloud-only competitors
-* **Community innovation**: Use the open source MCP ecosystem without licensing fees
-
-==== Installing MCP and connecting the Time server
+==== *Installing MCP and connecting the Time server*
 
 **What I say:**
 
@@ -595,7 +586,7 @@ Observe how the AI handles the denial. It should acknowledge it could not comple
 * "How many tools can the AI chain together?" - There is no hard limit. The AI will plan and call as many tools as needed. More capable models handle complex multi-tool chains better.
 * "What about production use?" - In production, you would configure auto-approval for safe operations (time lookups), require approval for sensitive ones (file writes), and integrate with audit logging systems.
 
-==== Understanding agentic workflows
+==== *Understanding agentic workflows*
 
 An agentic AI can:
 
@@ -656,7 +647,7 @@ Before proceeding to Module 5, clean up the MCP environment:
 
 . In the *MCP Servers* panel, disconnect any connected MCP servers by clicking the *Connect* toggle to turn it off.
 
-. In the vLLM Playground web UI, click the *Stop Server* button to terminate the running vLLM instance.
+. In the *vLLM Server* panel, click the *Stop Server* button to terminate the running vLLM instance.
 
 . Verify the server has stopped by checking that the server status shows "Stopped" or the Start Server button becomes available again.
 
