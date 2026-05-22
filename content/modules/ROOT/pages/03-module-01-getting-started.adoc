@@ -281,7 +281,7 @@ vLLM Playground provides a streaming chat interface with real-time performance m
 +
 * Message input area at the bottom
 * Conversation history in the main panel
-* Model settings in the sidebar
+* Model settings in the toolbar
 +
 image::module-01-figure-07.png[vLLM Playground chat interface with ChatGPT-style layout: conversation history panel in center showing AI responses, message input text area at bottom with blue Send button, and right sidebar displaying temperature slider (0.0-2.0), max tokens input field, and system prompt configuration button,align="center",width=700,link=module-01-figure-07.png^,title="Chat Interface"]
 
@@ -337,7 +337,7 @@ image::module-01-figure-08b.png[Left navigation bar showing vLLM Projects with v
 **What I do:**
 --
 
-. Explore the *Chat Settings* in the in-chat sidebar:
+. Explore the *Chat Settings* in the in-chat toolbar:
 +
 * *Temperature*: Controls randomness (lower = focused, higher = creative)
 * *Max Tokens*: Maximum response length

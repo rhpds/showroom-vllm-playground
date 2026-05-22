@@ -114,7 +114,7 @@ NOTE: **Tool calling does NOT mean LLM executes tools.** When tool calling is en
 **What I do:**
 --
 
-. In vLLM Playground in-chat sidebar, navigate to the *Tools* panel (wrench icon in the toolbar).
+. In vLLM Playground, navigate to the *Tools* panel (wrench icon in the in-chat toolbar).
 +
 image::module-03-figure-02.png[vLLM Playground Tools panel with wrench icon in the toolbar. The panel displays a JSON editor area for defining function calling tools with syntax highlighting, Add Tool button at top-left, Save button at bottom-right, and placeholder text for entering tool definitions in OpenAI-compatible function format,align="center",width=600,link=module-03-figure-02.png^,title="Tools Panel"]
 
