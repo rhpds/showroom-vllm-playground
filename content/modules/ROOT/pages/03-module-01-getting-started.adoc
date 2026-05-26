@@ -53,20 +53,26 @@ Expected output:
 +
 [source,text]
 ----
-usage: vllm-playground [-h] [--port PORT] [--host HOST] {pull,stop,status} ...
+usage: vllm-playground [-h] [--version] [--host HOST] [--port PORT] [--reload]
+                       {start,stop,status,pull} ...
 
-vLLM Playground - A modern web interface for vLLM
+vLLM Playground - A web interface for managing and interacting with vLLM
 
 positional arguments:
-  {pull,stop,status}
-    pull              Pre-download container images
-    stop              Stop running vLLM Playground instance
-    status            Check status of vLLM Playground
+  {start,stop,status,pull}
+                        Commands
+    start               Start the playground (default)
+    stop                Stop running playground instance
+    status              Check if playground is running
+    pull                Pre-download vLLM container images (recommended for
+                        first run)
 
-optional arguments:
-  -h, --help          show this help message and exit
-  --port PORT         Port to run on (default: 7860)
-  --host HOST         Host to bind to (default: 0.0.0.0)
+options:
+  -h, --help            show this help message and exit
+  --version, -v         show program's version number and exit
+  --host HOST           Host to bind to (default: 0.0.0.0)
+  --port PORT, -p PORT  Port to listen on (default: 7860)
+  --reload, -r          Enable auto-reload for development
 ----
 
 . Check Podman is available:
