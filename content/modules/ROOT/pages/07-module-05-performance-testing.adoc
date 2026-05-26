@@ -358,12 +358,15 @@ Shows latency distribution across different percentiles:
 **If asked:**
 
 Q: "How does GuideLLM compare to other benchmarking tools?"
+
 A: "GuideLLM is purpose-built for LLM inference. It understands token-level metrics like TTFT and output tokens per second, which generic HTTP benchmarking tools like wrk or ab cannot measure."
 
 Q: "Can we run benchmarks without installing GuideLLM?"
+
 A: "Yes, the built-in benchmark in vLLM Playground provides basic performance testing. GuideLLM adds advanced features like sweep testing and detailed latency percentile analysis."
 
 Q: "Are these numbers representative of production performance?"
+
 A: "These are baseline numbers under controlled conditions. Production performance depends on model size, concurrent users, prompt complexity, and hardware. Use these as a starting point and run benchmarks under realistic conditions."
 
 [[part-2]]
@@ -460,12 +463,15 @@ TIP: Keep notes on what changes were made and how they affected performance. Thi
 **If asked:**
 
 Q: "What is the most impactful parameter to tune first?"
+
 A: "GPU Memory Utilization is usually the best starting point. Increasing from 0.9 to 0.95 can improve concurrent request handling significantly. Just watch for OOM errors."
 
 Q: "Can we automate this optimization process?"
+
 A: "Yes. GuideLLM's sweep mode can automatically test across different request rates. For full configuration sweeps, you can script multiple server restarts with different parameters and compare the results programmatically using the JSON output."
 
 Q: "What about model quantization?"
+
 A: "INT8 and INT4 quantization can dramatically reduce memory usage and improve throughput at the cost of some accuracy. For customer support use cases, quantized models often perform comparably to full-precision models."
 
 == Troubleshooting

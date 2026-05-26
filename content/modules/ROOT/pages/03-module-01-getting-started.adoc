@@ -241,12 +241,15 @@ sudo podman ps
 **If asked:**
 
 Q: "What if the container fails to start with 'out of memory'?"
+
 A: "Check GPU memory with `nvidia-smi`. Try a smaller model or adjust GPU memory utilization to 0.8 for 80% usage."
 
 Q: "Can we use models from sources other than HuggingFace?"
+
 A: "Yes. vLLM supports any GGUF or HuggingFace-compatible model. You can also point to private model registries."
 
 Q: "What about gated models like Llama?"
+
 A: "For gated models, you need a HuggingFace token with access. Enter it in the HF_TOKEN field. Public models like TinyLlama and Qwen work without authentication."
 
 [[part-2]]
@@ -381,12 +384,15 @@ TIP: `TinyLlama` is a very small model and response quality may not be ideal. Fo
 **If asked:**
 
 Q: "Can we customize the chat interface for our brand?"
+
 A: "vLLM Playground is open source, so the UI can be customized. For production, you would typically build a custom frontend that calls the vLLM OpenAI-compatible API."
 
 Q: "Why are responses sometimes slow?"
+
 A: "Check GPU utilization with `nvidia-smi`. Verify the model loaded to GPU, not CPU. For faster responses, consider a smaller model."
 
 Q: "What models work best for customer support?"
+
 A: "Models like Qwen2.5-3B-Instruct or Llama 3.1-8B provide good instruction-following for support scenarios. We will use Qwen in the next modules."
 --
 
