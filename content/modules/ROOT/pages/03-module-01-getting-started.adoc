@@ -340,7 +340,7 @@ image::module-01-figure-08b.png[Left navigation bar showing vLLM Projects with v
 **What I do:**
 --
 
-. Explore the *Chat Settings* in the in-chat toolbar:
+. Click the gear icon (⚙️) in the toolbar directly below the chat message input area to open the *Chat Settings* panel:
 +
 * *Temperature*: Controls randomness (lower = focused, higher = creative)
 * *Max Tokens*: Maximum response length
