@@ -152,6 +152,7 @@ TIP: The vLLM Playground response panel already validates JSON formatting. If th
 **If asked:**
 
 Q: "Can we validate the JSON output programmatically?"
+
 A: "Yes. You can save the output and validate it with Python:"
 
 [source,bash]
@@ -164,9 +165,11 @@ python3 -c "import json; print(json.load(open('/tmp/output.json')))"
 ----
 
 Q: "What happens if the model tries to output invalid enum values?"
+
 A: "The guided decoding engine rejects invalid tokens at generation time. The model physically cannot produce values outside the schema definition."
 
 Q: "Does this work with nested JSON schemas?"
+
 A: "Yes, vLLM supports nested objects, arrays, and complex schema compositions including allOf, anyOf, and oneOf."
 
 [[part-2]]
@@ -256,12 +259,15 @@ image::module-02-figure-03.png[Sentiment analysis showing neutral classification
 **If asked:**
 
 Q: "How is this different from just asking the model to pick one?"
+
 A: "Without Choice mode, the model might output 'The sentiment is positive' or 'I would classify this as positive.' Choice mode guarantees the output is exactly one of the defined values, nothing more."
 
 Q: "Can we use more than three choices?"
+
 A: "Yes. You can define any number of string values in the choice array. For example, a five-point scale: very_positive, positive, neutral, negative, very_negative."
 
 Q: "What about multi-label classification?"
+
 A: "For multi-label scenarios, JSON Schema mode is more appropriate. You can define an array field that accepts multiple enum values."
 
 [[part-3]]
@@ -468,9 +474,11 @@ image::module-02-figure-10.png[Grammar output showing structured report format w
 **If asked:**
 
 Q: "When would I use Grammar over JSON Schema?"
+
 A: "Grammar is best for non-JSON structured output, like custom report formats, DSLs, or markup languages that your existing tools already parse."
 
 Q: "Is Grammar mode slower than other modes?"
+
 A: "Complex grammars can add overhead. For high-throughput scenarios, JSON Schema is generally faster. Use Grammar only when the output format genuinely requires it."
 
 === Reset structured outputs
